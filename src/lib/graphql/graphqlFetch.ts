@@ -23,8 +23,7 @@ export const graphqlFetch =
     options?: (HeadersInit & FetchOptions) | FetchOptions,
   ) =>
   async (): Promise<TData> => {
-    const headers = getRequestHeaders();
-    const session = await auth.api.getSession({ headers });
+    const session = await auth.api.getSession({ headers: getRequestHeaders() });
 
     const { cache, ...restOptions } = options || {};
 

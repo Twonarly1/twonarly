@@ -5,8 +5,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "@/lib/config/auth.config";
 
 export const authMiddleware = createMiddleware().server(async ({ next }) => {
-  const headers = getRequestHeaders();
-  const sessionData = await auth.api.getSession({ headers });
+  const sessionData = await auth.api.getSession({ headers: getRequestHeaders() });
 
   if (!sessionData) throw redirect({ to: "/" });
 

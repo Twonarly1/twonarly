@@ -16,10 +16,8 @@ export const addTask = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const headers = getRequestHeaders();
-
     const session = await auth.api.getSession({
-      headers,
+      headers: getRequestHeaders(),
     });
 
     if (!session?.user) {

@@ -1,4 +1,4 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Pen, Trash } from "lucide-react";
 import { useRef, useState } from "react";
@@ -48,7 +48,7 @@ export const Route = createFileRoute("/_authenticated/profile/")({
 function ProfilePage() {
   const user = Route.useLoaderData();
   const router = useRouter();
-
+  const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
 
   const removeAvatarFn = useServerFn(removeAvatar);
@@ -235,7 +235,13 @@ function ProfilePage() {
             <ItemDescription>All your data will be permanently deleted.</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button variant="destructive" onClick={() => deleteUserFn({ data: { id: user.id } })}>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                deleteUserFn({ data: { id: user.id } });
+                navigate({ to: "/" });
+              }}
+            >
               Delete
             </Button>
           </ItemActions>
