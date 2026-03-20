@@ -1,0 +1,38 @@
+fragment TaskFields on Task {
+  id
+  name
+  description
+  completed
+  createdAt
+  updatedAt
+  userId
+  rowId
+}
+
+query GetTaskById($id: ID!) {
+  taskById(id: $id) {
+    ...TaskFields
+  }
+}
+
+mutation CreateTask($input: CreateTaskInput!) {
+  createTask(input: $input) {
+    task {
+      ...TaskFields
+    }
+  }
+}
+
+mutation UpdateTask($input: UpdateTaskByIdInput!) {
+  updateTaskById(input: $input) {
+    task {
+      ...TaskFields
+    }
+  }
+}
+
+mutation DeleteTask($input: DeleteTaskInput!) {
+  deleteTask(input: $input) {
+    clientMutationId
+  }
+}

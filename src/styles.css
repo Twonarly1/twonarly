@@ -1,0 +1,266 @@
+@import 'tailwindcss';
+
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+
+body {
+  @apply m-0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: var(--font-size-base);
+  transition: font-size 0.2s ease-out;
+}
+
+/* html {
+  font-size: var(--font-size-base);
+  transition: font-size 0.2s ease-out;
+} */
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.25 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.646 0.196 293.756); /* Violet-600 */
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.94 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.8946 0.0562 293.06);
+  --accent-foreground: oklch(27.8% 0.033 256.848);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.646 0.196 293.756); /* Match primary */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.646 0.196 293.756);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.646 0.196 293.756);
+
+  /* Default font size */
+  --font-size-base: 14px;
+    /* Default icon size */
+  --icon-size-base: 14px;
+}
+
+/* Font size */
+html[data-font-size="smaller"] { --font-size-base: 12px }
+html[data-font-size="small"]   { --font-size-base: 13px }
+html[data-font-size="large"]   { --font-size-base: 15px }
+html[data-font-size="larger"]  { --font-size-base: 16px }
+
+/* Icon size */
+html[data-font-size="smaller"] { --icon-size-base: 12px }
+html[data-font-size="small"] { --icon-size-base: 13px }
+html[data-font-size="large"] { --icon-size-base: 15px }
+html[data-font-size="larger"] { --icon-size-base: 16px }
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.141 0.005 285.823);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.141 0.005 285.823);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.71 0.176 293.756); /* Lighter violet for dark mode */
+  --primary-foreground: oklch(0.141 0.005 285.823);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.274 0.006 286.033);
+  --input: oklch(0.274 0.006 286.033);
+  --ring: oklch(0.71 0.176 293.756);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.71 0.176 293.756);
+  --sidebar-primary-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.274 0.006 286.033);
+  --sidebar-ring: oklch(0.71 0.176 293.756);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Violet */
+  --color-violet-50: #f5f3ff;
+  --color-violet-100: #ede9fe;
+  --color-violet-200: #ddd6ff;
+  --color-violet-300: #c4b4ff;
+  --color-violet-400: #a684ff;
+  --color-violet-500: #8e51ff;
+  --color-violet-600: #7f22fe;
+  --color-violet-700: #7008e7;
+  --color-violet-800: #5d0ec0;
+  --color-violet-900: #4d179a;
+  --color-violet-950: #2f0d68;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50 cursor-default;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+/* Responsive typography utilities using em (relative to parent/inherited font-size) */
+/* These scale with the user's font-size preference */
+@layer utilities {
+  .text-h1 { font-size: 2em; } 
+  .text-h2 { font-size: 1.75em; } 
+  .text-h3 { font-size: 1.5em; } 
+  .text-h4 { font-size: 1.25em; } 
+  .text-h5 { font-size: 1.125em; } 
+  .text-h6 { font-size: 1em; }      
+  
+  /* Body text variations */
+  .text-body-lg { font-size: 1.125em; } 
+  .text-body { font-size: 1em; }  
+  .text-body-sm { font-size: 0.875em; }  
+  .text-body-xs { font-size: 0.75em; }
+  .text-body-2xs { font-size: 0.625em; }
+
+  /* Icon sizes - using rem units to scale with base font size */
+  .icon-xs { width: 1em; height: 1em; }
+  .icon-sm { width: 1.125em; height: 1.125em; }
+  .icon-md { width: 1.25em; height: 1.25em; }
+  .icon-lg { width: 1.5em; height: 1.5em; }
+  .icon-xl { width: 1.75em; height: 1.75em; }
+}
+
+/* Pointer cursor mode - applied via class on html element */
+/* Target the interactive elements AND their children */
+html.pointer-cursor button,
+html.pointer-cursor button *,
+html.pointer-cursor a,
+html.pointer-cursor a *,
+html.pointer-cursor [role="button"],
+html.pointer-cursor [role="button"] *,
+html.pointer-cursor [role="tab"],
+html.pointer-cursor [role="tab"] *,
+html.pointer-cursor [role="menuitem"],
+html.pointer-cursor [role="menuitem"] *,
+html.pointer-cursor [role="option"],
+html.pointer-cursor [role="option"] *,
+html.pointer-cursor input[type="checkbox"],
+html.pointer-cursor input[type="radio"],
+html.pointer-cursor select,
+html.pointer-cursor select *,
+html.pointer-cursor summary,
+html.pointer-cursor summary *,
+html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"],
+html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"] * {
+  @apply !cursor-pointer;
+}
+
+/* Only apply pointer cursor to labels that wrap clickable inputs or have associated inputs */
+html.pointer-cursor label:has(input[type="checkbox"]),
+html.pointer-cursor label:has(input[type="checkbox"]) *,
+html.pointer-cursor label:has(input[type="radio"]),
+html.pointer-cursor label:has(input[type="radio"]) *,
+html.pointer-cursor label:has(input[type="file"]),
+html.pointer-cursor label:has(input[type="file"]) * {
+  @apply !cursor-pointer;
+}
+
+@utility container {
+  @apply max-w-4xl;
+  margin-inline: auto;
+  padding: 1rem;
+}
+
+.color-picker-custom .react-colorful__saturation-pointer {
+  width: 12px;
+  height: 12px;
+}
+
+.color-picker-custom .react-colorful__saturation {
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.color-picker-custom .react-colorful__hue {
+  height: 12px;
+  border-radius: 4px;
+}
+
+.color-picker-custom .react-colorful__hue-pointer {
+  width: 4px;
+  height: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 0.5px var(--color-foreground);
+  transition: none
+}
