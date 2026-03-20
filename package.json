@@ -3,9 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "NODE_ENV=development bun --bun vite dev --port 3000",
+    "dev": "NODE_ENV=development bun --bun vite dev --port 3000 & NODE_ENV=development bun --bun run src/lib/db/server.ts",
     "build": "NODE_ENV=production bun --bun vite build",
-    "serve": "NODE_ENV=development bun --bun run src/lib/db/server.ts",
     "lint": "biome lint",
     "format": "biome format --write",
     "check": "biome check",
@@ -93,6 +92,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "concurrently": "^9.2.1",
     "tsx": "^4.0.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7"
