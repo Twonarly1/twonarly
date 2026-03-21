@@ -1,8 +1,0 @@
-query GetUserTasks($userId: String!, $first: Int, $offset: Int) {
-  tasks(condition: { userId: $userId }, first: $first, offset: $offset) {
-    nodes {
-      ...TaskFields
-    }
-    totalCount
-  }
-}
