@@ -2,7 +2,6 @@ import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, MoreHorizontal, Trash } from "lucide-react";
 import { memo, useCallback } from "react";
-import { toast as sonnerToast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/toast";
 import { deleteTask } from "@/server/functions/task/delete-task";
 import { toggleIsComplete } from "@/server/functions/task/toggle-completed";
 
@@ -61,7 +60,6 @@ const ActionCell = memo(({ row, table }: Props) => {
         toast.success({
           title: "Task deleted",
           description: `The task "${task.name}" has been deleted.`,
-          action: { onClick: () => sonnerToast.dismiss() },
         });
         router.invalidate();
       } catch (err) {
@@ -69,7 +67,6 @@ const ActionCell = memo(({ row, table }: Props) => {
         toast.error({
           title: "Failed to delete",
           description: `Could not delete "${task.name}".`,
-          action: { onClick: () => sonnerToast.dismiss() },
         });
         router.invalidate();
       }

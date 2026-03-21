@@ -1,11 +1,10 @@
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, Trash, X } from "lucide-react";
-import { toast as sonnerToast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/toast";
 import { deleteTask } from "@/server/functions/task/delete-task";
 import { toggleIsComplete } from "@/server/functions/task/toggle-completed";
 
@@ -57,7 +56,6 @@ const TableActions = ({ table }: Props) => {
       toast.success({
         title,
         description,
-        action: { onClick: () => sonnerToast.dismiss() },
       });
       router.invalidate();
     } catch (err) {
@@ -67,7 +65,6 @@ const TableActions = ({ table }: Props) => {
       toast.error({
         title: "Failed to update tasks",
         description: `Could not update ${selectedCount} ${selectedCount === 1 ? "task" : "tasks"}.`,
-        action: { onClick: () => sonnerToast.dismiss() },
       });
       console.error("Failed to toggle completed", err);
     }
@@ -89,7 +86,6 @@ const TableActions = ({ table }: Props) => {
       toast.success({
         title: "Tasks deleted",
         description: `${selectedCount} tasks have been deleted.`,
-        action: { onClick: () => sonnerToast.dismiss() },
       });
       router.invalidate();
     } catch (err) {
@@ -97,7 +93,6 @@ const TableActions = ({ table }: Props) => {
       toast.error({
         title: "Failed to delete",
         description: `Could not delete ${selectedCount} tasks.`,
-        action: { onClick: () => sonnerToast.dismiss() },
       });
       router.invalidate();
     }

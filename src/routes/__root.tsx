@@ -3,7 +3,7 @@ import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toast";
 import { app } from "@/lib/config/app.config";
 import { SettingsProvider } from "@/providers/settings-provider";
 import ThemeProvider from "@/providers/theme-provider";

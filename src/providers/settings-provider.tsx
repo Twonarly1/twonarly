@@ -130,6 +130,5 @@ export function SettingsProvider({
 export const useSettings = () => {
   const context = useContext(SettingsContext);
   if (!context) throw new Error("`useSettings` called outside of `<SettingsProvider />`");
-
   return context;
 };

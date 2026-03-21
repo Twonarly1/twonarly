@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/item";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/sonner";
+import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/auth-client";
 import { getSession } from "@/server/functions/get-session";
@@ -133,7 +133,6 @@ function ProfilePage() {
             <ItemTitle>Profile picture</ItemTitle>
           </ItemContent>
 
-          {/* TODO: Simplify this conditional rendering */}
           <ItemActions>
             {user.image ? (
               <DropdownMenu>

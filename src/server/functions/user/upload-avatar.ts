@@ -1,6 +1,7 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
+import { fileTypeFromBuffer } from "file-type";
 import z from "zod";
 
 import { r2 } from "@/lib/config/r2.config";
@@ -8,6 +9,9 @@ import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
 import { getSession } from "@/server/functions/get-session";
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_SIZE = 5 * 1024 * 1024;
 
 export const uploadAvatar = createServerFn({ method: "POST" })
   .inputValidator(z.instanceof(FormData))
@@ -21,16 +25,15 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       throw new Error("Please provide a valid image file");
     }
 
-    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-    if (!allowedTypes.includes(file.type)) {
-      throw new Error("Invalid file type. Only JPEG, PNG, and WebP are allowed");
+    if (file.size > MAX_SIZE) {
+      throw new Error("File size must be less than 5MB");
     }
 
-    const maxSize = 5 * 1024 * 1024;
+    const buffer = await file.arrayBuffer();
+    const detected = await fileTypeFromBuffer(buffer);
 
-    if (file.size > maxSize) {
-      throw new Error("File size must be less than 5MB");
+    if (!detected || !ALLOWED_TYPES.includes(detected.mime)) {
+      throw new Error("Invalid file type. Only JPEG, PNG, and WebP are allowed");
     }
 
     // Delete old R2 object if exists
@@ -49,16 +52,14 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       );
     }
 
-    const ext = file.type.split("/")[1];
-    const key = `avatars/${session.userId}-${crypto.randomUUID()}.${ext}`;
-    const buffer = await file.arrayBuffer();
+    const key = `avatars/${session.userId}-${crypto.randomUUID()}.${detected.ext}`;
 
     await r2.send(
       new PutObjectCommand({
         Bucket: env.R2_BUCKET_NAME,
         Key: key,
         Body: Buffer.from(buffer),
-        ContentType: file.type,
+        ContentType: detected.mime,
       }),
     );
 

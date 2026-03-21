@@ -1,18 +1,9 @@
 import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { Repeat } from "lucide-react";
-import { useMemo } from "react";
-import { UAParser } from "ua-parser-js";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemTitle,
-} from "@/components/ui/item";
+import { Item, ItemActions, ItemContent, ItemGroup } from "@/components/ui/item";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { authClient } from "@/lib/auth/auth-client";
 import { getDeviceSessions } from "@/server/functions/get-device-sessions";
@@ -27,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/accounts/")({
 });
 
 function RouteComponent() {
-  const { deviceSessions, sessions } = Route.useLoaderData();
+  const { deviceSessions } = Route.useLoaderData();
 
   const router = useRouter();
   const navigate = useNavigate();
@@ -42,16 +33,6 @@ function RouteComponent() {
   const removeAccount = async (token: string) => {
     await authClient.multiSession.revoke({ sessionToken: token });
     router.invalidate();
-  };
-
-  const revokeSession = async (token: string) => {
-    try {
-      await authClient.revokeSession({ token });
-      router.invalidate();
-    } catch (err) {
-      console.error("Failed to revoke session:", err);
-      // TODO: surface a toast here
-    }
   };
 
   const signIn = async () =>
@@ -69,7 +50,6 @@ function RouteComponent() {
       });
     } catch (err) {
       console.error("Failed to sign out:", err);
-      // TODO: surface a toast here
     }
   };
 
@@ -78,31 +58,6 @@ function RouteComponent() {
     const bIsCurrent = b.user.id === session?.user.id;
     return aIsCurrent ? -1 : bIsCurrent ? 1 : 0;
   });
-
-  const sortedSessions = useMemo(
-    () =>
-      [...(sessions ?? [])].sort((a, b) => {
-        const aIsCurrent = a.token === session?.session.token;
-        const bIsCurrent = b.token === session?.session.token;
-        return aIsCurrent ? -1 : bIsCurrent ? 1 : 0;
-      }),
-    [sessions, session?.session.token],
-  );
-
-  const parsedUserAgents = useMemo(() => {
-    return new Map(
-      (sessions ?? []).map((s) => {
-        const parser = new UAParser(s.userAgent ?? undefined);
-        return [
-          s.token,
-          {
-            browser: parser.getBrowser().name ?? "Unknown Browser",
-            os: parser.getOS().name ?? "Unknown OS",
-          },
-        ];
-      }),
-    );
-  }, [sessions]);
 
   if (isPending) {
     return (
@@ -165,7 +120,11 @@ function RouteComponent() {
                   </div>
                 </ItemContent>
                 <ItemActions>
-                  {!isCurrent && (
+                  {isCurrent ? (
+                    <Button variant="ghost" size="sm" onClick={signOut}>
+                      Log out
+                    </Button>
+                  ) : (
                     <div className="flex items-center gap-2">
                       <Button
                         variant="outline"
@@ -180,7 +139,7 @@ function RouteComponent() {
                         size="sm"
                         onClick={() => removeAccount(deviceSession.session.token!)}
                       >
-                        Remove
+                        Revoke
                       </Button>
                     </div>
                   )}
@@ -188,64 +147,6 @@ function RouteComponent() {
               </Item>
             );
           })}
-        </ItemGroup>
-      </div>
-
-      <div className="space-y-4">
-        <div className="space-y-1">
-          <h4 className="items-baseline font-medium text-h4">Sessions</h4>
-          <p className="text-muted-foreground">Devices logged into your account</p>
-        </div>
-
-        <ItemGroup className="rounded-lg border">
-          {sortedSessions.length === 0 ? (
-            <Item size="sm">
-              <ItemContent>
-                <p className="text-muted-foreground">No active sessions found.</p>
-              </ItemContent>
-            </Item>
-          ) : (
-            sortedSessions.map((s) => {
-              const isCurrent = s.token === session?.session.token;
-              const { browser, os } = parsedUserAgents.get(s.token) ?? {
-                browser: "Unknown Browser",
-                os: "Unknown OS",
-              };
-
-              return (
-                <Item size="sm" key={s.token}>
-                  <ItemContent>
-                    <ItemTitle>
-                      {browser} on {os}
-                    </ItemTitle>
-                    <ItemDescription className="flex items-center gap-1.5">
-                      {isCurrent && (
-                        <>
-                          <div className="size-1.5 rounded-full bg-green-600" />
-                          <span className="font-medium text-green-600">Current session</span>
-                          <span className="text-muted-foreground">–</span>
-                        </>
-                      )}
-                      <span className="text-muted-foreground">
-                        {s.ipAddress ?? "Unknown location"}
-                      </span>
-                    </ItemDescription>
-                  </ItemContent>
-                  <ItemActions>
-                    {isCurrent ? (
-                      <Button variant="ghost" size="sm" onClick={signOut}>
-                        Log out
-                      </Button>
-                    ) : (
-                      <Button variant="ghost" size="sm" onClick={() => revokeSession(s.token)}>
-                        Revoke
-                      </Button>
-                    )}
-                  </ItemActions>
-                </Item>
-              );
-            })
-          )}
         </ItemGroup>
       </div>
     </div>

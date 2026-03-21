@@ -30,6 +30,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
 import { useSettings } from "@/providers/settings-provider";
@@ -53,7 +54,6 @@ const AppSidebar = () => {
       });
     } catch (err) {
       console.error("Failed to sign in:", err);
-      // TODO: surface a toast here
     }
   };
 
@@ -66,7 +66,6 @@ const AppSidebar = () => {
       });
     } catch (err) {
       console.error("Failed to sign out:", err);
-      // TODO: surface a toast here
     }
   };
 
@@ -74,10 +73,15 @@ const AppSidebar = () => {
     if (!token) return;
     try {
       await authClient.multiSession.setActive({ sessionToken: token });
+      toast.success({
+        title: "Account switched",
+      });
       router.invalidate();
     } catch (err) {
       console.error("Failed to switch account:", err);
-      // TODO: surface a toast here
+      toast.error({
+        title: "Failed to switch account",
+      });
     }
   };
 

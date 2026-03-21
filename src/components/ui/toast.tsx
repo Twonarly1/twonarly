@@ -2,7 +2,7 @@
 
 import { Check, Info, X } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Toaster as Sonner, toast as sonnerToast } from "sonner";
+import { Toaster as ToasterPrimitive, toast as toastPrimitive } from "sonner";
 
 import { Button } from "./button";
 
@@ -15,10 +15,9 @@ interface ToastData {
   title: string;
   description?: string;
   intent?: Intent;
-  action?: { label?: string; onClick: () => void };
+  // action?: { label?: string; onClick: () => void };
 }
 
-// TODO: create custom icons
 const ICONS: Record<Intent, ReactNode> = {
   success: (
     <div className="icon-xs flex shrink-0 items-center justify-center rounded-full bg-green-500 p-0.5">
@@ -52,13 +51,11 @@ const ICONS: Record<Intent, ReactNode> = {
   info: <Info className="icon-xs text-blue-500" />,
 };
 
-// toast UI
 function ToastUI({
   id,
   title,
   description,
   intent = "success",
-  action,
 }: ToastData & { id: string | number }) {
   return (
     <div className="relative flex min-w-sm items-center gap-3 rounded-lg bg-background px-3 py-2 shadow-lg ring-1 ring-black/5">
@@ -66,10 +63,7 @@ function ToastUI({
         variant="unstyled"
         size="icon-xs"
         className="absolute top-1 right-1 text-muted-foreground hover:text-foreground"
-        onClick={() => {
-          action?.onClick?.();
-          sonnerToast.dismiss(id);
-        }}
+        onClick={() => toastPrimitive.dismiss(id)}
       >
         <X className="icon-xs" />
       </Button>
@@ -85,23 +79,23 @@ function ToastUI({
   );
 }
 
-// renders toast
 function show(data: ToastData) {
-  return sonnerToast.custom((id) => <ToastUI id={id} {...data} />);
+  return toastPrimitive.custom((id) => <ToastUI id={id} {...data} />);
 }
 
-// api
 export const toast = {
   success: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "success" }),
   error: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "error" }),
   info: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "info" }),
   warning: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "warning" }),
-  custom: sonnerToast.custom,
+  custom: toastPrimitive.custom,
+  dismiss: toastPrimitive.dismiss,
 };
 
-// provider
 export function Toaster(props: ToasterProps) {
   const { theme = "light" } = useTheme();
 
-  return <Sonner theme={theme as ToasterProps["theme"]} className="toaster group" {...props} />;
+  return (
+    <ToasterPrimitive theme={theme as ToasterProps["theme"]} className="toaster group" {...props} />
+  );
 }

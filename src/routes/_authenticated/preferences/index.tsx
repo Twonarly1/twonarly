@@ -47,7 +47,6 @@ export const Route = createFileRoute("/_authenticated/preferences/")({
 });
 
 function SettingsPage() {
-  // TODO: get this from loader?
   const {
     theme,
     setTheme,
