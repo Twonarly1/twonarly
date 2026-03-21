@@ -3,6 +3,10 @@ import { makePgService } from "postgraphile/adaptors/pg";
 import { PostGraphileAmberPreset } from "postgraphile/presets/amber";
 import { PostGraphileConnectionFilterPreset } from "postgraphile-plugin-connection-filter";
 
+import { env } from "@/lib/config/t3.config";
+
+const isProduction = process.env.NODE_ENV === "production";
+
 /**
  * Graphile preset.
  */
@@ -14,7 +18,7 @@ const graphilePreset: GraphileConfig.Preset = {
   ],
   disablePlugins: ["PgIndexBehaviorsPlugin"],
   schema: {
-    retryOnInitFail: process.env.NODE_ENV === "production",
+    retryOnInitFail: isProduction,
     sortExport: true,
     pgForbidSetofFunctionsToReturnNull: true,
     jsonScalarAsString: false,
@@ -24,11 +28,11 @@ const graphilePreset: GraphileConfig.Preset = {
   },
   pgServices: [
     makePgService({
-      connectionString: process.env.DATABASE_URL!,
+      connectionString: env.DATABASE_URL,
       schemas: ["public"],
     }),
   ],
-  grafast: { explain: process.env.NODE_ENV !== "production" },
+  grafast: { explain: !isProduction },
 };
 
 export default graphilePreset;

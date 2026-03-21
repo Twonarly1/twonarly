@@ -1,3 +1,5 @@
+import { env } from "@/lib/config/t3.config";
+
 import type { CodegenConfig } from "@graphql-codegen/cli";
 import type { Types } from "@graphql-codegen/plugin-helpers";
 
@@ -34,7 +36,7 @@ const sharedConfig: GraphQLCodegenConfig["config"] = {
  * GraphQL Code Generator configuration. This generates various artifacts based on the GraphQL schema.
  */
 const codegen: CodegenConfig = {
-  schema: process.env.API_BASE_URL!,
+  schema: env.API_BASE_URL,
   documents: "src/lib/graphql/**/*.graphql",
   ignoreNoDocuments: true,
   generates: {

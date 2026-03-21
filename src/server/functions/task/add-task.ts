@@ -1,11 +1,10 @@
 import { redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
 import z from "zod";
 
-import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { tasks } from "@/lib/db/schema";
+import { getSession } from "@/server/functions/get-session";
 
 export const addTask = createServerFn({ method: "POST" })
   .inputValidator(
@@ -16,17 +15,13 @@ export const addTask = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const session = await auth.api.getSession({
-      headers: getRequestHeaders(),
-    });
-
-    if (!session?.user) {
-      throw new Error("Unauthorized");
-    }
+    const session = await getSession();
+    if (!session?.userId) throw new Error("Unauthorized");
 
     await db.insert(tasks).values({
       ...data,
-      userId: session.user.id,
+      userId: session.userId,
     });
+
     throw redirect({ to: "/tasks" });
   });

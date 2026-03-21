@@ -61,7 +61,7 @@ export function DataTable({ table }: Props) {
             </TableHeader>
             <TableBody>
               {isEmpty ? (
-                <TableRow className="h-12 hover:bg-transparent">
+                <TableRow className="hover:bg-transparent">
                   {table.getAllColumns().map((column) => (
                     <TableCell
                       key={column.id}
@@ -74,7 +74,7 @@ export function DataTable({ table }: Props) {
                     >
                       {column.id === "name" && (
                         <div className="group flex h-7 w-full items-center truncate rounded border border-transparent px-2 text-foreground leading-7 focus-visible:border-border">
-                          <span>No results</span>
+                          No results
                         </div>
                       )}
                     </TableCell>
@@ -150,12 +150,12 @@ function GridCanvas({ rows }: { rows: Task[] }) {
 
     const totalWidth = COLUMN_WIDTHS.reduce((a, b) => a + b, 0);
 
-    /* ---- background ---- */
-    ctx.fillStyle = "#ffffff";
+    // Background
+    // ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, totalWidth, ROW_H + rows.length * ROW_H);
 
-    /* ---- horizontal lines (borders between rows) ---- */
-    ctx.strokeStyle = "hsl(var(--border))";
+    // Horizontal lines
+    // ctx.strokeStyle = "hsl(var(--border))";
     ctx.lineWidth = 1;
 
     // Header bottom border

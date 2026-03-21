@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import z from "zod";
 
 import { r2 } from "@/lib/config/r2.config";
+import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
 import { getSession } from "@/server/functions/get-session";
@@ -12,10 +13,7 @@ export const uploadAvatar = createServerFn({ method: "POST" })
   .inputValidator(z.instanceof(FormData))
   .handler(async ({ data }) => {
     const session = await getSession();
-
-    if (!session?.userId) {
-      throw new Error("Unauthorized: No valid session");
-    }
+    if (!session?.userId) throw new Error("Unauthorized");
 
     const file = data.get("file") as File;
 
@@ -41,11 +39,11 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       .from(user)
       .where(eq(user.id, session.userId));
 
-    if (currentUser?.image?.includes(process.env.R2_PUBLIC_URL!)) {
-      const oldKey = currentUser.image.replace(`${process.env.R2_PUBLIC_URL}/`, "");
+    if (currentUser?.image?.includes(env.R2_PUBLIC_URL)) {
+      const oldKey = currentUser.image.replace(`${env.R2_PUBLIC_URL}/`, "");
       await r2.send(
         new DeleteObjectCommand({
-          Bucket: process.env.R2_BUCKET_NAME!,
+          Bucket: env.R2_BUCKET_NAME,
           Key: oldKey,
         }),
       );
@@ -57,14 +55,14 @@ export const uploadAvatar = createServerFn({ method: "POST" })
 
     await r2.send(
       new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME!,
+        Bucket: env.R2_BUCKET_NAME,
         Key: key,
         Body: Buffer.from(buffer),
         ContentType: file.type,
       }),
     );
 
-    const imageUrl = `${process.env.R2_PUBLIC_URL}/${key}`;
+    const imageUrl = `${env.R2_PUBLIC_URL}/${key}`;
 
     await db
       .update(user)

@@ -14,10 +14,7 @@ export const updateUser = createServerFn({ method: "POST" })
   )
   .handler(async ({ data }) => {
     const session = await getSession();
-
-    if (!session?.userId) {
-      throw new Error("Unauthorized: No valid session");
-    }
+    if (!session?.userId) throw new Error("Unauthorized");
 
     await db
       .update(user)

@@ -10,12 +10,13 @@ import { useGrafast } from "grafast/envelop";
 
 import { schema } from "@/generated/graphql/schema.executable";
 import { auth } from "@/lib/config/auth.config";
+import { env } from "@/lib/config/t3.config";
 import createGraphqlContext from "@/lib/db/utils/create-graphql-context";
 
 const app = new Elysia()
   .use(
     cors({
-      origin: process.env.CORS_ALLOWED_ORIGINS!.split(","),
+      origin: env.CORS_ALLOWED_ORIGINS.split(","),
       methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowedHeaders: ["Content-Type", "Authorization"],
     }),

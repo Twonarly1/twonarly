@@ -2,7 +2,8 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { parse } from "graphql";
 import { GraphQLClient, gql } from "graphql-request";
 
-import { auth } from "../config/auth.config";
+import { auth } from "@/lib/config/auth.config";
+import { env } from "@/lib/config/t3.config";
 
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import type { Variables } from "graphql-request";
@@ -27,7 +28,7 @@ export const graphqlFetch =
 
     const { cache, ...restOptions } = options || {};
 
-    const client = new GraphQLClient(process.env.API_GRAPHQL_URL!, {
+    const client = new GraphQLClient(env.API_BASE_URL, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session?.session.token ?? ""}`,
