@@ -6,8 +6,6 @@ export const env = createEnv({
     // database
     DATABASE_NAME: z.string().min(1),
     DATABASE_URL: z.url(),
-    CORS_ALLOWED_ORIGINS: z.string().min(1),
-    API_BASE_URL: z.url(),
 
     // auth
     BETTER_AUTH_SECRET: z.string().min(1),
