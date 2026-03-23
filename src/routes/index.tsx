@@ -33,13 +33,7 @@ function App() {
     <div className="flex h-dvh items-center justify-center">
       {session ? (
         <div className="flex flex-col items-center gap-8">
-          <h1 className="font-medium text-h1">Landing Page Stuff</h1>
-          <div className="flex gap-4">
-            <Link to="/tasks">Tasks</Link>
-            <Link to="/preferences" variant="outline">
-              Preferences
-            </Link>
-          </div>
+          <Link to="/preferences">Enter Shell</Link>
         </div>
       ) : (
         <div className="container mx-auto flex flex-col items-center justify-center gap-4 p-4">

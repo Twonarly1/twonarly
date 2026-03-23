@@ -24,7 +24,7 @@ export const tasks = pgTable(
   (table) => [uniqueIndex().on(table.id), index().on(table.userId)],
 );
 
-export type InsertTask = InferInsertModel<typeof tasks>;
+export type Task = InferInsertModel<typeof tasks>;
 export type SelectTask = InferSelectModel<typeof tasks>;
 
 // AUTH SCHEMA TABLES

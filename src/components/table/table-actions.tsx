@@ -9,7 +9,7 @@ import { deleteTask } from "@/server/functions/task/delete-task";
 import { toggleIsComplete } from "@/server/functions/task/toggle-completed";
 
 import type { Table as TableProps } from "@tanstack/react-table";
-import type { Task } from "@/lib/types";
+import type { Task } from "@/lib/db/schema";
 
 interface Props {
   table: TableProps<Task>;
@@ -29,11 +29,13 @@ const TableActions = ({ table }: Props) => {
     const markingIncomplete = selectedRows.filter((row) => row.original.completed).length;
 
     for (const row of selectedRows) {
+      if (!row.original.id) continue;
       table.options.meta?.updateTask(row.original.id, "completed", !row.original.completed);
     }
 
     try {
       for (const row of selectedRows) {
+        if (!row.original.id) continue;
         await toggleCompletedFn({
           data: { id: row.original.id, completed: !row.original.completed },
         });
@@ -46,10 +48,10 @@ const TableActions = ({ table }: Props) => {
       if (markingComplete > 0 && markingIncomplete > 0) {
         description = `Marked ${markingComplete} ${markingComplete === 1 ? "task" : "tasks"} as complete and ${markingIncomplete} ${markingIncomplete === 1 ? "task" : "tasks"} as incomplete.`;
       } else if (markingComplete > 0) {
-        title = "Tasks marked as complete";
+        title = `${markingComplete === 1 ? "Task marked as complete" : "Tasks marked as complete"}`;
         description = `${markingComplete} ${markingComplete === 1 ? "task has" : "tasks have"} been completed.`;
       } else {
-        title = "Tasks marked as incomplete";
+        title = `${markingIncomplete === 1 ? "Task marked as incomplete" : "Tasks marked as incomplete"}`;
         description = `${markingIncomplete} ${markingIncomplete === 1 ? "task has" : "tasks have"} been marked as incomplete.`;
       }
 
@@ -60,6 +62,7 @@ const TableActions = ({ table }: Props) => {
       router.invalidate();
     } catch (err) {
       for (const row of selectedRows) {
+        if (!row.original.id) continue;
         table.options.meta?.updateTask(row.original.id, "completed", row.original.completed);
       }
       toast.error({
@@ -76,23 +79,25 @@ const TableActions = ({ table }: Props) => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
 
     for (const row of selectedRows) {
+      if (!row.original.id) continue;
       table.options.meta?.deleteTask(row.original.id);
     }
 
     try {
       for (const row of selectedRows) {
+        if (!row.original.id) continue;
         await deleteTaskFn({ data: { id: row.original.id } });
       }
       toast.success({
         title: "Tasks deleted",
-        description: `${selectedCount} tasks have been deleted.`,
+        description: `${selectedCount} ${selectedCount === 1 ? "task has" : "tasks have"} been deleted.`,
       });
       router.invalidate();
     } catch (err) {
       console.error("Failed to delete", err);
       toast.error({
         title: "Failed to delete",
-        description: `Could not delete ${selectedCount} tasks.`,
+        description: `Could not delete ${selectedCount} ${selectedCount === 1 ? "task" : "tasks"}.`,
       });
       router.invalidate();
     }

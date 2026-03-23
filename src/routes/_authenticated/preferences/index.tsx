@@ -5,7 +5,7 @@ import { ChevronDown, Droplet, Monitor, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 
-import ColorPickerDialog from "@/components/color-picker-dialog";
+import ColorPickerDialog from "@/components/color-picker";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {

@@ -10,7 +10,7 @@ interface Props {
   onChange: (value: string) => void;
 }
 
-const ColorPickerDialog = ({ value, onChange }: Props) => {
+const ColorPicker = ({ value, onChange }: Props) => {
   const [inputValue, setInputValue] = useState(value);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,4 +76,4 @@ const ColorPickerDialog = ({ value, onChange }: Props) => {
   );
 };
 
-export default ColorPickerDialog;
+export default ColorPicker;

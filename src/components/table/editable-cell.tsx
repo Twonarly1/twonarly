@@ -7,7 +7,7 @@ import { updateTask } from "@/server/functions/task/update-task";
 
 import type { CellContext } from "@tanstack/react-table";
 import type { KeyboardEvent } from "react";
-import type { Task } from "@/lib/types";
+import type { Task } from "@/lib/db/schema";
 
 // Extract the editable cell logic into a separate component
 const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, unknown>) => {
@@ -47,11 +47,13 @@ const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, u
     }
 
     // Optimistic update
+    if (!row.original.id) return;
     table.options.meta?.updateTask(row.original.id, column.id, trimmed);
 
     try {
       await updateTaskFn({
         data: {
+          id: row.original.id,
           ...row.original,
           [column.id]: trimmed,
         },

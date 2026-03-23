@@ -27,7 +27,7 @@ import type {
   SortingState,
   VisibilityState,
 } from "@tanstack/react-table";
-import type { Task } from "@/lib/types";
+import type { Task } from "@/lib/db/schema";
 
 export const Route = createFileRoute("/_authenticated/tasks/")({
   component: TasksPage,

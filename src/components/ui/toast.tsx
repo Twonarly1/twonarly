@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
 import type { ToasterProps } from "sonner";
 
 // TODO: rethink
-// Mmove some acions to hook
+// Move some acions to hook
 
 type Intent = "success" | "error" | "info" | "warning";
 

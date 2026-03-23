@@ -60,7 +60,9 @@ const NewTaskDialog = () => {
   return (
     <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
       <DialogTrigger asChild>
-        <Button className="active:scale-[0.97]">New Task</Button>
+        <Button size="sm" className="active:scale-[0.97]">
+          New Task
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="sr-only">

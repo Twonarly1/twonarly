@@ -15,7 +15,7 @@ import { deleteTask } from "@/server/functions/task/delete-task";
 import { toggleIsComplete } from "@/server/functions/task/toggle-completed";
 
 import type { Row, Table } from "@tanstack/react-table";
-import type { Task } from "@/lib/types";
+import type { Task } from "@/lib/db/schema";
 
 interface Props {
   row: Row<Task>;
@@ -35,6 +35,8 @@ const ActionCell = memo(({ row, table }: Props) => {
       e.stopPropagation();
       e.preventDefault();
 
+      if (!task.id) return;
+
       table.options.meta?.updateTask(task.id, "completed", !completed);
 
       try {
@@ -52,6 +54,8 @@ const ActionCell = memo(({ row, table }: Props) => {
     async (e: React.MouseEvent) => {
       e.stopPropagation();
       e.preventDefault();
+
+      if (!task.id) return;
 
       table.options.meta?.deleteTask(task.id);
 

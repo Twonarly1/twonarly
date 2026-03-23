@@ -6,7 +6,7 @@ import HeaderCell from "@/components/table/header-cell";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
 
 import type { RowData, Table as TableProps } from "@tanstack/react-table";
-import type { Task } from "@/lib/types";
+import type { Task } from "@/lib/db/schema";
 
 declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {

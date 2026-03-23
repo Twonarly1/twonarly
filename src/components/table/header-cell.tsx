@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { cn } from "@/lib/utils";
 
 import type { Header } from "@tanstack/react-table";
-import type { Task } from "@/lib/types";
+import type { Task } from "@/lib/db/schema";
 
 interface Props {
   header: Header<Task, unknown>;

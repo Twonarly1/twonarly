@@ -7,6 +7,16 @@ import { useOnClickOutside } from "usehooks-ts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -238,15 +248,34 @@ function ProfilePage() {
             <ItemDescription>All your data will be permanently deleted.</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                deleteUserFn({ data: { id: user.id } });
-                navigate({ to: "/" });
-              }}
-            >
-              Delete
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive">Delete</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-sm">
+                <DialogHeader>
+                  <DialogTitle>Delete account</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete your account? This action cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                  <Button
+                    variant="destructive"
+                    onClick={() => {
+                      deleteUserFn({ data: { id: user.id } });
+                      navigate({ to: "/" });
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </ItemActions>
         </Item>
       </ItemGroup>
