@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/lib/hooks/use-debounce";
 import { cn, formatDate } from "@/lib/utils";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 import { getTasks } from "@/server/functions/task/get-tasks";
 
 import type {

@@ -6,7 +6,7 @@ import { r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 
 export const removeAvatar = createServerFn({ method: "POST" }).handler(async () => {
   const session = await getSession();

@@ -27,7 +27,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/auth-client";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 import { deleteUser } from "@/server/functions/user/delete-user";
 import { getUser } from "@/server/functions/user/get-user";
 import { removeAvatar } from "@/server/functions/user/remove-avatar";

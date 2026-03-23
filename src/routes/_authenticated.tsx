@@ -5,7 +5,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { cn } from "@/lib/utils";
 import { authMiddleware } from "@/middleware";
 import { useSettings } from "@/providers/settings-provider";
-import { getDeviceSessions } from "@/server/functions/get-device-sessions";
+import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthenticatedLayout,

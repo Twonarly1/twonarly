@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemContent, ItemGroup } from "@/components/ui/item";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { authClient } from "@/lib/auth/auth-client";
-import { getDeviceSessions } from "@/server/functions/get-device-sessions";
-import { getSessions } from "@/server/functions/get-sessions";
+import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
+import { getSessions } from "@/server/functions/session/get-sessions";
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
   component: RouteComponent,

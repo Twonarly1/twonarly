@@ -4,7 +4,7 @@ import z from "zod";
 
 import { db } from "@/lib/db/db";
 import { tasks } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 
 export const toggleIsComplete = createServerFn({ method: "POST" })
   .inputValidator(
@@ -21,6 +21,4 @@ export const toggleIsComplete = createServerFn({ method: "POST" })
       .update(tasks)
       .set({ completed: data.completed })
       .where(and(eq(tasks.id, data.id), eq(tasks.userId, session.userId)));
-
-    return { error: false };
   });

@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { db } from "@/lib/db/db";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 
 export const getTasks = createServerFn({ method: "GET" })
   .inputValidator((data: { userId: string }) => data)

@@ -6,7 +6,7 @@ import z from "zod";
 import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 
 export const deleteUser = createServerFn({ method: "POST" })
   .inputValidator(z.object({ id: z.string().min(1) }))
@@ -18,6 +18,4 @@ export const deleteUser = createServerFn({ method: "POST" })
 
     await db.delete(user).where(eq(user.id, data.id));
     await auth.api.signOut({ headers: getRequestHeaders() });
-
-    return { error: false };
   });

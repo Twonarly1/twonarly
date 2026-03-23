@@ -8,7 +8,7 @@ import { r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/get-session";
+import { getSession } from "@/server/functions/session/get-session";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -69,6 +69,4 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       .update(user)
       .set({ image: imageUrl, updatedAt: new Date().toISOString() })
       .where(eq(user.id, session.userId));
-
-    return { success: true, imageUrl };
   });
