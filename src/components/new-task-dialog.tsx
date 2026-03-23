@@ -18,6 +18,8 @@ import { LoadingSwap } from "@/components/ui/loading-swap";
 import { Textarea } from "@/components/ui/textarea";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 import { addTask } from "@/server/functions/task/add-task";
+import { Kbd } from "./ui/kbd";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const NewTaskDialog = () => {
   const addTaskFn = useServerFn(addTask);
@@ -53,96 +55,113 @@ const NewTaskDialog = () => {
     },
   });
 
-  useHotkeys("mod+j", () => setIsCreateTaskOpen(true), { description: "Add new task" }, [
-    isCreateTaskOpen,
-  ]);
+  useHotkeys(
+    "c",
+    (e) => {
+      e.preventDefault();
+      setIsCreateTaskOpen(true);
+    },
+    {
+      description: "Add new task",
+      enabled: !isCreateTaskOpen,
+    },
+    [isCreateTaskOpen],
+  );
 
   return (
-    <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" className="active:scale-[0.97]">
-          New Task
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader className="sr-only">
-          <DialogDescription className="hidden" />
-        </DialogHeader>
+    <Tooltip delayDuration={500}>
+      <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button size="sm" className="flex gap-2 active:scale-[0.97]">
+              New Task
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <DialogContent>
+          <DialogHeader className="sr-only">
+            <DialogDescription className="hidden" />
+          </DialogHeader>
 
-        <DialogHeader>
-          <DialogTitle>New Task</DialogTitle>
-        </DialogHeader>
+          <DialogHeader>
+            <DialogTitle>New Task</DialogTitle>
+          </DialogHeader>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            form.handleSubmit();
-          }}
-          className="space-y-2"
-        >
-          <form.Field
-            name="name"
-            validators={{
-              onSubmit: z.string().min(1, "Name is required"),
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit();
             }}
+            className="space-y-2"
           >
-            {(field) => (
-              <Input
-                autoFocus
-                aria-label="Name"
-                placeholder="Enter your task..."
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            )}
-          </form.Field>
+            <form.Field
+              name="name"
+              validators={{
+                onSubmit: z.string().min(1, "Name is required"),
+              }}
+            >
+              {(field) => (
+                <Input
+                  autoFocus
+                  aria-label="Name"
+                  placeholder="Enter your task..."
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+              )}
+            </form.Field>
 
-          <form.Field name="description">
-            {(field) => (
-              <Textarea
-                aria-label="Description"
-                placeholder="Enter a description..."
-                value={field.state.value ?? ""}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            )}
-          </form.Field>
+            <form.Field name="description">
+              {(field) => (
+                <Textarea
+                  aria-label="Description"
+                  placeholder="Enter a description..."
+                  value={field.state.value ?? ""}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+              )}
+            </form.Field>
 
-          <form.Field name="category">
-            {(field) => (
-              <Input
-                aria-label="Category"
-                placeholder="Enter your category..."
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
-            )}
-          </form.Field>
+            <form.Field name="category">
+              {(field) => (
+                <Input
+                  aria-label="Category"
+                  placeholder="Enter your category..."
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+              )}
+            </form.Field>
 
-          <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting, state.isDefaultValue]}
-          >
-            {([canSubmit, isSubmitting, isDefaultValue]) => (
-              <Button
-                type="submit"
-                disabled={!canSubmit || isSubmitting || isDefaultValue}
-                className="mt-2 ml-auto flex active:scale-[0.97]"
-              >
-                <LoadingSwap
-                  isLoading={form.state.isSubmitting}
-                  className="flex items-center gap-2"
+            <form.Subscribe
+              selector={(state) => [state.canSubmit, state.isSubmitting, state.isDefaultValue]}
+            >
+              {([canSubmit, isSubmitting, isDefaultValue]) => (
+                <Button
+                  type="submit"
+                  disabled={!canSubmit || isSubmitting || isDefaultValue}
+                  className="mt-2 ml-auto flex active:scale-[0.97]"
                 >
-                  Create task
-                </LoadingSwap>
-              </Button>
-            )}
-          </form.Subscribe>
-        </form>
-      </DialogContent>
-    </Dialog>
+                  <LoadingSwap
+                    isLoading={form.state.isSubmitting}
+                    className="flex items-center gap-2"
+                  >
+                    Create task
+                  </LoadingSwap>
+                </Button>
+              )}
+            </form.Subscribe>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      <TooltipContent side="left" sideOffset={8} className="flex items-center gap-2 text-body-sm">
+        Create new task <Kbd className="ml-2">c</Kbd>
+      </TooltipContent>
+    </Tooltip>
   );
 };
 

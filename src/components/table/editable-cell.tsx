@@ -105,7 +105,7 @@ const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, u
             {initialValue}
           </span>
         ) : (
-          <span className="text-muted-foreground/50 opacity-0 hover:text-muted-foreground group-hover:opacity-100">
+          <span className="text-muted-foreground/50 opacity-100 hover:text-muted-foreground group-hover:opacity-100 sm:opacity-0">
             {isDescriptionColumn ? "Add task description" : undefined}
           </span>
         )}

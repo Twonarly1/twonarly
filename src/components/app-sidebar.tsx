@@ -20,7 +20,6 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -37,7 +36,6 @@ import { app } from "@/lib/config/app.config";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
 import { Route } from "@/routes/_authenticated";
-import ShortcutsDialog from "./shortcuts-dialog";
 
 const AppSidebar = () => {
   const { deviceSessions } = Route.useLoaderData();
@@ -205,12 +203,6 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      {!isMobile && (
-        <SidebarFooter>
-          <ShortcutsDialog />
-        </SidebarFooter>
-      )}
 
       <SidebarRail />
     </Sidebar>
