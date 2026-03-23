@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Link from "@/components/core/link";
 import { Button } from "@/components/ui/button";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { authClient } from "@/lib/auth/auth-client";
+import { authClient, signIn } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
 
 export const Route = createFileRoute("/")({
@@ -11,12 +11,6 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-  const signIn = async () =>
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/tasks",
-    });
-
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {

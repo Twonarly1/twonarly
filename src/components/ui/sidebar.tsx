@@ -339,13 +339,12 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
 function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
   const { settings } = useSettings();
   const sidebarPosition = settings.sidebarPosition || "left";
-  const isMobile = useIsMobile();
 
   return (
     <main
       data-slot="sidebar-inset"
       className={cn(
-        "relative flex w-full flex-1 flex-col bg-background",
+        "relative flex w-full flex-1 flex-col bg-background p-0 sm:p-2",
         "md:peer-data-[variant=inset]:rounded-lg md:peer-data-[variant=inset]:shadow-sm",
         // Left sidebar (default)
         sidebarPosition === "left" && [
@@ -361,7 +360,6 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
           "md:peer-data-[variant=inset]:mr-0",
           "md:peer-data-[state=collapsed]:mr-2",
         ],
-        isMobile ? "p-0" : "p-2",
         className,
       )}
       {...props}

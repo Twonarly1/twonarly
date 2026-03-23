@@ -81,7 +81,7 @@ function SettingsPage() {
   }, [backgroundHex, accentHex, borderHex, theme, setCustomColors]);
 
   return (
-    <div className="container mx-auto space-y-12 p-4">
+    <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
       <h1 className="items-baseline font-medium text-h1">Preferences</h1>
 
       <ItemGroup className="rounded-lg border">

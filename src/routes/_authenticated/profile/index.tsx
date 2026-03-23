@@ -139,8 +139,9 @@ function ProfilePage() {
   }
 
   return (
-    <div ref={containerRef} className="container mx-auto space-y-12 p-4">
+    <div ref={containerRef} className="container mx-auto space-y-6 p-4 sm:space-y-12">
       <h1 className="items-baseline font-medium text-h1">Profile</h1>
+
       <ItemGroup className="rounded-lg border">
         <Item size="sm">
           <ItemContent>

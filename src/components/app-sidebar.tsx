@@ -32,7 +32,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { toast } from "@/components/ui/toast";
-import { authClient } from "@/lib/auth/auth-client";
+import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
@@ -48,27 +48,9 @@ const AppSidebar = () => {
   const navigate = useNavigate();
   const router = useRouter();
 
-  const signIn = async () => {
-    try {
-      await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/accounts",
-      });
-    } catch (err) {
-      console.error("Failed to sign in:", err);
-    }
-  };
-
-  const signOut = async () => {
-    try {
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => navigate({ to: "/" }),
-        },
-      });
-    } catch (err) {
-      console.error("Failed to sign out:", err);
-    }
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/" });
   };
 
   const handleAccountSwitch = async (token: string | null | undefined) => {
@@ -170,7 +152,7 @@ const AppSidebar = () => {
                         </DropdownMenuPortal>
                       </DropdownMenuSub>
                     )}
-                    <DropdownMenuItem onSelect={signOut}>Log out</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={handleSignOut}>Log out</DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>

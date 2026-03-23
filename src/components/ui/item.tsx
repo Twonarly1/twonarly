@@ -104,7 +104,7 @@ function ItemContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="item-content"
-      className={cn("flex flex-1 flex-col gap-0 [&+[data-slot=item-content]]:flex-none", className)}
+      className={cn("flex flex-1 flex-col gap-2 [&+[data-slot=item-content]]:flex-none", className)}
       {...props}
     />
   );

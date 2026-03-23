@@ -3,9 +3,16 @@ import { Repeat } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Item, ItemActions, ItemContent, ItemGroup } from "@/components/ui/item";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { authClient } from "@/lib/auth/auth-client";
+import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
 import { getSessions } from "@/server/functions/session/get-sessions";
 
@@ -25,6 +32,11 @@ function RouteComponent() {
 
   const { data: session, isPending } = authClient.useSession();
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate({ to: "/" });
+  };
+
   const handleAccountSwitch = async (token: string) => {
     await authClient.multiSession.setActive({ sessionToken: token });
     router.invalidate();
@@ -33,24 +45,6 @@ function RouteComponent() {
   const removeAccount = async (token: string) => {
     await authClient.multiSession.revoke({ sessionToken: token });
     router.invalidate();
-  };
-
-  const signIn = async () =>
-    await authClient.signIn.social({
-      provider: "google",
-      callbackURL: "/accounts",
-    });
-
-  const signOut = async () => {
-    try {
-      await authClient.signOut({
-        fetchOptions: {
-          onSuccess: () => navigate({ to: "/" }),
-        },
-      });
-    } catch (err) {
-      console.error("Failed to sign out:", err);
-    }
   };
 
   const sortedDeviceSessions = [...(deviceSessions ?? [])].sort((a, b) => {
@@ -70,23 +64,22 @@ function RouteComponent() {
   }
 
   return (
-    <div className="container mx-auto space-y-12 p-4">
-      <div>
-        <h1 className="items-baseline font-medium text-h1">Security & access</h1>
-      </div>
+    <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
+      <h1 className="items-baseline font-medium text-h1">Security & access</h1>
 
       {/* Account switcher — one entry per signed-in account on this device */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h4 className="items-baseline font-medium text-h4">Accounts</h4>
-            <p className="text-muted-foreground">Signed-in accounts on this device</p>
-          </div>
-
-          <Button size="sm" onClick={signIn} className="ml-auto">
-            Add an account
-          </Button>
-        </div>
+        <Item>
+          <ItemContent>
+            <ItemTitle>Accounts</ItemTitle>
+            <ItemDescription>Signed-in accounts on this device</ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Button size="sm" onClick={signIn} className="ml-auto">
+              Add an account
+            </Button>
+          </ItemActions>
+        </Item>
 
         <ItemGroup className="rounded-lg border">
           {sortedDeviceSessions.map((deviceSession) => {
@@ -121,7 +114,7 @@ function RouteComponent() {
                 </ItemContent>
                 <ItemActions>
                   {isCurrent ? (
-                    <Button variant="ghost" size="sm" onClick={signOut}>
+                    <Button variant="ghost" size="sm" onClick={handleSignOut}>
                       Log out
                     </Button>
                   ) : (

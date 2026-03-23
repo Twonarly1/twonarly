@@ -188,7 +188,7 @@ function TasksPage() {
 
   return (
     <>
-      <div className="mx-auto space-y-6 p-4 px-8 lg:px-12">
+      <div className="mx-auto space-y-6 p-4 px-6 lg:px-12">
         <h1 className="items-baseline font-medium text-h1">Tasks ({data.length})</h1>
 
         <div className="flex items-center gap-2">
