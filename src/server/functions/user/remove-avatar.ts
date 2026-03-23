@@ -3,7 +3,6 @@ import { createServerFn } from "@tanstack/react-start";
 import { eq } from "drizzle-orm";
 
 import { r2 } from "@/lib/config/r2.config";
-import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
 import { getSession } from "@/server/functions/session/get-session";
@@ -19,10 +18,10 @@ export const removeAvatar = createServerFn({ method: "POST" }).handler(async () 
       .where(eq(user.id, session.userId));
 
     if (currentUser?.image) {
-      const key = currentUser.image.replace(`${env.R2_PUBLIC_URL}/`, "");
+      const key = currentUser.image.replace(`${process.env.R2_PUBLIC_URL}/`, "");
       await r2.send(
         new DeleteObjectCommand({
-          Bucket: env.R2_BUCKET_NAME,
+          Bucket: process.env.R2_BUCKET_NAME,
           Key: key,
         }),
       );
