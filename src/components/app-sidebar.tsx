@@ -132,41 +132,44 @@ const AppSidebar = () => {
                   align="start"
                 >
                   <DropdownMenuGroup className="space-y-0.5">
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="space-y-0.5">
-                          {deviceSessions?.map((deviceSession) => (
-                            <DropdownMenuItem
-                              key={deviceSession.session.token}
-                              onSelect={() => handleAccountSwitch(deviceSession.session.token)}
-                            >
-                              <Avatar className="mr-0.5 size-6 rounded">
-                                <AvatarImage
-                                  src={deviceSession.user.image || undefined}
-                                  alt={deviceSession.user.name}
-                                />
-                                <AvatarFallback>{deviceSession.user.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
-                              <div className="flex flex-col">
-                                <p className="text-body">{deviceSession.user.name}</p>
-                                <p className="text-body-sm text-muted-foreground">
-                                  {deviceSession.user.email}
-                                </p>
-                              </div>
-                              {deviceSession.user.id === session?.user.id && (
-                                <Check className="icon-xs ml-auto" />
-                              )}
-                            </DropdownMenuItem>
-                          ))}
+                    {!isMobile && (
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent className="space-y-0.5">
+                            {deviceSessions?.map((deviceSession) => (
+                              <DropdownMenuItem
+                                key={deviceSession.session.token}
+                                onSelect={() => handleAccountSwitch(deviceSession.session.token)}
+                              >
+                                <Avatar className="mr-0.5 size-6 rounded">
+                                  <AvatarImage
+                                    src={deviceSession.user.image || undefined}
+                                    alt={deviceSession.user.name}
+                                  />
+                                  <AvatarFallback>
+                                    {deviceSession.user.name.charAt(0)}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className="flex flex-col">
+                                  <p className="text-body">{deviceSession.user.name}</p>
+                                  <p className="text-body-sm text-muted-foreground">
+                                    {deviceSession.user.email}
+                                  </p>
+                                </div>
+                                {deviceSession.user.id === session?.user.id && (
+                                  <Check className="icon-xs ml-auto" />
+                                )}
+                              </DropdownMenuItem>
+                            ))}
 
-                          <DropdownMenuSeparator />
+                            <DropdownMenuSeparator />
 
-                          <DropdownMenuItem onSelect={signIn}>Add an account...</DropdownMenuItem>
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-
+                            <DropdownMenuItem onSelect={signIn}>Add an account...</DropdownMenuItem>
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                    )}
                     <DropdownMenuItem onSelect={signOut}>Log out</DropdownMenuItem>
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
@@ -221,9 +224,11 @@ const AppSidebar = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
-        <ShortcutsDialog />
-      </SidebarFooter>
+      {!isMobile && (
+        <SidebarFooter>
+          <ShortcutsDialog />
+        </SidebarFooter>
+      )}
 
       <SidebarRail />
     </Sidebar>
