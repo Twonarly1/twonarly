@@ -1,14 +1,23 @@
 node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
-count.txt
-.env
-.env.production
-.nitro
+
+# TanStack
 .tanstack
-.vscode
-.wrangler
+.nitro
 .output
-.vinxi
+.vite
+dist
+
+# editor
+.vscode
+.zed
+.rules
+
+# environment
+*.env*
+
+# typescript
+tsconfig.tsbuildinfo
+
+# below are safe to commit
+!.env
+!.env.local.template

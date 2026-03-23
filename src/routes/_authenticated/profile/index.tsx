@@ -49,7 +49,7 @@ function ProfilePage() {
   const user = Route.useLoaderData();
   const router = useRouter();
   const navigate = useNavigate();
-  const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending, refetch } = authClient.useSession();
 
   const removeAvatarFn = useServerFn(removeAvatar);
   const uploadAvatarFn = useServerFn(uploadAvatar);
@@ -65,6 +65,8 @@ function ProfilePage() {
     try {
       await removeAvatarFn();
       toast.success({ title: "Profile updated" });
+      await refetch();
+
       router.invalidate();
     } catch (error) {
       console.error("File upload error:", error);
@@ -83,6 +85,8 @@ function ProfilePage() {
       await uploadAvatarFn({ data: formData });
 
       toast.success({ title: "Profile updated" });
+      await refetch();
+
       router.invalidate();
     } catch (error) {
       console.error("File upload error:", error);
