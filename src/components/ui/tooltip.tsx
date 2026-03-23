@@ -29,7 +29,6 @@ function TooltipTrigger({ ...props }: React.ComponentProps<typeof TooltipPrimiti
   return (
     <TooltipPrimitive.Trigger
       data-slot="tooltip-trigger"
-      // Prevent tooltip from showing when focused
       onFocus={(e) => e.preventDefault()}
       {...props}
     />
@@ -59,4 +58,4 @@ function TooltipContent({
   );
 }
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+export { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger };

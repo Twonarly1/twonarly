@@ -9,13 +9,15 @@ import { Button } from "./button";
 import type { ReactNode } from "react";
 import type { ToasterProps } from "sonner";
 
+// TODO: rethink
+// Mmove some acions to hook
+
 type Intent = "success" | "error" | "info" | "warning";
 
 interface ToastData {
   title: string;
   description?: string;
   intent?: Intent;
-  // action?: { label?: string; onClick: () => void };
 }
 
 const ICONS: Record<Intent, ReactNode> = {
