@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
@@ -54,8 +55,9 @@ function SettingsPage() {
     setCustomColors,
     clearCustomColors: clearCustomColorsContext,
   } = useTheme();
-
+  const isMobile = useIsMobile();
   const { settings, setFontSize, setUsePointerCursor, setSidebarPosition } = useSettings();
+
   const [backgroundHex, setBackgroundHex] = useState(customColors?.background);
   const [accentHex, setAccentHex] = useState(customColors?.accent);
   const [borderHex, setBorderHex] = useState(customColors?.border);
@@ -210,21 +212,24 @@ function SettingsPage() {
 
         <Separator />
 
-        <Item size="sm">
-          <ItemContent>
-            <ItemTitle>Use pointer cursors</ItemTitle>
-            <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Switch
-              id="switch-pointer-cursor"
-              checked={settings.usePointerCursor}
-              onCheckedChange={setUsePointerCursor}
-            />
-          </ItemActions>
-        </Item>
-
-        <Separator />
+        {!isMobile && (
+          <>
+            <Item size="sm">
+              <ItemContent>
+                <ItemTitle>Use pointer cursors</ItemTitle>
+                <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Switch
+                  id="switch-pointer-cursor"
+                  checked={settings.usePointerCursor}
+                  onCheckedChange={setUsePointerCursor}
+                />
+              </ItemActions>
+            </Item>
+            <Separator />
+          </>
+        )}
 
         <Item size="sm">
           <ItemContent>
