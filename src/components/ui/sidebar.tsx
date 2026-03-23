@@ -185,7 +185,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="w-(--sidebar-width) bg-transparent p-2 text-sidebar-foreground [&>button]:hidden"
+          className="w-(--sidebar-width) border-l-0 bg-transparent p-2 text-sidebar-foreground [&>button]:hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -317,7 +317,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
         // "hover:before:bg-sidebar",
 
         // Positioning based on side
-        "group-data-[side=left]:-right-6 group-data-[side=right]:left-2",
+        "group-data-[side=left]:-right-6 group-data-[side=right]:-left-6",
 
         // Cursor styles
         "in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize",
