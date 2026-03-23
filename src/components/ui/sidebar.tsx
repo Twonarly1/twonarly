@@ -284,7 +284,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       <TooltipContent
         side={side === "right" ? "left" : "right"}
         sideOffset={4}
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 text-body-sm"
       >
         <p>Toggle sidebar</p>
         <Kbd>b</Kbd>
