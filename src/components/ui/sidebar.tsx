@@ -270,7 +270,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
           data-slot="sidebar-trigger"
           variant="ghost"
           size="sm"
-          className={cn("px-2", className)}
+          className={cn("m-2 px-2", side === "right" && "ml-auto flex", className)}
           onClick={(event) => {
             onClick?.(event);
             toggleSidebar();
@@ -339,6 +339,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
 function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
   const { settings } = useSettings();
   const sidebarPosition = settings.sidebarPosition || "left";
+  const isMobile = useIsMobile();
 
   return (
     <main
@@ -351,13 +352,16 @@ function SidebarInset({ className, ...props }: React.ComponentProps<"main">) {
           "md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2",
           "md:peer-data-[variant=inset]:m-2",
           "md:peer-data-[variant=inset]:ml-0",
+          "md:peer-data-[state=expanded]:pl-0",
         ],
         // Right sidebar
         sidebarPosition === "right" && [
           "md:peer-data-[variant=inset]:peer-data-[state=collapsed]:mr-2",
           "md:peer-data-[variant=inset]:m-2",
           "md:peer-data-[variant=inset]:mr-0",
+          "md:peer-data-[state=collapsed]:mr-2",
         ],
+        isMobile ? "p-0" : "p-2",
         className,
       )}
       {...props}

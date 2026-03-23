@@ -24,18 +24,10 @@ function AuthenticatedLayout() {
       <SidebarProvider>
         {sidebarPosition === "left" && <AppSidebar />}
 
-        <SidebarInset
-          className={cn(
-            "bg-sidebar p-2 transition-transform duration-500",
-            sidebarPosition === "left" && "md:peer-data-[state=expanded]:pl-0",
-            sidebarPosition === "right" && "md:peer-data-[state=collapsed]:mr-2",
-          )}
-        >
+        <SidebarInset className={cn("bg-sidebar transition-transform duration-500")}>
           <main className="flex-1 gap-0 overflow-hidden rounded-lg">
             <div className="h-full w-full rounded-lg border bg-background">
-              <SidebarTrigger
-                className={cn("m-2", sidebarPosition === "right" && "ml-auto flex")}
-              />
+              <SidebarTrigger />
 
               <Outlet />
             </div>
