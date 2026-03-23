@@ -4,8 +4,6 @@ import { Pool } from "pg";
 import { env } from "@/lib/config/t3.config";
 import * as schema from "@/lib/db/schema.ts";
 
-const pool = new Pool({
-  connectionString: env.DATABASE_URL,
-});
+const pool = new Pool({ connectionString: env.DATABASE_URL });
 
 export const db = drizzle(pool, { schema });

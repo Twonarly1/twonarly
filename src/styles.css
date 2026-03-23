@@ -1,15 +1,14 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@import 'tw-animate-css';
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
 
 body {
   @apply m-0;
   font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: var(--font-size-base);
@@ -22,8 +21,7 @@ body {
 } */
 
 code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 :root {
@@ -63,21 +61,37 @@ code {
 
   /* Default font size */
   --font-size-base: 14px;
-    /* Default icon size */
+  /* Default icon size */
   --icon-size-base: 14px;
 }
 
 /* Font size */
-html[data-font-size="smaller"] { --font-size-base: 12px }
-html[data-font-size="small"]   { --font-size-base: 13px }
-html[data-font-size="large"]   { --font-size-base: 15px }
-html[data-font-size="larger"]  { --font-size-base: 16px }
+html[data-font-size="smaller"] {
+  --font-size-base: 12px;
+}
+html[data-font-size="small"] {
+  --font-size-base: 13px;
+}
+html[data-font-size="large"] {
+  --font-size-base: 15px;
+}
+html[data-font-size="larger"] {
+  --font-size-base: 16px;
+}
 
 /* Icon size */
-html[data-font-size="smaller"] { --icon-size-base: 12px }
-html[data-font-size="small"] { --icon-size-base: 13px }
-html[data-font-size="large"] { --icon-size-base: 15px }
-html[data-font-size="larger"] { --icon-size-base: 16px }
+html[data-font-size="smaller"] {
+  --icon-size-base: 12px;
+}
+html[data-font-size="small"] {
+  --icon-size-base: 13px;
+}
+html[data-font-size="large"] {
+  --icon-size-base: 15px;
+}
+html[data-font-size="larger"] {
+  --icon-size-base: 16px;
+}
 
 .dark {
   --background: oklch(0.141 0.005 285.823);
@@ -175,30 +189,66 @@ html[data-font-size="larger"] { --icon-size-base: 16px }
   }
 }
 
-
 /* Responsive typography utilities using em (relative to parent/inherited font-size) */
 /* These scale with the user's font-size preference */
 @layer utilities {
-  .text-h1 { font-size: 2em; } 
-  .text-h2 { font-size: 1.75em; } 
-  .text-h3 { font-size: 1.5em; } 
-  .text-h4 { font-size: 1.25em; } 
-  .text-h5 { font-size: 1.125em; } 
-  .text-h6 { font-size: 1em; }      
-  
+  .text-h1 {
+    font-size: 2em;
+  }
+  .text-h2 {
+    font-size: 1.75em;
+  }
+  .text-h3 {
+    font-size: 1.5em;
+  }
+  .text-h4 {
+    font-size: 1.25em;
+  }
+  .text-h5 {
+    font-size: 1.125em;
+  }
+  .text-h6 {
+    font-size: 1em;
+  }
+
   /* Body text variations */
-  .text-body-lg { font-size: 1.125em; } 
-  .text-body { font-size: 1em; }  
-  .text-body-sm { font-size: 0.875em; }  
-  .text-body-xs { font-size: 0.75em; }
-  .text-body-2xs { font-size: 0.625em; }
+  .text-body-lg {
+    font-size: 1.125em;
+  }
+  .text-body {
+    font-size: 1em;
+  }
+  .text-body-sm {
+    font-size: 0.875em;
+  }
+  .text-body-xs {
+    font-size: 0.75em;
+  }
+  .text-body-2xs {
+    font-size: 0.625em;
+  }
 
   /* Icon sizes - using rem units to scale with base font size */
-  .icon-xs { width: 1em; height: 1em; }
-  .icon-sm { width: 1.125em; height: 1.125em; }
-  .icon-md { width: 1.25em; height: 1.25em; }
-  .icon-lg { width: 1.5em; height: 1.5em; }
-  .icon-xl { width: 1.75em; height: 1.75em; }
+  .icon-xs {
+    width: 1em;
+    height: 1em;
+  }
+  .icon-sm {
+    width: 1.125em;
+    height: 1.125em;
+  }
+  .icon-md {
+    width: 1.25em;
+    height: 1.25em;
+  }
+  .icon-lg {
+    width: 1.5em;
+    height: 1.5em;
+  }
+  .icon-xl {
+    width: 1.75em;
+    height: 1.75em;
+  }
 }
 
 /* Pointer cursor mode - applied via class on html element */
@@ -262,5 +312,5 @@ html.pointer-cursor label:has(input[type="file"]) * {
   height: 20px;
   border-radius: 3px;
   box-shadow: 0 0 0 0.5px var(--color-foreground);
-  transition: none
+  transition: none;
 }
