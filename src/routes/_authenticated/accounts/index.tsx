@@ -1,9 +1,8 @@
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
 import AccountList from "@/components/account-list";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import PasskeyList from "@/components/passkey-list";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,10 +11,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
-import { authClient, signIn } from "@/lib/auth/auth-client";
+import { signIn } from "@/lib/auth/auth-client";
 import { getAccountsByUserIds } from "@/server/functions/get-accounts";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
-import { getUserPasskeys } from "@/server/functions/user/get-passkeys";
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
   component: RouteComponent,
@@ -24,22 +22,22 @@ export const Route = createFileRoute("/_authenticated/accounts/")({
     const userIds = deviceSessions.map((s) => s.user.id);
     const accounts = await getAccountsByUserIds({ data: { userIds } });
 
-    return { deviceSessions, accounts: accounts ?? [], passkeys: await getUserPasskeys() };
+    return { deviceSessions, accounts: accounts ?? [] };
   },
 });
 
 function RouteComponent() {
-  const { deviceSessions, accounts, passkeys } = Route.useLoaderData();
-  const router = useRouter();
+  const { deviceSessions, accounts } = Route.useLoaderData();
+  // const router = useRouter();
 
-  const handleAddPasskey = async () => {
-    const { error } = await authClient.passkey.addPasskey({
-      name: "example-passkey-name",
-      authenticatorAttachment: "platform",
-    });
+  // const handleAddPasskey = async () => {
+  //   const { error } = await authClient.passkey.addPasskey({
+  //     name: "example-passkey-name",
+  //     authenticatorAttachment: "platform",
+  //   });
 
-    if (!error) router.invalidate();
-  };
+  //   if (!error) router.invalidate();
+  // };
 
   return (
     <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
@@ -74,8 +72,8 @@ function RouteComponent() {
         <AccountList deviceSessions={deviceSessions} accounts={accounts} />
       </div>
 
-      <div className="space-y-4">
-        {/* Passkeys */}
+      {/* Passkeys */}
+      {/* <div className="space-y-4">
         <Item className="px-0">
           <ItemContent>
             <ItemTitle>Passkeys</ItemTitle>
@@ -89,7 +87,7 @@ function RouteComponent() {
         </Item>
 
         <PasskeyList passkeys={passkeys} />
-      </div>
+      </div> */}
     </div>
   );
 }

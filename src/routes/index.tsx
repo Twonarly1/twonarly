@@ -1,12 +1,10 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Fingerprint } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 
 import Link from "@/components/core/link";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { toast } from "@/components/ui/toast";
 import { authClient, signIn } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
 
@@ -15,24 +13,24 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
 
-  const handlePasskeySignIn = async () => {
-    const { error } = await authClient.signIn.passkey({
-      autoFill: true,
-      fetchOptions: {
-        onSuccess: () => navigate({ to: "/tasks" }),
-      },
-    });
+  // const handlePasskeySignIn = async () => {
+  //   const { error } = await authClient.signIn.passkey({
+  //     autoFill: true,
+  //     fetchOptions: {
+  //       onSuccess: () => navigate({ to: "/tasks" }),
+  //     },
+  //   });
 
-    if (error) {
-      toast.error({
-        title: "Sign in failed",
-        description: "Could not sign in with passkey.",
-      });
-    }
-  };
+  //   if (error) {
+  //     toast.error({
+  //       title: "Sign in failed",
+  //       description: "Could not sign in with passkey.",
+  //     });
+  //   }
+  // };
 
   if (isPending) {
     return (
@@ -78,7 +76,7 @@ function App() {
               <p className="font-medium text-body-lg">Sign in with GitHub</p>
             </Button>
 
-            <Button
+            {/* <Button
               variant="outline"
               size="lg"
               onClick={handlePasskeySignIn}
@@ -86,7 +84,7 @@ function App() {
             >
               <Fingerprint className="size-4" />
               <p className="font-medium text-body-lg">Sign in with passkey</p>
-            </Button>
+            </Button> */}
           </div>
         </div>
       )}
