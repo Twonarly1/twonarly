@@ -18,13 +18,9 @@ function App() {
 
   const handlePasskeySignIn = async () => {
     const { error } = await authClient.signIn.passkey({
+      autoFill: true,
       fetchOptions: {
-        onSuccess: () => {
-          navigate({ to: "/tasks" });
-        },
-        onError: (ctx) => {
-          console.error("Passkey sign-in onError:", ctx.error);
-        },
+        onSuccess: () => navigate({ to: "/tasks" }),
       },
     });
 
