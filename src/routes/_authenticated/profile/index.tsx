@@ -216,9 +216,7 @@ function ProfilePage() {
             )}
           </ItemActions>
         </Item>
-
         <Separator />
-
         <Item size="sm">
           <ItemContent>
             <ItemTitle>Email</ItemTitle>
@@ -229,9 +227,7 @@ function ProfilePage() {
             </div>
           </ItemActions>
         </Item>
-
         <Separator />
-
         <Item size="sm">
           <ItemContent>
             <ItemTitle>Username</ItemTitle>

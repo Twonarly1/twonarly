@@ -1,8 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Fingerprint } from "lucide-react";
 
 import Link from "@/components/core/link";
 import { Button } from "@/components/ui/button";
 import { LoadingSwap } from "@/components/ui/loading-swap";
+import { toast } from "@/components/ui/toast";
 import { authClient, signIn } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
 
@@ -11,7 +13,28 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
+  const navigate = useNavigate();
   const { data: session, isPending } = authClient.useSession();
+
+  const handlePasskeySignIn = async () => {
+    const { error } = await authClient.signIn.passkey({
+      fetchOptions: {
+        onSuccess: () => {
+          navigate({ to: "/tasks" });
+        },
+        onError: (ctx) => {
+          console.error("Passkey sign-in onError:", ctx.error);
+        },
+      },
+    });
+
+    if (error) {
+      toast.error({
+        title: "Sign in failed",
+        description: "Could not sign in with passkey.",
+      });
+    }
+  };
 
   if (isPending) {
     return (
@@ -58,6 +81,11 @@ function App() {
             </svg>
 
             <p className="font-medium text-body-lg">Sign in with Google</p>
+          </Button>
+
+          <Button onClick={handlePasskeySignIn} variant="outline" size="lg" className="px-12 py-6">
+            <Fingerprint className="icon-lg mr-1" />
+            <p className="font-medium text-body-lg">Sign in with passkey</p>
           </Button>
         </div>
       )}

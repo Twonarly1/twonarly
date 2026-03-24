@@ -36,6 +36,20 @@
       "when": 1770768111388,
       "tag": "0004_dusty_professor_monster",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1774311483282,
+      "tag": "0005_flippant_mantis",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1774312997872,
+      "tag": "0006_lonely_daimon_hellstrom",
+      "breakpoints": true
     }
   ]
 }

@@ -1,146 +1,73 @@
-import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
-import { Repeat } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import AccountList from "@/components/account-list";
+import PasskeyList from "@/components/passkey-list";
 import { Button } from "@/components/ui/button";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemTitle,
-} from "@/components/ui/item";
-import { LoadingSwap } from "@/components/ui/loading-swap";
-import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
+import { authClient, signIn } from "@/lib/auth/auth-client";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
-import { getSessions } from "@/server/functions/session/get-sessions";
+import { getUserPasskeys } from "@/server/functions/user/get-passkeys";
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
   component: RouteComponent,
   loader: async () => ({
     deviceSessions: await getDeviceSessions(),
-    sessions: await getSessions(),
+    passkeys: await getUserPasskeys(),
   }),
 });
 
 function RouteComponent() {
-  const { deviceSessions } = Route.useLoaderData();
+  const { deviceSessions, passkeys } = Route.useLoaderData();
 
-  const router = useRouter();
-  const navigate = useNavigate();
-
-  const { data: session, isPending } = authClient.useSession();
-
-  const handleSignOut = async () => {
-    await signOut();
-    navigate({ to: "/" });
+  const fetchPasskeys = async () => {
+    await authClient.passkey.listUserPasskeys();
   };
 
-  const handleAccountSwitch = async (token: string) => {
-    await authClient.multiSession.setActive({ sessionToken: token });
-    router.invalidate();
+  const handleAddPasskey = async () => {
+    const { error } = await authClient.passkey.addPasskey({
+      name: "example-passkey-name",
+      authenticatorAttachment: "platform",
+    });
+
+    if (!error) fetchPasskeys();
   };
-
-  const removeAccount = async (token: string) => {
-    await authClient.multiSession.revoke({ sessionToken: token });
-    router.invalidate();
-  };
-
-  const sortedDeviceSessions = [...(deviceSessions ?? [])].sort((a, b) => {
-    const aIsCurrent = a.user.id === session?.user.id;
-    const bIsCurrent = b.user.id === session?.user.id;
-    return aIsCurrent ? -1 : bIsCurrent ? 1 : 0;
-  });
-
-  if (isPending) {
-    return (
-      <div className="flex h-dvh items-center justify-center">
-        <LoadingSwap isLoading={isPending} className="flex items-center gap-2">
-          Loading
-        </LoadingSwap>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
       <h1 className="items-baseline font-medium text-h1">Security & access</h1>
 
-      {/* Account switcher — one entry per signed-in account on this device */}
       <div className="space-y-4">
-        <Item>
+        {/* Accounts */}
+        <Item className="px-0">
           <ItemContent>
             <ItemTitle>Accounts</ItemTitle>
             <ItemDescription>Signed-in accounts on this device</ItemDescription>
           </ItemContent>
           <ItemActions>
             <Button size="sm" onClick={signIn} className="ml-auto">
-              Add an account
+              Add account
             </Button>
           </ItemActions>
         </Item>
 
-        <ItemGroup className="rounded-lg border">
-          {sortedDeviceSessions.map((deviceSession) => {
-            const isCurrent = deviceSession.user.id === session?.user.id;
+        <AccountList deviceSessions={deviceSessions} />
+      </div>
 
-            return (
-              <Item size="sm" key={deviceSession.session.token}>
-                <ItemContent>
-                  <div className="flex items-center gap-2">
-                    <Avatar className="size-8 rounded-lg">
-                      <AvatarImage
-                        src={deviceSession.user.image || undefined}
-                        alt={deviceSession.user.name}
-                      />
-                      <AvatarFallback className="rounded-lg">
-                        {deviceSession.user.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="flex items-baseline gap-2">
-                        <p className="font-medium text-body">{deviceSession.user.name}</p>
+      <div className="space-y-4">
+        {/* Passkeys */}
+        <Item className="px-0">
+          <ItemContent>
+            <ItemTitle>Passkeys</ItemTitle>
+            <ItemDescription>Sign in with biometrics like Face ID or Touch ID</ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Button size="sm" onClick={handleAddPasskey}>
+              Add passkey
+            </Button>
+          </ItemActions>
+        </Item>
 
-                        {isCurrent && (
-                          <span className="font-medium text-body-sm text-green-600">Active</span>
-                        )}
-                      </div>
-                      <p className="text-body-sm text-muted-foreground">
-                        {deviceSession.user.email}
-                      </p>
-                    </div>
-                  </div>
-                </ItemContent>
-                <ItemActions>
-                  {isCurrent ? (
-                    <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                      Log out
-                    </Button>
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAccountSwitch(deviceSession.session.token!)}
-                      >
-                        <Repeat className="icon-xs" />
-                        Switch
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeAccount(deviceSession.session.token!)}
-                      >
-                        Revoke
-                      </Button>
-                    </div>
-                  )}
-                </ItemActions>
-              </Item>
-            );
-          })}
-        </ItemGroup>
+        <PasskeyList passkeys={passkeys} fetchPasskeys={fetchPasskeys} />
       </div>
     </div>
   );

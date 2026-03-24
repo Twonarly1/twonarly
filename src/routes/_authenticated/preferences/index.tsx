@@ -227,6 +227,7 @@ function SettingsPage() {
                 />
               </ItemActions>
             </Item>
+
             <Separator />
           </>
         )}

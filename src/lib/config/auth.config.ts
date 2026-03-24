@@ -1,3 +1,4 @@
+import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { multiSession } from "better-auth/plugins";
@@ -23,6 +24,7 @@ export const auth = betterAuth({
   plugins: [
     // TODO: show a warning when the maximum number of sessions is reached and prevent new sign-ins until an existing session is signed out
     multiSession({ maximumSessions: 3 }),
+    passkey(),
     // make sure this is the last plugin in the array
     tanstackStartCookies(),
   ],
