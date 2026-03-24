@@ -145,7 +145,9 @@ const AppSidebar = () => {
 
                             <DropdownMenuSeparator />
 
-                            <DropdownMenuItem onSelect={signIn}>Add an account...</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => signIn("google")}>
+                              Add an account...
+                            </DropdownMenuItem>
                           </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                       </DropdownMenuSub>

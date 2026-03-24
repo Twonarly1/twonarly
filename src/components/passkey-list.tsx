@@ -1,3 +1,4 @@
+import { useRouter } from "@tanstack/react-router";
 import { Fingerprint, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 
@@ -10,24 +11,26 @@ import type { Passkey } from "@better-auth/passkey/client";
 
 interface Props {
   passkeys: Passkey[];
-  fetchPasskeys: () => Promise<void>;
 }
 
-const PasskeyList = ({ passkeys, fetchPasskeys }: Props) => {
+const PasskeyList = ({ passkeys }: Props) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
+  const router = useRouter();
 
   const handleDeletePasskey = async (id: string) => {
     await authClient.passkey.deletePasskey({ id });
-    fetchPasskeys();
+    router.invalidate();
   };
 
   const handleRenamePasskey = async (id: string) => {
     if (!editName.trim()) return;
+
     await authClient.passkey.updatePasskey({ id, name: editName.trim() });
+
     setEditingId(null);
     setEditName("");
-    fetchPasskeys();
+    router.invalidate();
   };
 
   if (passkeys.length === 0) return null;

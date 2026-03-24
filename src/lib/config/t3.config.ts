@@ -13,6 +13,8 @@ export const env = createEnv({
     // oauth providers
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
+    GITHUB_CLIENT_ID: z.string().min(1),
+    GITHUB_CLIENT_SECRET: z.string().min(1),
 
     // Cloudflare R2 storage
     R2_ACCOUNT_ID: z.string().min(1),

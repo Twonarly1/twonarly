@@ -6,9 +6,9 @@ export const authClient = createAuthClient({
   plugins: [multiSessionClient(), passkeyClient()],
 });
 
-export const signIn = async () => {
+export const signIn = async (provider: "google" | "github") => {
   await authClient.signIn.social({
-    provider: "google",
+    provider,
     callbackURL: "/tasks",
   });
 };

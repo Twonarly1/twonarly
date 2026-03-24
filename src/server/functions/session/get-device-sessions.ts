@@ -4,5 +4,18 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "@/lib/config/auth.config";
 
 export const getDeviceSessions = createServerFn({ method: "POST" }).handler(async () => {
-  return await auth.api.listDeviceSessions({ headers: getRequestHeaders() });
+  const headers = getRequestHeaders();
+
+  const [deviceSessions, currentSession] = await Promise.all([
+    auth.api.listDeviceSessions({ headers }),
+    auth.api.getSession({ headers }),
+  ]);
+
+  const currentUserId = currentSession?.user?.id;
+
+  return deviceSessions.sort((a, b) => {
+    if (a.user.id === currentUserId) return -1;
+    if (b.user.id === currentUserId) return 1;
+    return 0;
+  });
 });

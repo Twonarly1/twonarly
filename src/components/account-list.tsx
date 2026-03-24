@@ -5,6 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Item, ItemActions, ItemContent, ItemGroup } from "@/components/ui/item";
 import { authClient, signOut } from "@/lib/auth/auth-client";
+import { GitHubIcon } from "./icons/github";
+import { GoogleIcon } from "./icons/google";
 
 import type { Session, User } from "better-auth";
 
@@ -15,9 +17,10 @@ interface DeviceSession {
 
 interface Props {
   deviceSessions: DeviceSession[];
+  accounts: { userId: string; providerId: string }[];
 }
 
-const AccountList = ({ deviceSessions }: Props) => {
+const AccountList = ({ deviceSessions, accounts }: Props) => {
   const router = useRouter();
   const navigate = useNavigate();
 
@@ -38,18 +41,11 @@ const AccountList = ({ deviceSessions }: Props) => {
     router.invalidate();
   };
 
-  const sortedDeviceSessions = [...(deviceSessions ?? [])].sort((a, b) => {
-    const aIsCurrent = a.user.id === session?.user.id;
-    const bIsCurrent = b.user.id === session?.user.id;
-    return aIsCurrent ? -1 : bIsCurrent ? 1 : 0;
-  });
-
-  if (sortedDeviceSessions.length === 0) return null;
-
   return (
     <ItemGroup className="rounded-lg border">
-      {sortedDeviceSessions.map((deviceSession) => {
+      {deviceSessions.map((deviceSession) => {
         const isCurrent = deviceSession.user.id === session?.user.id;
+        const provider = accounts.find((a) => a.userId === deviceSession.user.id)?.providerId;
 
         return (
           <Item size="sm" key={deviceSession.session.token}>
@@ -65,9 +61,10 @@ const AccountList = ({ deviceSessions }: Props) => {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <div className="flex items-baseline gap-2">
+                  <div className="flex items-center gap-2">
                     <p className="font-medium text-body">{deviceSession.user.name}</p>
-
+                    {provider === "google" && <GoogleIcon className="size-3.5" />}
+                    {provider === "github" && <GitHubIcon className="size-3.5" />}
                     {isCurrent && (
                       <span className="font-medium text-body-sm text-green-600">Active</span>
                     )}
