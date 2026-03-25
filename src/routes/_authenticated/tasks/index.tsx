@@ -33,13 +33,14 @@ export const Route = createFileRoute("/_authenticated/tasks/")({
   component: TasksPage,
   loader: async () => {
     const session = await getSession();
+    const tasks = await getTasks({ data: { userId: session?.userId! } });
 
-    return getTasks({ data: { userId: session?.userId! } });
+    return { tasks };
   },
 });
 
 function TasksPage() {
-  const tasks = Route.useLoaderData();
+  const { tasks } = Route.useLoaderData();
 
   const [data, setData] = useState(tasks ?? []);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -149,7 +150,6 @@ function TasksPage() {
     setColumnFilters([{ id: "name", value: debouncedSearch }]);
   }, [debouncedSearch]);
 
-  // Sync data when tasks change from server
   useEffect(() => {
     setData(tasks ?? []);
   }, [tasks]);
@@ -189,7 +189,9 @@ function TasksPage() {
   return (
     <>
       <div className="mx-auto space-y-6 p-4 px-6 lg:px-12">
-        <h1 className="items-baseline font-medium text-h1">Tasks ({data.length})</h1>
+        <h1 className="items-baseline font-medium text-h1">
+          Tasks {data?.length ? `(${data.length})` : ""}
+        </h1>
 
         <div className="flex items-center gap-2">
           <div className="group relative flex w-full gap-2">

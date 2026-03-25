@@ -4,7 +4,6 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 
 export enum DialogType {
   CreateTask = "create_task",
-  DeleteAccount = "delete_account",
 }
 
 interface DialogState {

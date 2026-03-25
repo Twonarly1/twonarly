@@ -7,7 +7,14 @@ import type { KnipConfig } from "knip";
 const knipConfig: KnipConfig = {
   entry: ["src/routes/**/*.{ts,tsx}", "src/router.tsx"],
   project: ["src/**/*.{ts,tsx,css}"],
-  ignore: ["src/generated/**", "src/lib/config/**", "src/components/ui/**", "src/server/server.ts"],
+  ignore: [
+    "src/generated/**",
+    "src/lib/config/**",
+    "src/components/ui/**",
+    "src/server/server.ts",
+    "src/components/passkey-list.tsx",
+    "src/server/functions/user/get-passkeys.ts",
+  ],
   tags: ["-knipignore"],
 };
 

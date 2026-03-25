@@ -9,8 +9,8 @@ import { Button } from "./button";
 import type { ReactNode } from "react";
 import type { ToasterProps } from "sonner";
 
-// TODO: rethink
-// Move some acions to hook
+// TODO: Move some actions to hook and just display UI here.
+// TODO: Implement a toast.promise.
 
 type Intent = "success" | "error" | "info" | "warning";
 

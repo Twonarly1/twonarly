@@ -29,16 +29,11 @@ const NewTaskDialog = () => {
     type: DialogType.CreateTask,
   });
 
-  const closeDialog = () => {
-    setIsCreateTaskOpen(false);
-  };
-
   const form = useForm({
     defaultValues: {
       name: "",
       description: "",
       completed: false,
-      category: "",
     },
     onSubmit: async ({ value }) => {
       await addTaskFn({
@@ -50,7 +45,8 @@ const NewTaskDialog = () => {
       });
 
       router.invalidate();
-      closeDialog();
+      setIsCreateTaskOpen(false);
+
       form.reset();
     },
   });
@@ -84,7 +80,7 @@ const NewTaskDialog = () => {
           </DialogHeader>
 
           <DialogHeader>
-            <DialogTitle>New Task</DialogTitle>
+            <DialogTitle className="text-body-lg">New Task</DialogTitle>
           </DialogHeader>
 
           <form
@@ -104,10 +100,12 @@ const NewTaskDialog = () => {
                 <Input
                   autoFocus
                   aria-label="Name"
-                  placeholder="Enter your task..."
+                  placeholder="Enter a task name..."
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e) => {
+                    field.handleChange(e.target.value);
+                  }}
                 />
               )}
             </form.Field>
@@ -118,18 +116,6 @@ const NewTaskDialog = () => {
                   aria-label="Description"
                   placeholder="Enter a description..."
                   value={field.state.value ?? ""}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
-                />
-              )}
-            </form.Field>
-
-            <form.Field name="category">
-              {(field) => (
-                <Input
-                  aria-label="Category"
-                  placeholder="Enter your category..."
-                  value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
                 />
@@ -149,7 +135,7 @@ const NewTaskDialog = () => {
                     isLoading={form.state.isSubmitting}
                     className="flex items-center gap-2"
                   >
-                    Create task
+                    "Create task"
                   </LoadingSwap>
                 </Button>
               )}
