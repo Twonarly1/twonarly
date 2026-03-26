@@ -1,17 +1,43 @@
 import { clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
 
 import type { ClassValue } from "clsx";
 
+const customTwMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      "font-size": [
+        "text-body-2xs",
+        "text-body-xs",
+        "text-body-sm",
+        "text-body",
+        "text-body-lg",
+        "text-h1",
+        "text-h2",
+        "text-h3",
+        "text-h4",
+        "text-h5",
+        "text-h6",
+      ],
+    },
+  },
+});
+
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return customTwMerge(clsx(inputs));
 }
 
-export function formatDate(date: Date) {
-  return date.toLocaleDateString("en-US", {
-    // year: "numeric",
+export const capitalizeFirstLetter = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export function formatDate(date: Date | string | null | undefined, options?: { year?: boolean }) {
+  if (!date) return null;
+  const d = typeof date === "string" ? new Date(date) : date;
+  return d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
+    ...(options?.year && { year: "numeric" }),
   });
 }
 
@@ -33,3 +59,9 @@ export function adjustColorLightness(hex: string, percentage: number): string {
   const toHex = (n: number) => n.toString(16).padStart(2, "0");
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
+
+export const formatCurrency = (amount: number, currency: string) =>
+  new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency.toUpperCase(),
+  }).format(amount / 100);

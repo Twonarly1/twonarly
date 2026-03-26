@@ -14,6 +14,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks/index'
 import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
 import { Route as AuthenticatedPreferencesIndexRouteImport } from './routes/_authenticated/preferences/index'
+import { Route as AuthenticatedIntegrationsIndexRouteImport } from './routes/_authenticated/integrations/index'
+import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
 import { Route as AuthenticatedAccountsIndexRouteImport } from './routes/_authenticated/accounts/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -43,6 +45,18 @@ const AuthenticatedPreferencesIndexRoute =
     path: '/preferences/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedIntegrationsIndexRoute =
+  AuthenticatedIntegrationsIndexRouteImport.update({
+    id: '/integrations/',
+    path: '/integrations/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedBillingIndexRoute =
+  AuthenticatedBillingIndexRouteImport.update({
+    id: '/billing/',
+    path: '/billing/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAccountsIndexRoute =
   AuthenticatedAccountsIndexRouteImport.update({
     id: '/accounts/',
@@ -59,6 +73,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/accounts/': typeof AuthenticatedAccountsIndexRoute
+  '/billing/': typeof AuthenticatedBillingIndexRoute
+  '/integrations/': typeof AuthenticatedIntegrationsIndexRoute
   '/preferences/': typeof AuthenticatedPreferencesIndexRoute
   '/profile/': typeof AuthenticatedProfileIndexRoute
   '/tasks/': typeof AuthenticatedTasksIndexRoute
@@ -67,6 +83,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/accounts': typeof AuthenticatedAccountsIndexRoute
+  '/billing': typeof AuthenticatedBillingIndexRoute
+  '/integrations': typeof AuthenticatedIntegrationsIndexRoute
   '/preferences': typeof AuthenticatedPreferencesIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
@@ -77,6 +95,8 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_authenticated/accounts/': typeof AuthenticatedAccountsIndexRoute
+  '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
+  '/_authenticated/integrations/': typeof AuthenticatedIntegrationsIndexRoute
   '/_authenticated/preferences/': typeof AuthenticatedPreferencesIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
@@ -87,17 +107,29 @@ export interface FileRouteTypes {
     | '/'
     | '/api/auth/$'
     | '/accounts/'
+    | '/billing/'
+    | '/integrations/'
     | '/preferences/'
     | '/profile/'
     | '/tasks/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/auth/$' | '/accounts' | '/preferences' | '/profile' | '/tasks'
+  to:
+    | '/'
+    | '/api/auth/$'
+    | '/accounts'
+    | '/billing'
+    | '/integrations'
+    | '/preferences'
+    | '/profile'
+    | '/tasks'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/api/auth/$'
     | '/_authenticated/accounts/'
+    | '/_authenticated/billing/'
+    | '/_authenticated/integrations/'
     | '/_authenticated/preferences/'
     | '/_authenticated/profile/'
     | '/_authenticated/tasks/'
@@ -146,6 +178,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPreferencesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/integrations/': {
+      id: '/_authenticated/integrations/'
+      path: '/integrations'
+      fullPath: '/integrations/'
+      preLoaderRoute: typeof AuthenticatedIntegrationsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/billing/': {
+      id: '/_authenticated/billing/'
+      path: '/billing'
+      fullPath: '/billing/'
+      preLoaderRoute: typeof AuthenticatedBillingIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/accounts/': {
       id: '/_authenticated/accounts/'
       path: '/accounts'
@@ -165,6 +211,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedAccountsIndexRoute: typeof AuthenticatedAccountsIndexRoute
+  AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
+  AuthenticatedIntegrationsIndexRoute: typeof AuthenticatedIntegrationsIndexRoute
   AuthenticatedPreferencesIndexRoute: typeof AuthenticatedPreferencesIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
@@ -172,6 +220,8 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountsIndexRoute: AuthenticatedAccountsIndexRoute,
+  AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,
+  AuthenticatedIntegrationsIndexRoute: AuthenticatedIntegrationsIndexRoute,
   AuthenticatedPreferencesIndexRoute: AuthenticatedPreferencesIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,

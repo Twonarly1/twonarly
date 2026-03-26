@@ -1,57 +1,23 @@
 "use client";
 
-import { Check, Info, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Toaster as ToasterPrimitive, toast as toastPrimitive } from "sonner";
 
+import { INTENT_ICONS } from "@/components/intent";
 import { Button } from "./button";
 
-import type { ReactNode } from "react";
 import type { ToasterProps } from "sonner";
+import type { Intent } from "@/components/intent";
 
 // TODO: Move some actions to hook and just display UI here.
 // TODO: Implement a toast.promise.
-
-type Intent = "success" | "error" | "info" | "warning";
 
 interface ToastData {
   title: string;
   description?: string;
   intent?: Intent;
 }
-
-const ICONS: Record<Intent, ReactNode> = {
-  success: (
-    <div className="icon-xs flex shrink-0 items-center justify-center rounded-full bg-green-500 p-0.5">
-      <Check strokeWidth={3} className="icon-xs text-white" />
-    </div>
-  ),
-  error: (
-    <div className="icon-xs flex shrink-0 items-center justify-center rounded-full bg-red-500 p-0.5">
-      <X strokeWidth={3} className="icon-xs text-white" />
-    </div>
-  ),
-  warning: (
-    <svg viewBox="0 0 24 24" className="icon-xs shrink-0">
-      <title>Warning</title>
-      <path
-        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-        fill="#f59e0b"
-      />
-      <text
-        x="12"
-        y="18.5"
-        textAnchor="middle"
-        fontSize="text-body-xs"
-        fontWeight="900"
-        fill="white"
-      >
-        !
-      </text>
-    </svg>
-  ),
-  info: <Info className="icon-xs text-blue-500" />,
-};
 
 function ToastUI({
   id,
@@ -72,7 +38,7 @@ function ToastUI({
 
       <div className="space-y-0">
         <div className="flex items-center gap-2">
-          {ICONS[intent]}
+          {INTENT_ICONS[intent]}
           <span className="font-medium text-body-sm leading-loose">{title}</span>
         </div>
         {description && <p className="ml-5.5 text-body-sm text-muted-foreground">{description}</p>}

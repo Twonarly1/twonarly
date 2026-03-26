@@ -1,6 +1,6 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { getContrastingColor } from "@uiw/color-convert";
-import { Check, CheckLine, ChevronDown, Settings2, User } from "lucide-react";
+import { Blocks, Check, CheckLine, ChevronDown, Key, Settings2, User, Wallet } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import Link from "@/components/core/link";
@@ -185,7 +185,17 @@ const AppSidebar = () => {
                 {
                   label: "Security & access",
                   to: "/accounts",
-                  icon: <User className="icon-xs" />,
+                  icon: <Key className="icon-xs" />,
+                },
+                {
+                  label: "Billing",
+                  to: "/billing",
+                  icon: <Wallet className="icon-xs" />,
+                },
+                {
+                  label: "Integrations",
+                  to: "/integrations",
+                  icon: <Blocks className="icon-xs" />,
                 },
               ].map((item) => (
                 <SidebarMenuItem key={item.to}>
@@ -197,6 +207,7 @@ const AppSidebar = () => {
                     onClick={isMobile ? () => toggleSidebar() : undefined}
                     style={{ color: contrastingForegroundColor }}
                   >
+                    {item.icon}
                     <p className="text-body">{item.label}</p>
                   </Link>
                 </SidebarMenuItem>

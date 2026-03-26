@@ -23,6 +23,10 @@ export const env = createEnv({
     R2_PUBLIC_URL: z.url(),
     R2_TOKEN_NAME: z.string().min(1),
     R2_TOKEN_VALUE: z.string().min(1),
+
+    // stripe
+    STRIPE_SECRET_KEY: z.string().min(1),
+    STRIPE_WEBHOOK_SECRET: z.string().min(1),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

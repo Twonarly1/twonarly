@@ -1,3 +1,4 @@
+import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { multiSession } from "better-auth/plugins";
@@ -7,6 +8,7 @@ import { app } from "@/lib/config/app.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import * as schema from "@/lib/db/schema";
+import { stripeClient } from "./stripe.config";
 
 export const auth = betterAuth({
   appName: app.name,
@@ -17,7 +19,6 @@ export const auth = betterAuth({
     github: {
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
-      // scopes: ["repo"],
       scope: ["repo"],
     },
     google: {
@@ -30,6 +31,20 @@ export const auth = betterAuth({
     // TODO: show a warning when the maximum number of sessions is reached and prevent new sign-ins until an existing session is signed out
     multiSession({ maximumSessions: 3 }),
     // passkey(),
+    stripe({
+      stripeClient,
+      stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
+      createCustomerOnSignUp: true,
+      subscription: {
+        enabled: true,
+        plans: [
+          {
+            name: "basic",
+            priceId: "price_1TEvh82LlOYTb68GIvAivwDo",
+          },
+        ],
+      },
+    }),
     // make sure this is the last plugin in the array
     tanstackStartCookies(),
   ],

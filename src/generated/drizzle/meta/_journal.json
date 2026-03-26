@@ -50,6 +50,13 @@
       "when": 1774312997872,
       "tag": "0006_lonely_daimon_hellstrom",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1774456919682,
+      "tag": "0007_tiny_namorita",
+      "breakpoints": true
     }
   ]
 }

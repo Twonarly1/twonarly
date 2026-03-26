@@ -30,7 +30,7 @@ function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Sepa
 }
 
 const itemVariants = cva(
-  "group/item flex items-center border border-transparent rounded-lg transition-none [a]:hover:bg-accent/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+  "group/item flex items-center border border-transparent rounded-lg transition-none [a]:hover:bg-muted/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
   {
     variants: {
       variant: {
@@ -75,7 +75,7 @@ const itemMediaVariants = cva(
     variants: {
       variant: {
         default: "bg-transparent",
-        icon: "size-8 border rounded bg-muted [&_svg:not([class*='size-'])]:size-4",
+        icon: "size-8 border rounded bg-muted/50 [&_svg:not([class*='size-'])]:size-4",
         image: "size-10 rounded overflow-hidden [&_img]:size-full [&_img]:object-cover",
       },
     },

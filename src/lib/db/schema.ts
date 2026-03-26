@@ -1,5 +1,14 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
@@ -30,6 +39,7 @@ export type SelectTask = InferSelectModel<typeof tasks>;
 // AUTH SCHEMA TABLES
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
+  stripeCustomerId: text("stripe_customer_id"),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
@@ -109,6 +119,26 @@ export const verification = pgTable(
   },
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
+
+export const subscription = pgTable("subscription", {
+  id: text("id").primaryKey(),
+  plan: text("plan").notNull(),
+  referenceId: text("reference_id").notNull(),
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  status: text("status").notNull(),
+  periodStart: timestamp("period_start", { precision: 6, withTimezone: true }),
+  periodEnd: timestamp("period_end", { precision: 6, withTimezone: true }),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end"),
+  cancelAt: timestamp("cancel_at", { precision: 6, withTimezone: true }),
+  canceledAt: timestamp("canceled_at", { precision: 6, withTimezone: true }),
+  endedAt: timestamp("ended_at", { precision: 6, withTimezone: true }),
+  seats: integer("seats"),
+  trialStart: timestamp("trial_start", { precision: 6, withTimezone: true }),
+  trialEnd: timestamp("trial_end", { precision: 6, withTimezone: true }),
+  billingInterval: text("billing_interval"),
+  stripeScheduleId: text("stripe_schedule_id"),
+});
 
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),

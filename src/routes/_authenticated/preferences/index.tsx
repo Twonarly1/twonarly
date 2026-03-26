@@ -137,6 +137,7 @@ function SettingsPage() {
             </ItemActions>
 
             <Separator className={cn("hidden", theme === "custom" && "flex")} />
+
             {theme === "custom" && (
               <CollapsibleContent className="w-full">
                 <Item size="sm">
