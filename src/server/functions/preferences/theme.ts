@@ -2,6 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import { z } from "zod";
 
+import { COOKIES } from "@/lib/constants/cookies";
+
 const themeValidator = z.union([
   z.literal("light"),
   z.literal("dark"),
@@ -15,8 +17,8 @@ const customColorsValidator = z.object({
   border: z.string().optional(),
 });
 
-const storageKey = "_preferred-theme";
-export const customColorsKey = "_custom-theme-colors";
+const storageKey = COOKIES.theme;
+const customColorsKey = COOKIES.themeCustom;
 
 export type Theme = z.infer<typeof themeValidator>;
 export type CustomColors = z.infer<typeof customColorsValidator>;

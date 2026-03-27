@@ -1,6 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { setCookie } from "@tanstack/react-start/server";
 import { ChevronDown, Droplet, Monitor, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
@@ -30,7 +28,6 @@ import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
-import { customColorsKey } from "@/server/functions/preferences/theme";
 
 const themeOptions = [
   { value: "light", label: "Light", icon: Sun },
@@ -39,22 +36,12 @@ const themeOptions = [
   { value: "custom", label: "Custom", icon: Droplet },
 ] as const;
 
-const clearCustomColors = createServerFn({ method: "POST" }).handler(async () => {
-  setCookie(customColorsKey, "", { maxAge: 0 });
-});
-
 export const Route = createFileRoute("/_authenticated/preferences/")({
   component: SettingsPage,
 });
 
 function SettingsPage() {
-  const {
-    theme,
-    setTheme,
-    customColors,
-    setCustomColors,
-    clearCustomColors: clearCustomColorsContext,
-  } = useTheme();
+  const { theme, setTheme, customColors, setCustomColors, clearCustomColors } = useTheme();
   const isMobile = useIsMobile();
   const { settings, setFontSize, setUsePointerCursor, setSidebarPosition } = useSettings();
 
@@ -66,8 +53,7 @@ function SettingsPage() {
     setBackgroundHex("");
     setAccentHex("");
     setBorderHex("");
-    clearCustomColorsContext();
-    await clearCustomColors();
+    clearCustomColors();
   };
 
   useEffect(() => {

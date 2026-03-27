@@ -2,6 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
 import { z } from "zod";
 
+import { COOKIES } from "@/lib/constants/cookies";
+
 const fontSizeValidator = z.enum(["smaller", "small", "default", "large", "larger"]);
 const sidebarPositionValidator = z.enum(["left", "right"]);
 
@@ -11,9 +13,9 @@ const settingsValidator = z.object({
   sidebarPosition: sidebarPositionValidator,
 });
 
-const fontSizeStorageKey = "_preferred-font-size";
-const pointerCursorStorageKey = "_use-pointer-cursor";
-const sidebarPositionStorageKey = "_sidebar-position";
+const fontSizeStorageKey = COOKIES.fontSize;
+const pointerCursorStorageKey = COOKIES.pointerCursor;
+const sidebarPositionStorageKey = COOKIES.sidebarPosition;
 
 type Settings = z.infer<typeof settingsValidator>;
 
