@@ -12,13 +12,13 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { formatDate } from "@/lib/utils";
-import { listInvoices } from "@/server/functions/subscriptions/list-invoices";
+import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
 import Link from "./core/link";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
 import type { Intent } from "@/components/intent";
-import type { Invoice } from "@/server/functions/subscriptions/list-invoices";
+import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 
 const invoiceIntent = (status: Invoice["status"]) =>
   match(status)
@@ -43,7 +43,7 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
 
     setLoading(true);
     try {
-      const result = await listInvoices({ data: { startingAfter: lastId } });
+      const result = await fetchInvoices({ data: { startingAfter: lastId } });
       setInvoices((prev) => [...prev, ...result.invoices]);
       setHasMore(result.hasMore);
     } finally {

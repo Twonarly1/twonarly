@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/toast";
 import { deleteTask } from "@/server/functions/task/delete-task";
-import { toggleIsComplete } from "@/server/functions/task/toggle-completed";
+import { toggleIsComplete } from "@/server/functions/task/toggle-task-complete";
 
 import type { Table as TableProps } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";

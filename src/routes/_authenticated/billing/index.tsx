@@ -27,9 +27,9 @@ import {
 import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth/auth-client";
 import { capitalizeFirstLetter, cn, formatDate } from "@/lib/utils";
-import { listActiveSubscriptions } from "@/server/functions/subscriptions/list-active-subscriptions";
-import { listInvoices } from "@/server/functions/subscriptions/list-invoices";
-import { listPlans } from "@/server/functions/subscriptions/list-plans";
+import { fetchActiveSubscriptions } from "@/server/functions/subscriptions/fetch-active-subscriptions";
+import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
+import { fetchPlans } from "@/server/functions/subscriptions/fetch-plans";
 
 export const Route = createFileRoute("/_authenticated/billing/")({
   component: BillingPage,
@@ -37,11 +37,9 @@ export const Route = createFileRoute("/_authenticated/billing/")({
     upgraded: z.boolean().optional(),
   }),
   loader: async () => {
-    const [subscriptions, invoices, plans] = await Promise.all([
-      listActiveSubscriptions(),
-      listInvoices({ data: { limit: 6, startingAfter: undefined } }),
-      listPlans(),
-    ]);
+    const subscriptions = await fetchActiveSubscriptions();
+    const invoices = await fetchInvoices({ data: { limit: 6, startingAfter: undefined } });
+    const plans = await fetchPlans();
 
     return { subscriptions, invoices, plans };
   },
@@ -129,6 +127,7 @@ function BillingPage() {
         <h1 className="items-baseline font-medium text-h1">Billing</h1>
         <p className="text-muted-foreground text-sm">Manage your subscription and billing</p>
       </div>
+
       <ItemGroup className="rounded-lg border">
         <Item size="sm">
           <ItemContent>
@@ -202,245 +201,3 @@ function BillingPage() {
     </div>
   );
 }
-
-// <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
-//   <div className="space-y-1">
-//     <h1 className="items-baseline font-medium text-h1">Billing</h1>
-//     <p className="text-muted-foreground text-sm">Manage your subscription and billing</p>
-//   </div>
-
-//   {/* Current plan */}
-//   <ItemGroup className="rounded-lg border">
-//     <Item size="sm">
-//       <ItemContent>
-//         <ItemTitle className="flex items-center gap-2">
-//           {planLabel}
-
-//           {isCanceling ? (
-//             <Badge variant="outline" className="text-body-xs">
-//               Canceling
-//             </Badge>
-//           ) : (
-//             <Badge variant="outline-primary" className="text-body-xs">
-//               Current
-//             </Badge>
-//           )}
-//         </ItemTitle>
-//         <ItemDescription>{planDescription()}</ItemDescription>
-//       </ItemContent>
-
-//       {isActive && (
-//         <ItemActions>
-//           <Button variant="outline" size="sm" onClick={openBillingPortal}>
-//             Manage billing
-//           </Button>
-//         </ItemActions>
-//       )}
-//     </Item>
-
-// <Item size="sm">
-//   <ItemContent>
-//     <ItemTitle>Upgrade to Basic</ItemTitle>
-//     <ItemDescription>$5 per month</ItemDescription>
-//   </ItemContent>
-//   <ItemActions>
-//     <Button size="sm" onClick={handleUpgrade}>
-//       Upgrade
-//     </Button>
-//   </ItemActions>
-// </Item>
-
-//     <Item size="sm">
-//       <ItemContent>
-//         <ItemTitle>See plans</ItemTitle>
-//         {/* <ItemDescription>$5 per month</ItemDescription> */}
-//       </ItemContent>
-//       <ItemActions>
-//         <Button variant="ghost" size="sm" onClick={handleUpgrade}>
-//           View plans
-//         </Button>
-//       </ItemActions>
-//     </Item>
-//   </ItemGroup>
-
-//   {/* {!isActive && (
-//     <ItemGroup className="rounded-lg border">
-//       <Item size="sm">
-//         <ItemContent>
-//           <ItemTitle>Upgrade to Basic</ItemTitle>
-//           <ItemDescription>$5 per month</ItemDescription>
-//         </ItemContent>
-//         <ItemActions>
-//           <Button size="sm" onClick={handleUpgrade}>
-//             Upgrade
-//           </Button>
-//         </ItemActions>
-//       </Item>
-//       <Separator />
-//       <div className="flex flex-wrap gap-x-6 gap-y-2 px-4 py-3">
-//         {["GitHub Integration"].map((feature) => (
-//           <div key={feature} className="flex items-center gap-1.5">
-//             <Check className="icon-xs text-primary" />
-//             <span className="text-muted-foreground">{feature}</span>
-//           </div>
-//         ))}
-//       </div>
-//     </ItemGroup>
-//   )} */}
-
-//   <div className="space-y-4">
-//     <Item className="px-0">
-//       <ItemContent>
-//         <ItemTitle>Recent invoices</ItemTitle>
-//       </ItemContent>
-//     </Item>
-
-//     <InvoiceList invoices={invoices.invoices} hasMore={invoices.hasMore} />
-//   </div>
-// </div>
-
-// import { createFileRoute } from "@tanstack/react-router";
-// import { Check } from "lucide-react";
-
-// import InvoiceList from "@/components/invoice-list";
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import {
-//   Item,
-//   ItemActions,
-//   ItemContent,
-//   ItemDescription,
-//   ItemGroup,
-//   ItemTitle,
-// } from "@/components/ui/item";
-// import { Separator } from "@/components/ui/separator";
-// import { toast } from "@/components/ui/toast";
-// import { authClient } from "@/lib/auth/auth-client";
-// import { capitalizeFirstLetter, formatDate } from "@/lib/utils";
-// import { listActiveSubscriptions } from "@/server/functions/subscriptions/list-active-subscriptions";
-// import { listInvoices } from "@/server/functions/subscriptions/list-invoices";
-
-// export const Route = createFileRoute("/_authenticated/billing/")({
-//   component: BillingPage,
-//   loader: async () => {
-//     const [subscriptions, invoices] = await Promise.all([
-//       listActiveSubscriptions(),
-//       listInvoices({ data: { limit: 6, startingAfter: undefined } }),
-//     ]);
-
-//     return { subscriptions, invoices };
-//   },
-// });
-
-// function BillingPage() {
-//   const { invoices, subscriptions } = Route.useLoaderData();
-
-//   const subscription = subscriptions?.find(
-//     (sub) => sub.status === "active" || sub.status === "trialing",
-//   );
-
-//   const isActive = !!subscription;
-//   const isTrialing = subscription?.status === "trialing";
-//   const isCanceling = !!(subscription?.cancelAtPeriodEnd || subscription?.cancelAt);
-
-//   const cancellationDate = subscription?.cancelAt ?? subscription?.periodEnd;
-
-//   const openBillingPortal = () => authClient.subscription.billingPortal({ returnUrl: "/billing" });
-
-//   const handleUpgrade = async () => {
-//     const { error } = await authClient.subscription.upgrade({
-//       plan: "basic",
-//       successUrl: "/billing",
-//       cancelUrl: "/billing",
-//     });
-
-//     if (error) {
-//       toast.error({ title: "Upgrade failed. Please try again." });
-//     }
-//   };
-
-//   const planLabel = isActive ? `${capitalizeFirstLetter(subscription.plan)} plan` : "Free plan";
-//   const planDescription = () => {
-//     if (!isActive) return "Free for all users";
-//     if (isTrialing) return `Free trial · Ends ${formatDate(subscription.trialEnd)}`;
-//     if (isCanceling)
-//       return `Your plan is active until ${formatDate(cancellationDate, { year: true })}. You won't be charged again.`;
-//     return `Next payment on ${formatDate(subscription.periodEnd, { year: true })}`;
-//   };
-
-//   console.log("Subscription:", subscription);
-
-//   return (
-//     <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
-//       <div className="space-y-1">
-//         <h1 className="items-baseline font-medium text-h1">Billing</h1>
-//         <p className="text-muted-foreground text-sm">Manage your subscription and billing</p>
-//       </div>
-
-//       {/* Current plan */}
-//       <ItemGroup className="rounded-lg border">
-//         <Item size="sm">
-//           <ItemContent>
-//             <ItemTitle className="flex items-center gap-2">
-//               {planLabel}
-
-//               {isCanceling ? (
-//                 <Badge variant="outline" className="text-body-xs">
-//                   Canceling
-//                 </Badge>
-//               ) : (
-//                 <Badge variant="outline-primary" className="text-body-xs">
-//                   Current
-//                 </Badge>
-//               )}
-//             </ItemTitle>
-//             <ItemDescription>{planDescription()}</ItemDescription>
-//           </ItemContent>
-
-//           {isActive && (
-//             <ItemActions>
-//               <Button variant="outline" size="sm" onClick={openBillingPortal}>
-//                 Manage billing
-//               </Button>
-//             </ItemActions>
-//           )}
-//         </Item>
-//       </ItemGroup>
-
-//       {!isActive && (
-//         <ItemGroup className="rounded-lg border">
-//           <Item size="sm">
-//             <ItemContent>
-//               <ItemTitle>Upgrade to Basic</ItemTitle>
-//               <ItemDescription>$5 per month</ItemDescription>
-//             </ItemContent>
-//             <ItemActions>
-//               <Button size="sm" onClick={handleUpgrade}>
-//                 Upgrade now
-//               </Button>
-//             </ItemActions>
-//           </Item>
-//           <Separator />
-//           <div className="flex flex-wrap gap-x-6 gap-y-2 px-4 py-3">
-//             {["GitHub Integration"].map((feature) => (
-//               <div key={feature} className="flex items-center gap-1.5">
-//                 <Check className="icon-xs text-primary" />
-//                 <span className="text-muted-foreground">{feature}</span>
-//               </div>
-//             ))}
-//           </div>
-//         </ItemGroup>
-//       )}
-
-//       <div className="space-y-4">
-//         <Item className="px-0">
-//           <ItemContent>
-//             <ItemTitle>Recent invoices</ItemTitle>
-//           </ItemContent>
-//         </Item>
-
-//         <InvoiceList invoices={invoices.invoices} hasMore={invoices.hasMore} />
-//       </div>
-//     </div>
-//   );
-// }

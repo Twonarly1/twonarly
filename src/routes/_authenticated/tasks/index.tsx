@@ -17,8 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/lib/hooks/use-debounce";
 import { cn, formatDate } from "@/lib/utils";
-import { getSession } from "@/server/functions/session/get-session";
-import { getTasks } from "@/server/functions/task/get-tasks";
+import { fetchTasks } from "@/server/functions/task/fetch-tasks";
 
 import type {
   ColumnDef,
@@ -32,8 +31,7 @@ import type { Task } from "@/lib/db/schema";
 export const Route = createFileRoute("/_authenticated/tasks/")({
   component: TasksPage,
   loader: async () => {
-    const session = await getSession();
-    const tasks = await getTasks({ data: { userId: session?.userId! } });
+    const tasks = await fetchTasks();
 
     return { tasks };
   },

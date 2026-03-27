@@ -6,7 +6,7 @@ import { getSession } from "@/server/functions/session/get-session";
 
 import type { Subscription } from "@better-auth/stripe";
 
-export const listActiveSubscriptions = createServerFn({ method: "GET" }).handler(async () => {
+export const fetchActiveSubscriptions = createServerFn({ method: "GET" }).handler(async () => {
   const session = await getSession();
   if (!session?.userId) throw new Error("Unauthorized");
 

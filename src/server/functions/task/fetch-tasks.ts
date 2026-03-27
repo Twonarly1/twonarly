@@ -3,13 +3,13 @@ import { createServerFn } from "@tanstack/react-start";
 import { db } from "@/lib/db/db";
 import { getSession } from "@/server/functions/session/get-session";
 
-export const getUser = createServerFn({ method: "GET" }).handler(async () => {
+export const fetchTasks = createServerFn({ method: "GET" }).handler(async () => {
   const session = await getSession();
   if (!session?.userId) throw new Error("Unauthorized");
 
-  const user = await db.query.user.findFirst({
-    where: (user, { eq }) => eq(user.id, session.userId),
+  const tasks = await db.query.tasks.findMany({
+    where: (tasks, { eq }) => eq(tasks.userId, session.userId),
   });
 
-  return user;
+  return tasks;
 });

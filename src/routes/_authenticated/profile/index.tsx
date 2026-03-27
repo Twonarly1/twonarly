@@ -38,7 +38,7 @@ import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/auth-client";
 import { deleteUser } from "@/server/functions/user/delete-user";
-import { getUser } from "@/server/functions/user/get-user";
+import { fetchUser } from "@/server/functions/user/fetch-user";
 import { removeAvatar } from "@/server/functions/user/remove-avatar";
 import { updateUser } from "@/server/functions/user/update-user";
 import { uploadAvatar } from "@/server/functions/user/upload-avatar";
@@ -48,14 +48,14 @@ import type { RefObject } from "react";
 export const Route = createFileRoute("/_authenticated/profile/")({
   component: ProfilePage,
   loader: async () => {
-    const user = await getUser();
+    const user = await fetchUser();
 
-    return user;
+    return { user };
   },
 });
 
 function ProfilePage() {
-  const user = Route.useLoaderData();
+  const { user } = Route.useLoaderData();
   const router = useRouter();
   const navigate = useNavigate();
   const { data: session, isPending, refetch } = authClient.useSession();

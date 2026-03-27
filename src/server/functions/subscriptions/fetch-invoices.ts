@@ -1,15 +1,19 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { stripeClient } from "@/lib/config/stripe.config";
-import { getUser } from "@/server/functions/user/get-user";
+import { fetchUser } from "@/server/functions/user/fetch-user";
 
-export const listInvoices = createServerFn({ method: "GET" })
+export const fetchInvoices = createServerFn({ method: "GET" })
   .inputValidator((data: { limit?: number; startingAfter?: string }) => data)
   .handler(async ({ data }) => {
-    const user = await getUser();
+    const user = await fetchUser();
+
+    if (!user?.stripeCustomerId) {
+      return { invoices: [], hasMore: false };
+    }
 
     const result = await stripeClient.invoices.list({
-      customer: user?.stripeCustomerId!,
+      customer: user.stripeCustomerId,
       limit: data?.limit ?? 12,
       ...(data?.startingAfter && { starting_after: data.startingAfter }),
     });
@@ -32,4 +36,4 @@ export const listInvoices = createServerFn({ method: "GET" })
     };
   });
 
-export type Invoice = Awaited<ReturnType<typeof listInvoices>>["invoices"][number];
+export type Invoice = Awaited<ReturnType<typeof fetchInvoices>>["invoices"][number];
