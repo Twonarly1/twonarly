@@ -96,12 +96,12 @@ const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, u
         tabIndex={-1}
         onClick={() => setIsEditing(true)}
         className={cn(
-          "group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium text-foreground leading-7 focus-visible:border-border",
+          "group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium text-body text-foreground leading-7 focus-visible:border-border",
           isCompleted && "pointer-events-none",
         )}
       >
         {initialValue ? (
-          <span className={cn(isCompleted && "text-body-sm text-muted-foreground line-through")}>
+          <span className={cn(isCompleted && "text-muted-foreground line-through")}>
             {initialValue}
           </span>
         ) : (

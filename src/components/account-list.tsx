@@ -1,7 +1,8 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { Repeat } from "lucide-react";
-import { Fragment } from "react";
 
+import { GitHubIcon } from "@/components/icons/github";
+import { GoogleIcon } from "@/components/icons/google";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,9 +14,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup } from "@/components/ui/item";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
-import { GitHubIcon } from "./icons/github";
-import { GoogleIcon } from "./icons/google";
-import { Separator } from "./ui/separator";
 
 import type { Session, User } from "better-auth";
 
@@ -57,87 +55,83 @@ const AccountList = ({ deviceSessions, accounts }: Props) => {
         const provider = accounts.find((a) => a.userId === deviceSession.user.id)?.providerId;
 
         return (
-          <Fragment key={deviceSession.session.token}>
-            <Item size="sm">
-              <ItemContent>
-                <div className="flex items-center gap-2">
-                  <Avatar className="size-8 rounded-lg">
-                    <AvatarImage
-                      src={deviceSession.user.image || undefined}
-                      alt={deviceSession.user.name}
-                    />
-                    <AvatarFallback className="rounded-lg">
-                      {deviceSession.user.name.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="font-medium text-body">{deviceSession.user.name}</p>
-                      {provider === "google" && <GoogleIcon className="size-3.5" />}
-                      {provider === "github" && <GitHubIcon className="size-3.5" />}
-                      {isCurrent && (
-                        <span className="font-medium text-body-sm text-green-600">Active</span>
-                      )}
-                    </div>
-                    <p className="text-body-sm text-muted-foreground">{deviceSession.user.email}</p>
+          <Item key={deviceSession.session.token} size="sm">
+            <ItemContent>
+              <div className="flex items-center gap-2">
+                <Avatar className="size-8 rounded-lg">
+                  <AvatarImage
+                    src={deviceSession.user.image || undefined}
+                    alt={deviceSession.user.name}
+                  />
+                  <AvatarFallback className="rounded-lg">
+                    {deviceSession.user.name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-body">{deviceSession.user.name}</p>
+                    {provider === "google" && <GoogleIcon className="size-3.5" />}
+                    {provider === "github" && <GitHubIcon className="size-3.5" />}
+                    {isCurrent && (
+                      <span className="font-medium text-body-sm text-green-600">Active</span>
+                    )}
                   </div>
+                  <p className="text-body-sm text-muted-foreground">{deviceSession.user.email}</p>
                 </div>
-              </ItemContent>
-              <ItemActions>
-                {isCurrent ? (
-                  <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                    Log out
-                  </Button>
-                ) : (
-                  <>
-                    <div className="hidden items-center gap-2 sm:flex">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleAccountSwitch(deviceSession.session.token!)}
-                      >
-                        <Repeat className="icon-xs" />
-                        Switch
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveAccount(deviceSession.session.token!)}
-                      >
-                        Revoke
-                      </Button>
-                    </div>
+              </div>
+            </ItemContent>
+            <ItemActions>
+              {isCurrent ? (
+                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                  Log out
+                </Button>
+              ) : (
+                <>
+                  <div className="hidden items-center gap-2 sm:flex">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleAccountSwitch(deviceSession.session.token!)}
+                    >
+                      <Repeat className="icon-xs" />
+                      Switch
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveAccount(deviceSession.session.token!)}
+                    >
+                      Revoke
+                    </Button>
+                  </div>
 
-                    {/* mobile dropdown */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="sm:hidden">
-                          Manage
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuGroup className="space-y-0.5">
-                          <DropdownMenuItem
-                            onSelect={() => handleAccountSwitch(deviceSession.session.token!)}
-                          >
-                            <Repeat className="icon-xs" />
-                            Switch to this account
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onSelect={() => handleRemoveAccount(deviceSession.session.token!)}
-                          >
-                            Revoke access
-                          </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </>
-                )}
-              </ItemActions>
-            </Item>
-
-            <Separator />
-          </Fragment>
+                  {/* mobile dropdown */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="sm:hidden">
+                        Manage
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuGroup className="space-y-0.5">
+                        <DropdownMenuItem
+                          onSelect={() => handleAccountSwitch(deviceSession.session.token!)}
+                        >
+                          <Repeat className="icon-xs" />
+                          Switch to this account
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onSelect={() => handleRemoveAccount(deviceSession.session.token!)}
+                        >
+                          Revoke access
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              )}
+            </ItemActions>
+          </Item>
         );
       })}
 

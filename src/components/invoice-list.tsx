@@ -2,7 +2,9 @@ import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { match } from "ts-pattern";
 
+import Link from "@/components/core/link";
 import { INTENT_ICONS } from "@/components/intent";
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -13,19 +15,9 @@ import {
 } from "@/components/ui/item";
 import { formatDate } from "@/lib/utils";
 import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
-import Link from "./core/link";
-import { Button } from "./ui/button";
-import { Separator } from "./ui/separator";
 
 import type { Intent } from "@/components/intent";
 import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
-
-const invoiceIntent = (status: Invoice["status"]) =>
-  match(status)
-    .with("paid", () => "success" as Intent)
-    .with("uncollectible", () => "error" as Intent)
-    .with("open", "draft", "void", () => "warning" as Intent)
-    .otherwise(() => "info" as Intent);
 
 interface Props {
   invoices: Invoice[];
@@ -78,7 +70,15 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
 
           <ItemActions>
             <span className="flex items-center gap-2 px-2">
-              {INTENT_ICONS[invoiceIntent(invoice.status)]}
+              {
+                INTENT_ICONS[
+                  match(invoice.status)
+                    .with("paid", () => "success" as Intent)
+                    .with("uncollectible", () => "error" as Intent)
+                    .with("open", "draft", "void", () => "warning" as Intent)
+                    .otherwise(() => "info" as Intent)
+                ]
+              }
               <span className="first-letter:uppercase">{invoice.status}</span>
             </span>
             <Link
@@ -95,17 +95,13 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
       ))}
 
       {hasMore && (
-        <>
-          <Separator />
-
-          <Item size="sm">
-            <ItemContent className="items-center">
-              <Button variant="ghost" size="sm" onClick={loadMore} disabled={loading}>
-                {loading ? "Loading…" : "Show older invoices"}
-              </Button>
-            </ItemContent>
-          </Item>
-        </>
+        <Item size="sm">
+          <ItemContent className="items-center">
+            <Button variant="ghost" size="sm" onClick={loadMore} disabled={loading}>
+              {loading ? "Loading…" : "Show older invoices"}
+            </Button>
+          </ItemContent>
+        </Item>
       )}
     </ItemGroup>
   );

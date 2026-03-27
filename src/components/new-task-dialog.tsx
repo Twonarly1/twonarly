@@ -14,12 +14,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Kbd } from "@/components/ui/kbd";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { Textarea } from "@/components/ui/textarea";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 import { addTask } from "@/server/functions/task/add-task";
-import { Kbd } from "./ui/kbd";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const NewTaskDialog = () => {
   const addTaskFn = useServerFn(addTask);

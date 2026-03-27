@@ -33,7 +33,6 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/auth-client";
@@ -212,7 +211,7 @@ function ProfilePage() {
             )}
           </ItemActions>
         </Item>
-        <Separator />
+
         <Item size="sm">
           <ItemContent>
             <ItemTitle>Email</ItemTitle>
@@ -223,7 +222,7 @@ function ProfilePage() {
             </div>
           </ItemActions>
         </Item>
-        <Separator />
+
         <Item size="sm">
           <ItemContent>
             <ItemTitle>Username</ItemTitle>

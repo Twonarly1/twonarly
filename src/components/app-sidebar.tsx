@@ -4,6 +4,8 @@ import { Blocks, Check, CheckLine, ChevronDown, Key, Settings2, User, Wallet } f
 import { useHotkeys } from "react-hotkeys-hook";
 
 import Link from "@/components/core/link";
+import { GitHubIcon } from "@/components/icons/github";
+import { GoogleIcon } from "@/components/icons/google";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -35,8 +37,6 @@ import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
 import { Route } from "@/routes/_authenticated";
-import { GitHubIcon } from "./icons/github";
-import { GoogleIcon } from "./icons/google";
 
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useLoaderData();

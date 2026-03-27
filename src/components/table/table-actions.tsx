@@ -108,7 +108,7 @@ const TableActions = ({ table }: Props) => {
   if (!selectedCount) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 flex justify-center p-4">
+    <div className="pointer-events-none sticky bottom-8 flex justify-center">
       <div className="pointer-events-auto flex items-center gap-1 rounded-lg border bg-background/95 p-1.5 shadow-lg backdrop-blur">
         <span className="px-3 text-muted-foreground">{selectedCount}</span>
 

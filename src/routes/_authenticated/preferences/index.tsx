@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -122,10 +121,8 @@ function SettingsPage() {
               </Select>
             </ItemActions>
 
-            <Separator className={cn("hidden", theme === "custom" && "flex")} />
-
             {theme === "custom" && (
-              <CollapsibleContent className="w-full">
+              <CollapsibleContent className="w-full border-t">
                 <Item size="sm">
                   <ItemContent>
                     <ItemTitle>Background</ItemTitle>
@@ -144,7 +141,7 @@ function SettingsPage() {
                   </ItemActions>
                 </Item>
 
-                <Item size="sm">
+                <Item size="sm" className="border-b">
                   <ItemContent>
                     <ItemTitle>Wireframe</ItemTitle>
                   </ItemContent>
@@ -154,22 +151,16 @@ function SettingsPage() {
                 </Item>
 
                 {(backgroundHex || accentHex || borderHex) && (
-                  <>
-                    <Separator />
-
-                    <div className="mt-3 mr-4 flex justify-end">
-                      <Button variant="outline" size="sm" onClick={handleResetCustomTheme}>
-                        Reset to Default
-                      </Button>
-                    </div>
-                  </>
+                  <div className="mt-3 mr-4 flex justify-end">
+                    <Button variant="outline" size="sm" onClick={handleResetCustomTheme}>
+                      Reset to Default
+                    </Button>
+                  </div>
                 )}
               </CollapsibleContent>
             )}
           </Item>
         </Collapsible>
-
-        <Separator />
 
         <Item size="sm">
           <ItemContent>
@@ -197,32 +188,26 @@ function SettingsPage() {
           </ItemActions>
         </Item>
 
-        <Separator />
-
         {!isMobile && (
-          <>
-            <Item size="sm">
-              <ItemContent>
-                <ItemTitle>Use pointer cursors</ItemTitle>
-                <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Switch
-                  id="switch-pointer-cursor"
-                  checked={settings.usePointerCursor}
-                  onCheckedChange={setUsePointerCursor}
-                />
-              </ItemActions>
-            </Item>
-
-            <Separator />
-          </>
+          <Item size="sm">
+            <ItemContent>
+              <ItemTitle>Use pointer cursors</ItemTitle>
+              <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Switch
+                id="switch-pointer-cursor"
+                checked={settings.usePointerCursor}
+                onCheckedChange={setUsePointerCursor}
+              />
+            </ItemActions>
+          </Item>
         )}
 
         <Item size="sm">
           <ItemContent>
             <ItemTitle>Sidebar position</ItemTitle>
-            <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
+            <ItemDescription>Choose the position of the sidebar</ItemDescription>
           </ItemContent>
           <ItemActions>
             <Select value={settings.sidebarPosition} onValueChange={setSidebarPosition}>
