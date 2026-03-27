@@ -6,7 +6,7 @@ import { db } from "@/lib/db/db";
 import { tasks } from "@/lib/db/schema";
 import { getSession } from "@/server/functions/session/get-session";
 
-export const toggleTaskCompleted = createServerFn({ method: "POST" })
+export const toggleTaskComplete = createServerFn({ method: "POST" })
   .inputValidator(
     z.object({
       id: z.string().min(1),

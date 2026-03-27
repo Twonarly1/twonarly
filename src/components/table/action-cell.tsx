@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/components/ui/toast";
 import { deleteTask } from "@/server/functions/task/delete-task";
-import { toggleTaskCompleted } from "@/server/functions/task/toggle-task-complete";
+import { toggleTaskComplete } from "@/server/functions/task/toggle-task-complete";
 
 import type { Row, Table } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";
@@ -25,7 +25,7 @@ interface Props {
 const ActionCell = memo(({ row, table }: Props) => {
   const router = useRouter();
   const deleteTaskFn = useServerFn(deleteTask);
-  const toggleCompletedFn = useServerFn(toggleTaskCompleted);
+  const toggleCompletedFn = useServerFn(toggleTaskComplete);
 
   const task = row.original;
   const completed = row.getValue("completed") as boolean;

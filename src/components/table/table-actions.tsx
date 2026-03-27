@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/toast";
 import { deleteTask } from "@/server/functions/task/delete-task";
-import { toggleIsComplete } from "@/server/functions/task/toggle-task-complete";
+import { toggleTaskComplete } from "@/server/functions/task/toggle-task-complete";
 
 import type { Table as TableProps } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";
@@ -19,7 +19,7 @@ const TableActions = ({ table }: Props) => {
   const router = useRouter();
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
   const deleteTaskFn = useServerFn(deleteTask);
-  const toggleCompletedFn = useServerFn(toggleIsComplete);
+  const toggleCompletedFn = useServerFn(toggleTaskComplete);
 
   const handleToggleComplete = async () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
