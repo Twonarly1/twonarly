@@ -6,12 +6,14 @@ import { cn } from "@/lib/utils";
 import { authMiddleware } from "@/middleware";
 import { useSettings } from "@/providers/settings-provider";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
+import { fetchUser } from "@/server/functions/user/fetch-user";
 
 export const Route = createFileRoute("/_authenticated")({
   component: AuthenticatedLayout,
   server: { middleware: [authMiddleware] },
   loader: async () => ({
     deviceSessions: await getDeviceSessions(),
+    user: await fetchUser(),
   }),
 });
 

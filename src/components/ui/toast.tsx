@@ -10,22 +10,13 @@ import { Button } from "./button";
 import type { ToasterProps } from "sonner";
 import type { Intent } from "@/components/intent";
 
-// TODO: Move some actions to hook and just display UI here.
-// TODO: Implement a toast.promise.
-
 interface ToastData {
   title: string;
   description?: string;
-  intent?: Intent;
 }
 
-function ToastUI({
-  id,
-  title,
-  description,
-  intent = "success",
-}: ToastData & { id: string | number }) {
-  return (
+function toast(intent: Intent, data: ToastData) {
+  return toastPrimitive.custom((id) => (
     <div className="relative flex min-w-sm items-center gap-3 rounded-lg bg-background px-3 py-2 shadow-lg ring-1 ring-black/5">
       <Button
         variant="unstyled"
@@ -39,31 +30,34 @@ function ToastUI({
       <div className="space-y-0">
         <div className="flex items-center gap-2">
           {INTENT_ICONS[intent]}
-          <span className="font-medium text-body-sm leading-loose">{title}</span>
+          <span className="font-medium text-body-sm leading-loose">{data.title}</span>
         </div>
-        {description && <p className="ml-5.5 text-body-sm text-muted-foreground">{description}</p>}
+        {data.description && (
+          <p className="ml-5.5 text-body-sm text-muted-foreground">{data.description}</p>
+        )}
       </div>
     </div>
-  );
+  ));
 }
 
-function show(data: ToastData) {
-  return toastPrimitive.custom((id) => <ToastUI id={id} {...data} />);
-}
+toast.success = (d: ToastData) => toast("success", d);
+toast.error = (d: ToastData) => toast("error", d);
+toast.info = (d: ToastData) => toast("info", d);
+toast.warning = (d: ToastData) => toast("warning", d);
+// TODO: Add action button like "undo" or "view" or something in the future
+// TODO: Add promise with loading state in the future
 
-export const toast = {
-  success: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "success" }),
-  error: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "error" }),
-  info: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "info" }),
-  warning: (d: Omit<ToastData, "intent">) => show({ ...d, intent: "warning" }),
-  custom: toastPrimitive.custom,
-  dismiss: toastPrimitive.dismiss,
-};
-
-export function Toaster(props: ToasterProps) {
-  const { theme = "light" } = useTheme();
+function Toaster(props: ToasterProps) {
+  const { theme = "system" } = useTheme();
 
   return (
-    <ToasterPrimitive theme={theme as ToasterProps["theme"]} className="toaster group" {...props} />
+    <ToasterPrimitive
+      icons={INTENT_ICONS}
+      theme={theme as ToasterProps["theme"]}
+      className="toaster group"
+      {...props}
+    />
   );
 }
+
+export { Toaster, toast };

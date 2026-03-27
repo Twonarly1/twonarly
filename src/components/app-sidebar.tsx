@@ -39,8 +39,7 @@ import { GitHubIcon } from "./icons/github";
 import { GoogleIcon } from "./icons/google";
 
 const AppSidebar = () => {
-  const { deviceSessions } = Route.useLoaderData();
-  const { data: session } = authClient.useSession();
+  const { deviceSessions, user } = Route.useLoaderData();
   const { isMobile, toggleSidebar } = useSidebar();
   const { theme, customColors } = useTheme();
   const { settings } = useSettings();
@@ -91,17 +90,15 @@ const AppSidebar = () => {
                     <div className="flex items-center gap-2">
                       <Avatar role="button" className="size-7 rounded">
                         <AvatarImage
-                          src={session?.user?.image || undefined}
-                          alt={session?.user?.name || "User avatar"}
+                          src={user?.image || undefined}
+                          alt={user?.name || "User avatar"}
                           className="rounded"
                         />
-                        <AvatarFallback className="rounded">
-                          {session?.user?.name?.charAt(0)}
-                        </AvatarFallback>
+                        <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
                       </Avatar>
 
                       <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-medium">{session?.user?.name}</span>
+                        <span className="font-medium">{user?.name}</span>
                       </div>
                     </div>
                     <ChevronDown className="icon-xs" />
@@ -138,7 +135,7 @@ const AppSidebar = () => {
                                     {deviceSession.user.email}
                                   </p>
                                 </div>
-                                {deviceSession.user.id === session?.user.id && (
+                                {deviceSession.user.id === user?.id && (
                                   <Check className="icon-xs ml-auto" />
                                 )}
                               </DropdownMenuItem>
@@ -146,9 +143,6 @@ const AppSidebar = () => {
 
                             <DropdownMenuSeparator />
 
-                            {/* <DropdownMenuItem onSelect={() => signIn("google")}>
-                              Add an account...
-                            </DropdownMenuItem> */}
                             <DropdownMenuSub>
                               <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
                               <DropdownMenuPortal>
