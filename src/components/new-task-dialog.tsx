@@ -135,7 +135,7 @@ const NewTaskDialog = () => {
                     isLoading={form.state.isSubmitting}
                     className="flex items-center gap-2"
                   >
-                    "Create task"
+                    Create task
                   </LoadingSwap>
                 </Button>
               )}

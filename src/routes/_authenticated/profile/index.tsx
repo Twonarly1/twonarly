@@ -75,7 +75,6 @@ function ProfilePage() {
       await removeAvatarFn();
       toast.success({ title: "Profile updated" });
       await refetch();
-
       router.invalidate();
     } catch (error) {
       console.error("File upload error:", error);
@@ -90,12 +89,9 @@ function ProfilePage() {
     try {
       const formData = new FormData();
       formData.append("file", file);
-
       await uploadAvatarFn({ data: formData });
-
       toast.success({ title: "Profile updated" });
       await refetch();
-
       router.invalidate();
     } catch (error) {
       console.error("File upload error:", error);
@@ -114,6 +110,7 @@ function ProfilePage() {
     try {
       await updateUserFn({ data: { name: name.trim() } });
       toast.success({ title: "Profile updated" });
+      await refetch();
       router.invalidate();
     } catch (error) {
       console.error("Update name error:", error);

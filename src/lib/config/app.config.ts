@@ -1,3 +1,3 @@
 export const app = {
-  name: "Twonarly",
+  name: "April",
 };

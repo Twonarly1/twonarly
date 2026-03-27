@@ -32,10 +32,11 @@ import {
 } from "@/components/ui/sidebar";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
-import { app } from "@/lib/config/app.config";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
 import { Route } from "@/routes/_authenticated";
+import { GitHubIcon } from "./icons/github";
+import { GoogleIcon } from "./icons/google";
 
 const AppSidebar = () => {
   const { deviceSessions } = Route.useLoaderData();
@@ -100,7 +101,7 @@ const AppSidebar = () => {
                       </Avatar>
 
                       <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-medium">{app.name}</span>
+                        <span className="font-medium">{session?.user?.name}</span>
                       </div>
                     </div>
                     <ChevronDown className="icon-xs" />
@@ -145,9 +146,24 @@ const AppSidebar = () => {
 
                             <DropdownMenuSeparator />
 
-                            <DropdownMenuItem onSelect={() => signIn("google")}>
+                            {/* <DropdownMenuItem onSelect={() => signIn("google")}>
                               Add an account...
-                            </DropdownMenuItem>
+                            </DropdownMenuItem> */}
+                            <DropdownMenuSub>
+                              <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
+                              <DropdownMenuPortal>
+                                <DropdownMenuSubContent>
+                                  <DropdownMenuItem onSelect={() => signIn("google")}>
+                                    <GoogleIcon className="size-4" />
+                                    Google
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onSelect={() => signIn("github")}>
+                                    <GitHubIcon className="size-4" />
+                                    GitHub
+                                  </DropdownMenuItem>
+                                </DropdownMenuSubContent>
+                              </DropdownMenuPortal>
+                            </DropdownMenuSub>
                           </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                       </DropdownMenuSub>

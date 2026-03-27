@@ -1,11 +1,13 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { Repeat } from "lucide-react";
+import { Fragment } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -55,8 +57,8 @@ const AccountList = ({ deviceSessions, accounts }: Props) => {
         const provider = accounts.find((a) => a.userId === deviceSession.user.id)?.providerId;
 
         return (
-          <>
-            <Item size="sm" key={deviceSession.session.token}>
+          <Fragment key={deviceSession.session.token}>
+            <Item size="sm">
               <ItemContent>
                 <div className="flex items-center gap-2">
                   <Avatar className="size-8 rounded-lg">
@@ -87,29 +89,55 @@ const AccountList = ({ deviceSessions, accounts }: Props) => {
                     Log out
                   </Button>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleAccountSwitch(deviceSession.session.token!)}
-                    >
-                      <Repeat className="icon-xs" />
-                      Switch
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRemoveAccount(deviceSession.session.token!)}
-                    >
-                      Revoke
-                    </Button>
-                  </div>
+                  <>
+                    <div className="hidden items-center gap-2 sm:flex">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAccountSwitch(deviceSession.session.token!)}
+                      >
+                        <Repeat className="icon-xs" />
+                        Switch
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveAccount(deviceSession.session.token!)}
+                      >
+                        Revoke
+                      </Button>
+                    </div>
+
+                    {/* mobile dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="sm:hidden">
+                          Manage
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuGroup className="space-y-0.5">
+                          <DropdownMenuItem
+                            onSelect={() => handleAccountSwitch(deviceSession.session.token!)}
+                          >
+                            <Repeat className="icon-xs" />
+                            Switch to this account
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onSelect={() => handleRemoveAccount(deviceSession.session.token!)}
+                          >
+                            Revoke access
+                          </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </>
                 )}
               </ItemActions>
             </Item>
 
             <Separator />
-          </>
+          </Fragment>
         );
       })}
 

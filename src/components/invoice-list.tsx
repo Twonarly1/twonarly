@@ -1,5 +1,5 @@
 import { ExternalLink } from "lucide-react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { match } from "ts-pattern";
 
 import { INTENT_ICONS } from "@/components/intent";
@@ -11,7 +11,7 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import { listInvoices } from "@/server/functions/subscriptions/list-invoices";
 import Link from "./core/link";
 import { Button } from "./ui/button";
@@ -42,10 +42,13 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
     if (!lastId) return;
 
     setLoading(true);
-    const result = await listInvoices({ data: { startingAfter: lastId } });
-    setInvoices((prev) => [...prev, ...result.invoices]);
-    setHasMore(result.hasMore);
-    setLoading(false);
+    try {
+      const result = await listInvoices({ data: { startingAfter: lastId } });
+      setInvoices((prev) => [...prev, ...result.invoices]);
+      setHasMore(result.hasMore);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (invoices.length === 0) {
@@ -62,43 +65,34 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
 
   return (
     <ItemGroup className="rounded-lg border">
-      {invoices.map((invoice, index) => {
-        return (
-          <Fragment key={invoice.id}>
-            {index > 0 && <Separator />}
+      {invoices.map((invoice) => (
+        <Item size="sm" key={invoice.id}>
+          <ItemContent>
+            <ItemTitle className="flex items-center gap-2 font-normal">
+              {invoice.lines.map((line) => line.description).join(", ")}
+            </ItemTitle>
+            <ItemDescription>
+              {formatDate(new Date(invoice.created * 1000), { year: true })}
+            </ItemDescription>
+          </ItemContent>
 
-            <Item size="sm">
-              <ItemContent>
-                <ItemTitle className="flex items-center gap-2">
-                  {invoice.lines.map((line) => (
-                    <p key={line.id}>{line.description}</p>
-                  ))}
-                </ItemTitle>
-                <ItemDescription>
-                  {formatDate(new Date(invoice.created * 1000))} ·{" "}
-                  {formatCurrency(invoice.amountPaid, invoice.currency)}
-                </ItemDescription>
-              </ItemContent>
-
-              <ItemActions>
-                <span className="flex items-center gap-2 px-2">
-                  {INTENT_ICONS[invoiceIntent(invoice.status)]}
-                  <span className="first-letter:uppercase">{invoice.status}</span>
-                </span>
-                <Link
-                  variant="ghost"
-                  to={invoice.hostedInvoiceUrl || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ExternalLink className="icon-xs" />
-                  View
-                </Link>
-              </ItemActions>
-            </Item>
-          </Fragment>
-        );
-      })}
+          <ItemActions>
+            <span className="flex items-center gap-2 px-2">
+              {INTENT_ICONS[invoiceIntent(invoice.status)]}
+              <span className="first-letter:uppercase">{invoice.status}</span>
+            </span>
+            <Link
+              variant="ghost"
+              to={invoice.hostedInvoiceUrl || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ExternalLink className="icon-xs" />
+              View
+            </Link>
+          </ItemActions>
+        </Item>
+      ))}
 
       {hasMore && (
         <>
