@@ -1,19 +1,21 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { stripeClient } from "@/lib/config/stripe.config";
-import { fetchUser } from "@/server/functions/user/fetch-user";
+import { ensureSession } from "../session/ensure-session";
 
 export const fetchInvoices = createServerFn({ method: "GET" })
   .inputValidator((data: { limit?: number; startingAfter?: string }) => data)
   .handler(async ({ data }) => {
-    const user = await fetchUser();
+    const session = await ensureSession();
 
-    if (!user?.stripeCustomerId) {
+    const stripeCustomerId = session.user?.stripeCustomerId;
+
+    if (!stripeCustomerId) {
       return { invoices: [], hasMore: false };
     }
 
     const result = await stripeClient.invoices.list({
-      customer: user.stripeCustomerId,
+      customer: stripeCustomerId,
       limit: data?.limit ?? 12,
       ...(data?.startingAfter && { starting_after: data.startingAfter }),
     });

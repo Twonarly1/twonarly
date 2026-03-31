@@ -32,7 +32,6 @@ export const Route = createFileRoute("/_authenticated/tasks/")({
   component: TasksPage,
   loader: async () => {
     const tasks = await fetchTasks();
-
     return { tasks };
   },
 });

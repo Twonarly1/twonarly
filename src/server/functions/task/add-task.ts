@@ -4,7 +4,7 @@ import z from "zod";
 
 import { db } from "@/lib/db/db";
 import { tasks } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/session/get-session";
+import { ensureSession } from "@/server/functions/session/ensure-session";
 
 export const addTask = createServerFn({ method: "POST" })
   .inputValidator(
@@ -15,12 +15,11 @@ export const addTask = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const session = await getSession();
-    if (!session?.userId) throw new Error("Unauthorized");
+    const session = await ensureSession();
 
     await db.insert(tasks).values({
       ...data,
-      userId: session.userId,
+      userId: session.user.id,
     });
 
     throw redirect({ to: "/tasks" });

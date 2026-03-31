@@ -15,11 +15,6 @@ body {
   transition: font-size 0.2s ease-out;
 }
 
-/* html {
-  font-size: var(--font-size-base);
-  transition: font-size 0.2s ease-out;
-} */
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }

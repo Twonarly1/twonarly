@@ -37,9 +37,11 @@ export const Route = createFileRoute("/_authenticated/billing/")({
     upgraded: z.boolean().optional(),
   }),
   loader: async () => {
-    const subscriptions = await fetchActiveSubscriptions();
-    const invoices = await fetchInvoices({ data: { limit: 6, startingAfter: undefined } });
-    const plans = await fetchPlans();
+    const [subscriptions, invoices, plans] = await Promise.all([
+      fetchActiveSubscriptions(),
+      fetchInvoices({ data: { limit: 6, startingAfter: undefined } }),
+      fetchPlans(),
+    ]);
 
     return { subscriptions, invoices, plans };
   },

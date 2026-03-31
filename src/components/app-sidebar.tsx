@@ -38,8 +38,17 @@ import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
 import { Route } from "@/routes/_authenticated";
 
+const navLinks = [
+  { label: "Tasks", to: "/tasks", icon: CheckLine },
+  { label: "Preferences", to: "/preferences", icon: Settings2 },
+  { label: "Profile", to: "/profile", icon: User },
+  { label: "Security & access", to: "/accounts", icon: Key },
+  { label: "Billing", to: "/billing", icon: Wallet },
+  { label: "Integrations", to: "/integrations", icon: Blocks },
+] as const;
+
 const AppSidebar = () => {
-  const { deviceSessions, user } = Route.useLoaderData();
+  const { deviceSessions, user } = Route.useRouteContext();
   const { isMobile, toggleSidebar } = useSidebar();
   const { theme, customColors } = useTheme();
   const { settings } = useSettings();
@@ -176,38 +185,7 @@ const AppSidebar = () => {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {[
-                {
-                  label: "Tasks",
-                  to: "/tasks",
-                  icon: <CheckLine className="icon-xs" />,
-                },
-                {
-                  label: "Preferences",
-                  to: "/preferences",
-                  icon: <Settings2 className="icon-xs" />,
-                },
-                {
-                  label: "Profile",
-                  to: "/profile",
-                  icon: <User className="icon-xs" />,
-                },
-                {
-                  label: "Security & access",
-                  to: "/accounts",
-                  icon: <Key className="icon-xs" />,
-                },
-                {
-                  label: "Billing",
-                  to: "/billing",
-                  icon: <Wallet className="icon-xs" />,
-                },
-                {
-                  label: "Integrations",
-                  to: "/integrations",
-                  icon: <Blocks className="icon-xs" />,
-                },
-              ].map((item) => (
+              {navLinks.map((item) => (
                 <SidebarMenuItem key={item.to}>
                   <Link
                     to={item.to}
@@ -217,7 +195,9 @@ const AppSidebar = () => {
                     onClick={isMobile ? () => toggleSidebar() : undefined}
                     style={{ color: contrastingForegroundColor }}
                   >
-                    {item.icon}
+                    {/* <Icon className="icon-xs" /> */}
+                    <item.icon className="icon-xs" />
+
                     <p className="text-body">{item.label}</p>
                   </Link>
                 </SidebarMenuItem>

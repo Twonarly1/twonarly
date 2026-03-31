@@ -2,21 +2,21 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import AccountList from "@/components/account-list";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
-import { getAccountsByUserIds } from "@/server/functions/get-accounts";
+import { fetchAccounts } from "@/server/functions/accounts/fetch-accounts";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
-  component: RouteComponent,
+  component: AccountsPage,
   loader: async () => {
     const deviceSessions = await getDeviceSessions();
     const userIds = deviceSessions.map((s) => s.user.id);
-    const accounts = await getAccountsByUserIds({ data: { userIds } });
+    const accounts = await fetchAccounts({ data: { userIds } });
 
     return { deviceSessions, accounts: accounts ?? [] };
   },
 });
 
-function RouteComponent() {
+function AccountsPage() {
   const { deviceSessions, accounts } = Route.useLoaderData();
 
   return (

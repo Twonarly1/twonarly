@@ -4,7 +4,7 @@ import { inArray } from "drizzle-orm";
 import { db } from "@/lib/db/db";
 import { account } from "@/lib/db/schema";
 
-export const getAccountsByUserIds = createServerFn({ method: "GET" })
+export const fetchAccounts = createServerFn({ method: "GET" })
   .inputValidator((data: { userIds: string[] }) => data)
   .handler(async ({ data }) => {
     return db

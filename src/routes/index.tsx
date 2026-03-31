@@ -4,17 +4,20 @@ import Link from "@/components/core/link";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
-import { LoadingSwap } from "@/components/ui/loading-swap";
-import { authClient, signIn } from "@/lib/auth/auth-client";
+import { signIn } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
+import { getSession } from "@/server/functions/session/get-session";
 
 export const Route = createFileRoute("/")({
   component: App,
+  loader: async () => {
+    const session = await getSession();
+    return { session };
+  },
 });
 
 function App() {
-  // const navigate = useNavigate();
-  const { data: session, isPending } = authClient.useSession();
+  const { session } = Route.useLoaderData();
 
   // const handlePasskeySignIn = async () => {
   //   const { error } = await authClient.signIn.passkey({
@@ -32,21 +35,11 @@ function App() {
   //   }
   // };
 
-  if (isPending) {
-    return (
-      <div className="flex h-dvh items-center justify-center">
-        <LoadingSwap isLoading={isPending} className="flex items-center gap-2">
-          Loading
-        </LoadingSwap>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-dvh items-center justify-center">
       {session ? (
         <div className="flex flex-col items-center gap-8">
-          <Link to="/preferences">Enter Shell</Link>
+          <Link to="/tasks">Enter Shell</Link>
         </div>
       ) : (
         <div className="container mx-auto flex flex-col items-center justify-center gap-4">

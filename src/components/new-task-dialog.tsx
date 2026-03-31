@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Kbd } from "@/components/ui/kbd";
-import { LoadingSwap } from "@/components/ui/loading-swap";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
@@ -131,12 +130,7 @@ const NewTaskDialog = () => {
                   disabled={!canSubmit || isSubmitting || isDefaultValue}
                   className="mt-2 ml-auto flex active:scale-[0.97]"
                 >
-                  <LoadingSwap
-                    isLoading={form.state.isSubmitting}
-                    className="flex items-center gap-2"
-                  >
-                    Create task
-                  </LoadingSwap>
+                  Create task
                 </Button>
               )}
             </form.Subscribe>

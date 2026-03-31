@@ -32,12 +32,10 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
-import { LoadingSwap } from "@/components/ui/loading-swap";
 import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient } from "@/lib/auth/auth-client";
 import { deleteUser } from "@/server/functions/user/delete-user";
-import { fetchUser } from "@/server/functions/user/fetch-user";
 import { removeAvatar } from "@/server/functions/user/remove-avatar";
 import { updateUser } from "@/server/functions/user/update-user";
 import { uploadAvatar } from "@/server/functions/user/upload-avatar";
@@ -46,18 +44,14 @@ import type { RefObject } from "react";
 
 export const Route = createFileRoute("/_authenticated/profile/")({
   component: ProfilePage,
-  loader: async () => {
-    const user = await fetchUser();
-
-    return { user };
-  },
 });
 
 function ProfilePage() {
-  const { user } = Route.useLoaderData();
+  const { user } = Route.useRouteContext();
+
   const router = useRouter();
   const navigate = useNavigate();
-  const { data: session, isPending, refetch } = authClient.useSession();
+  const { data: session, refetch } = authClient.useSession();
 
   const removeAvatarFn = useServerFn(removeAvatar);
   const uploadAvatarFn = useServerFn(uploadAvatar);
@@ -67,7 +61,7 @@ function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [name, setName] = useState(user?.name);
+  const [name, setName] = useState(user.name);
 
   const handleRemoveAvatar = async () => {
     try {
@@ -118,20 +112,10 @@ function ProfilePage() {
   };
 
   useOnClickOutside(containerRef as RefObject<HTMLElement>, () => {
-    if (name?.trim() && name !== user?.name) {
+    if (name?.trim() && name !== user.name) {
       handleUpdateName();
     }
   });
-
-  if (!user) {
-    return (
-      <div className="Fields-center flex h-dvh justify-center">
-        <LoadingSwap isLoading={isPending} className="Fields-center flex gap-2">
-          Loading
-        </LoadingSwap>
-      </div>
-    );
-  }
 
   return (
     <div ref={containerRef} className="container mx-auto space-y-6 p-4 sm:space-y-12">
@@ -152,8 +136,8 @@ function ProfilePage() {
                     className="group relative size-9 cursor-pointer rounded-full"
                   >
                     <AvatarImage
-                      src={user?.image || undefined}
-                      alt={user?.name || "User avatar"}
+                      src={user.image || undefined}
+                      alt={user.name || "User avatar"}
                       className="rounded-lg"
                     />
 
@@ -162,7 +146,7 @@ function ProfilePage() {
                     </div>
 
                     <AvatarFallback className="size-9 rounded-full">
-                      {user?.name?.charAt(0)}
+                      {user.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
@@ -190,8 +174,8 @@ function ProfilePage() {
                     className="group relative size-9 cursor-pointer rounded-full"
                   >
                     <AvatarImage
-                      src={user?.image || undefined}
-                      alt={user?.name || "User avatar"}
+                      src={user.image || undefined}
+                      alt={user.name || "User avatar"}
                       className="rounded-lg"
                     />
 
@@ -200,7 +184,7 @@ function ProfilePage() {
                     </div>
 
                     <AvatarFallback className="size-9 rounded-full">
-                      {user?.name?.charAt(0)}
+                      {user.name?.charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                 </TooltipTrigger>

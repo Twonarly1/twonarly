@@ -5,17 +5,16 @@ import { eq } from "drizzle-orm";
 import { r2 } from "@/lib/config/r2.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/session/get-session";
+import { ensureSession } from "@/server/functions/session/ensure-session";
 
 export const removeAvatar = createServerFn({ method: "POST" }).handler(async () => {
-  const session = await getSession();
-  if (!session?.userId) throw new Error("Unauthorized");
+  const session = await ensureSession();
 
   try {
     const [currentUser] = await db
       .select({ image: user.image })
       .from(user)
-      .where(eq(user.id, session.userId));
+      .where(eq(user.id, session.user.id));
 
     if (currentUser?.image) {
       const key = currentUser.image.replace(`${process.env.R2_PUBLIC_URL}/`, "");
@@ -30,7 +29,7 @@ export const removeAvatar = createServerFn({ method: "POST" }).handler(async () 
     await db
       .update(user)
       .set({ image: null, updatedAt: new Date().toISOString() })
-      .where(eq(user.id, session.userId));
+      .where(eq(user.id, session.user.id));
 
     return { success: true };
   } catch (error) {

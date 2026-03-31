@@ -8,7 +8,7 @@ import { r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { getSession } from "@/server/functions/session/get-session";
+import { ensureSession } from "@/server/functions/session/ensure-session";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -16,9 +16,7 @@ const MAX_SIZE = 5 * 1024 * 1024;
 export const uploadAvatar = createServerFn({ method: "POST" })
   .inputValidator(z.instanceof(FormData))
   .handler(async ({ data }) => {
-    const session = await getSession();
-    if (!session?.userId) throw new Error("Unauthorized");
-
+    const session = await ensureSession();
     const file = data.get("file") as File;
 
     if (!file || !(file instanceof File)) {
@@ -40,7 +38,7 @@ export const uploadAvatar = createServerFn({ method: "POST" })
     const [currentUser] = await db
       .select({ image: user.image })
       .from(user)
-      .where(eq(user.id, session.userId));
+      .where(eq(user.id, session.user.id));
 
     if (currentUser?.image?.includes(env.R2_PUBLIC_URL)) {
       const oldKey = currentUser.image.replace(`${env.R2_PUBLIC_URL}/`, "");
@@ -52,7 +50,7 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       );
     }
 
-    const key = `avatars/${session.userId}-${crypto.randomUUID()}.${detected.ext}`;
+    const key = `avatars/${session.user.id}-${crypto.randomUUID()}.${detected.ext}`;
 
     await r2.send(
       new PutObjectCommand({
@@ -68,5 +66,5 @@ export const uploadAvatar = createServerFn({ method: "POST" })
     await db
       .update(user)
       .set({ image: imageUrl, updatedAt: new Date().toISOString() })
-      .where(eq(user.id, session.userId));
+      .where(eq(user.id, session.user.id));
   });

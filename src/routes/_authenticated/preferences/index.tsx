@@ -28,7 +28,7 @@ import { cn } from "@/lib/utils";
 import { useSettings } from "@/providers/settings-provider";
 import { useTheme } from "@/providers/theme-provider";
 
-const themeOptions = [
+const THEME_OPTIONS = [
   { value: "light", label: "Light", icon: Sun },
   { value: "dark", label: "Dark", icon: Moon },
   { value: "system", label: "System", icon: Monitor },
@@ -98,24 +98,22 @@ function SettingsPage() {
                 </SelectTrigger>
                 <SelectContent align="end">
                   <SelectGroup>
-                    {themeOptions.map((option) => {
-                      return (
-                        <SelectItem
-                          key={option.value}
-                          value={option.value}
-                          icon={
-                            <option.icon
-                              className={cn(
-                                "icon-xs",
-                                option.value === "custom" ? "fill-primary text-primary" : "",
-                              )}
-                            />
-                          }
-                        >
-                          {option.label}
-                        </SelectItem>
-                      );
-                    })}
+                    {THEME_OPTIONS.map((option) => (
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        icon={
+                          <option.icon
+                            className={cn(
+                              "icon-xs",
+                              option.value === "custom" ? "fill-primary text-primary" : "",
+                            )}
+                          />
+                        }
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>

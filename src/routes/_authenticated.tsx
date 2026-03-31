@@ -1,20 +1,21 @@
-import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 import AppSidebar from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { authMiddleware } from "@/middleware";
 import { useSettings } from "@/providers/settings-provider";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
-import { fetchUser } from "@/server/functions/user/fetch-user";
+import { getSession } from "@/server/functions/session/get-session";
 
 export const Route = createFileRoute("/_authenticated")({
+  beforeLoad: async () => {
+    const session = await getSession();
+    if (!session) throw redirect({ to: "/" });
+
+    const deviceSessions = await getDeviceSessions();
+    return { user: session.user, deviceSessions };
+  },
   component: AuthenticatedLayout,
-  server: { middleware: [authMiddleware] },
-  loader: async () => ({
-    deviceSessions: await getDeviceSessions(),
-    user: await fetchUser(),
-  }),
 });
 
 function AuthenticatedLayout() {

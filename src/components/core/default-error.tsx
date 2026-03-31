@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 import type { ErrorComponentProps } from "@tanstack/react-router";
 
-const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
+const DefaultError = ({ error }: ErrorComponentProps) => {
   const router = useRouter();
   const isRoot = useMatch({
     strict: false,
@@ -42,4 +42,4 @@ const DefaultCatchBoundary = ({ error }: ErrorComponentProps) => {
   );
 };
 
-export default DefaultCatchBoundary;
+export default DefaultError;

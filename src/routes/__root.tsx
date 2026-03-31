@@ -11,8 +11,15 @@ import { getSettings } from "@/server/functions/preferences/settings";
 import { getCustomColors, getTheme } from "@/server/functions/preferences/theme";
 import appCss from "../styles.css?url";
 
+import type { QueryClient } from "@tanstack/react-query";
+import type { Session, User } from "better-auth";
 import type { PropsWithChildren } from "react";
-import type { RouterContext } from "@/router";
+
+interface RouterContext {
+  queryClient: QueryClient;
+  session: Session | null;
+  user: User | undefined;
+}
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   loader: async () => {
