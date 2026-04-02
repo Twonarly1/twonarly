@@ -1,6 +1,6 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
 import { ArrowLeft, XCircle } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 import { useConnect, useConnectors, useSignMessage } from "wagmi";
 
@@ -30,6 +30,9 @@ interface Props {
 }
 
 export function ConnectWalletDialog({ trigger, mode }: Props) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const router = useRouter();
   const navigate = useNavigate();
 
@@ -160,6 +163,8 @@ Nonce: ${nonce}`;
     setActiveConnector(null);
     setErrorMessage(null);
   };
+
+  if (!mounted) return <>{trigger}</>;
 
   return (
     <Dialog
