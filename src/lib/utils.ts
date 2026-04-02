@@ -59,3 +59,8 @@ export function adjustColorLightness(hex: string, percentage: number): string {
   const toHex = (n: number) => n.toString(16).padStart(2, "0");
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
+
+export function formatAddress(address?: string) {
+  if (!address) return null;
+  return `${address.slice(0, 6)}…${address.slice(38, 42)}`;
+}

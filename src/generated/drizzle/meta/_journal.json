@@ -57,6 +57,13 @@
       "when": 1774456919682,
       "tag": "0007_tiny_namorita",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1774979481135,
+      "tag": "0008_brown_swarm",
+      "breakpoints": true
     }
   ]
 }

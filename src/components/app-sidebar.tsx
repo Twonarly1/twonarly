@@ -42,7 +42,7 @@ const navLinks = [
   { label: "Tasks", to: "/tasks", icon: CheckLine },
   { label: "Preferences", to: "/preferences", icon: Settings2 },
   { label: "Profile", to: "/profile", icon: User },
-  { label: "Security & access", to: "/accounts", icon: Key },
+  { label: "Security & Access", to: "/accounts", icon: Key },
   { label: "Billing", to: "/billing", icon: Wallet },
   { label: "Integrations", to: "/integrations", icon: Blocks },
 ] as const;

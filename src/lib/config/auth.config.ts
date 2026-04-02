@@ -1,13 +1,17 @@
 import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { multiSession } from "better-auth/plugins";
+import { generateRandomString } from "better-auth/crypto";
+import { multiSession, siwe } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { createPublicClient, http, verifyMessage } from "viem";
+import { mainnet } from "wagmi/chains";
 
 import { app } from "@/lib/config/app.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import * as schema from "@/lib/db/schema";
+import { linkWalletPlugin } from "../auth/link-wallet-plugin";
 import { stripeClient } from "./stripe.config";
 
 export const auth = betterAuth({
@@ -31,6 +35,50 @@ export const auth = betterAuth({
     // TODO: show a warning when the maximum number of sessions is reached and prevent new sign-ins until an existing session is signed out
     multiSession({ maximumSessions: 3 }),
     // passkey(),
+    siwe({
+      domain: "twonarly.vercel.app",
+      anonymous: true,
+      getNonce: async () => {
+        return generateRandomString(32, "a-z", "A-Z", "0-9");
+      },
+      verifyMessage: async ({ message, signature, address }) => {
+        try {
+          return await verifyMessage({
+            address: address as `0x${string}`,
+            message,
+            signature: signature as `0x${string}`,
+          });
+        } catch {
+          return false;
+        }
+      },
+      ensLookup: async ({ walletAddress }) => {
+        try {
+          const client = createPublicClient({
+            chain: mainnet,
+            transport: http(),
+          });
+          const ensName = await client.getEnsName({
+            address: walletAddress as `0x${string}`,
+          });
+          const ensAvatar = ensName
+            ? await client.getEnsAvatar({
+                name: ensName,
+              })
+            : null;
+          return {
+            name: ensName || walletAddress,
+            avatar: ensAvatar || "",
+          };
+        } catch {
+          return {
+            name: walletAddress,
+            avatar: "",
+          };
+        }
+      },
+    }),
+    linkWalletPlugin(),
     stripe({
       stripeClient,
       stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,

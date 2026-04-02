@@ -66,6 +66,7 @@ function RootDocument({ children }: PropsWithChildren) {
         <HeadContent />
       </head>
       <body>
+        {/* TODO: Handle providers better along with context wrap in router.tsx */}
         <ThemeProvider theme={theme} customColors={customColors}>
           <SettingsProvider settings={settings}>
             {children}

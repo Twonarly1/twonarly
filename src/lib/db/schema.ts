@@ -140,6 +140,21 @@ export const subscription = pgTable("subscription", {
   stripeScheduleId: text("stripe_schedule_id"),
 });
 
+export const walletAddress = pgTable(
+  "wallet_address",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    address: text("address").notNull(),
+    chainId: integer("chain_id").notNull(),
+    createdAt: generateDefaultDate(),
+    isPrimary: boolean("is_primary").notNull().default(false),
+  },
+  (table) => [index("wallet_address_userId_idx").on(table.userId)],
+);
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
@@ -162,6 +177,13 @@ export const accountRelations = relations(account, ({ one }) => ({
 export const passkeyRelations = relations(passkey, ({ one }) => ({
   user: one(user, {
     fields: [passkey.userId],
+    references: [user.id],
+  }),
+}));
+
+export const walletAddressRelations = relations(walletAddress, ({ one }) => ({
+  user: one(user, {
+    fields: [walletAddress.userId],
     references: [user.id],
   }),
 }));

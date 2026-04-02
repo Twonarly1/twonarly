@@ -135,7 +135,7 @@ const AccountList = ({ deviceSessions, accounts }: Props) => {
         );
       })}
 
-      <Item>
+      <Item size="sm">
         <ItemContent>
           <ItemDescription>Sign in with another account</ItemDescription>
         </ItemContent>

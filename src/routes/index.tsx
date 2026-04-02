@@ -1,6 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { FingerprintPattern } from "lucide-react";
 
+import { ConnectWalletDialog } from "@/components/connect-wallet-dialog";
 import Link from "@/components/core/link";
+import { EthereumIcon } from "@/components/icons/ethereum";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
@@ -44,7 +47,7 @@ function App() {
       ) : (
         <div className="container mx-auto flex flex-col items-center justify-center gap-4">
           {/* TODO: Logo here */}
-          <div className="size-10 rounded-full border border-primary bg-primary/20 shadow-xl" />
+          {/* <div className="size-10 rounded-full border border-primary bg-primary/20 shadow-xl" /> */}
           <h1 className="mt-4 text-h2">Log in to {app.name}</h1>
 
           <div className="grid gap-2">
@@ -69,15 +72,32 @@ function App() {
               <p className="font-medium text-body-lg">Sign in with GitHub</p>
             </Button>
 
-            {/* <Button
+            <div className="flex w-full items-center gap-3 text-muted-foreground">
+              <div className="h-px w-full bg-border" />
+              <span className="text-sm">or</span>
+              <div className="h-px w-full bg-border" />
+            </div>
+
+            <Button
               variant="outline"
               size="lg"
-              onClick={handlePasskeySignIn}
+              disabled
+              // onClick={handlePasskeySignIn}
               className="px-12 py-4"
             >
-              <Fingerprint className="size-4" />
+              <FingerprintPattern className="size-4" />
               <p className="font-medium text-body-lg">Sign in with passkey</p>
-            </Button> */}
+            </Button>
+
+            <ConnectWalletDialog
+              mode="sign-in"
+              trigger={
+                <Button variant="outline" size="lg" className="px-12 py-4">
+                  <EthereumIcon className="size-4" />
+                  <p className="font-medium text-body-lg">Sign In With Ethereum</p>
+                </Button>
+              }
+            />
           </div>
         </div>
       )}
