@@ -2,6 +2,7 @@ import { createConfig, http } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { injected, walletConnect } from "wagmi/connectors";
 
+// ssr issues, notice @ `ConnectWalletDialog.tsx`
 const connectors =
   typeof window !== "undefined"
     ? [

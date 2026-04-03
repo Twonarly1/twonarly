@@ -1,4 +1,3 @@
-import { generateId } from "better-auth";
 import { APIError, createAuthEndpoint, sessionMiddleware } from "better-auth/api";
 import { verifyMessage } from "viem";
 import * as z from "zod";
@@ -35,6 +34,19 @@ export const linkWalletPlugin = () =>
             throw new APIError("UNAUTHORIZED", { message: "Invalid signature" });
           }
 
+          // Check if user already has a wallet linked
+          const userWallet = await ctx.context.adapter.findOne({
+            model: "walletAddress",
+            where: [{ field: "userId", value: session.user.id }],
+          });
+
+          if (userWallet) {
+            throw new APIError("BAD_REQUEST", {
+              message: "You already have a wallet linked. Unlink it first.",
+            });
+          }
+
+          // Check if this wallet is linked to another account
           const existing = await ctx.context.adapter.findOne({
             model: "walletAddress",
             where: [{ field: "address", value: walletAddress }],
@@ -49,7 +61,7 @@ export const linkWalletPlugin = () =>
           await ctx.context.adapter.create({
             model: "walletAddress",
             data: {
-              id: generateId(),
+              id: crypto.randomUUID(),
               userId: session.user.id,
               address: walletAddress,
               chainId,

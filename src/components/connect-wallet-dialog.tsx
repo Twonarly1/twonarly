@@ -56,57 +56,33 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
     setErrorMessage(null);
 
     try {
-      let address: `0x${string}`;
-      let chainId: number;
+      // 1. Connect
+      setStep("connecting");
+      const result = await connect.mutateAsync({ connector });
+      const address = result.accounts[0];
+      const chainId = result.chainId;
 
-      const accounts = await connector.getAccounts();
+      // 2. Get nonce + sign
+      setStep("signing");
+      const { data: nonceData } = await authClient.siwe.nonce({ walletAddress: address, chainId });
+      if (!nonceData?.nonce) throw new Error("Failed to get nonce");
 
-      if (accounts.length > 0) {
-        address = accounts[0];
-        const provider = await connector.getProvider();
-        // biome-ignore lint/suspicious/noExplicitAny: TODO
-        const chainHex = await (provider as any).request({ method: "eth_chainId" });
-        chainId = parseInt(chainHex, 16);
-        setStep("signing");
-      } else {
-        setStep("connecting");
-        const result = await connect.mutateAsync({ connector });
-        address = result.accounts[0];
-        chainId = result.chainId;
-        setStep("signing");
-      }
+      const message =
+        mode === "link"
+          ? `Sign in to ${window.location.host}\n\nWelcome 👋\n\nPlease sign this message to securely authenticate with your wallet.\nNo blockchain transaction will be made and no gas fees will apply.\n\nNonce: ${nonceData.nonce}`
+          : `Sign this message to sign in with your wallet. Nonce: ${nonceData.nonce}`;
 
-      if (!address) throw new Error("No address returned");
+      const signature = await signMessage.mutateAsync({ message });
+      setStep("verifying");
 
-      // Linking flow
+      // 3. Verify
       if (mode === "link") {
-        const nonce = crypto.randomUUID();
-
-        const message = `Sign in to ${window.location.host}
-
-Welcome 👋
-
-Please sign this message to securely authenticate with your wallet.
-No blockchain transaction will be made and no gas fees will apply.
-
-Nonce: ${nonce}`;
-
-        const signature = await signMessage.mutateAsync({ message });
-
-        setStep("verifying");
-
         const res = await fetch("/api/auth/siwe/link-wallet", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({
-            message,
-            signature,
-            walletAddress: address,
-            chainId,
-          }),
+          body: JSON.stringify({ message, signature, walletAddress: address, chainId }),
         });
-
         if (!res.ok) throw new Error("Link failed");
 
         setStep("success");
@@ -116,37 +92,14 @@ Nonce: ${nonce}`;
           description: "Your wallet has been linked to your account.",
         });
       } else {
-        // Sign-in flow
-        const { data: nonceData } = await authClient.siwe.nonce({
-          walletAddress: address,
-          chainId,
-        });
-
-        if (!nonceData?.nonce) throw new Error("Failed to get nonce");
-
-        const message = `Sign this message to sign in with your wallet. Nonce: ${nonceData.nonce}`;
-
-        const provider = (await connector.getProvider()) as {
-          request: (args: { method: string; params: unknown[] }) => Promise<string>;
-        };
-
-        const signature = await provider.request({
-          method: "personal_sign",
-          params: [message, address],
-        });
-
-        setStep("verifying");
-
         const { data, error } = await authClient.siwe.verify({
           message,
           signature,
           walletAddress: address,
-          chainId: 1,
+          chainId,
         });
-
-        if (error || !data) {
+        if (error || !data)
           throw new Error("This wallet isn't linked to an account. Link it in settings first.");
-        }
 
         setStep("success");
         navigate({ to: "/tasks" });

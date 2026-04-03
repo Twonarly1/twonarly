@@ -10,9 +10,6 @@ const config = defineConfig({
   worker: {
     format: "es",
   },
-  ssr: {
-    external: ["better-auth", "@better-auth/core", "@better-auth/passkey", "@better-auth/stripe"],
-  },
 });
 
 export default config;
