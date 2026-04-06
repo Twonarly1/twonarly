@@ -1,3 +1,4 @@
+import { getContrastingColor, hexToRgba } from "@uiw/color-convert";
 import { createContext, use, useCallback, useEffect, useState } from "react";
 
 import {
@@ -9,22 +10,32 @@ import type { PropsWithChildren } from "react";
 import type { CustomColors, Theme } from "@/server/functions/preferences/theme";
 
 function adjustColorLightness(hex: string, percentage: number): string {
-  // Remove # if present
   const cleanHex = hex.replace("#", "");
 
-  // Convert to RGB
   let r = parseInt(cleanHex.substring(0, 2), 16);
   let g = parseInt(cleanHex.substring(2, 4), 16);
   let b = parseInt(cleanHex.substring(4, 6), 16);
 
-  // Adjust lightness
-  r = Math.min(255, Math.floor(r + (255 - r) * (percentage / 100)));
-  g = Math.min(255, Math.floor(g + (255 - g) * (percentage / 100)));
-  b = Math.min(255, Math.floor(b + (255 - b) * (percentage / 100)));
+  if (percentage >= 0) {
+    // Blend toward white
+    r = Math.min(255, Math.floor(r + (255 - r) * (percentage / 100)));
+    g = Math.min(255, Math.floor(g + (255 - g) * (percentage / 100)));
+    b = Math.min(255, Math.floor(b + (255 - b) * (percentage / 100)));
+  } else {
+    // Blend toward black
+    const factor = Math.abs(percentage) / 100;
+    r = Math.max(0, Math.floor(r * (1 - factor)));
+    g = Math.max(0, Math.floor(g * (1 - factor)));
+    b = Math.max(0, Math.floor(b * (1 - factor)));
+  }
 
-  // Convert back to hex
   const toHex = (n: number) => n.toString(16).padStart(2, "0");
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+function isColorDark(hex: string): boolean {
+  const { r, g, b } = hexToRgba(hex);
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
 }
 
 interface ThemeContext {
@@ -49,7 +60,6 @@ const ThemeProvider = ({
   const [customColors, setCustomColorsState] = useState<CustomColors | null>(initialCustomColors);
 
   const setTheme = useCallback((newTheme: Theme) => {
-    document.documentElement.className = newTheme;
     setThemeState(newTheme);
     setThemeServerFn({ data: newTheme });
   }, []);
@@ -89,11 +99,17 @@ const ThemeProvider = ({
 
     if (theme === "custom" && customColors) {
       if (customColors.background) {
-        const bgColor = adjustColorLightness(customColors.background, 0);
-        const insetColor = adjustColorLightness(customColors.background, 80);
+        const bg = customColors.background;
+        const bgColor = adjustColorLightness(bg, 0);
+        const insetColor = adjustColorLightness(bg, 80);
+        const dark = isColorDark(bg);
+        const sidebarAccent = dark ? adjustColorLightness(bg, 15) : adjustColorLightness(bg, -10);
+        const sidebarForeground = getContrastingColor(bg);
 
         root.style.setProperty("--sidebar", bgColor);
         root.style.setProperty("--background", insetColor);
+        root.style.setProperty("--sidebar-accent", sidebarAccent);
+        root.style.setProperty("--sidebar-foreground", sidebarForeground);
       }
 
       if (customColors.accent) {
@@ -110,6 +126,8 @@ const ThemeProvider = ({
       // Only remove properties when switching away from custom theme
       root.style.removeProperty("--sidebar");
       root.style.removeProperty("--background");
+      root.style.removeProperty("--sidebar-accent");
+      root.style.removeProperty("--sidebar-foreground");
       root.style.removeProperty("--border");
       root.style.removeProperty("--primary");
       root.style.removeProperty("--ring");

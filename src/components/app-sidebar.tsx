@@ -1,5 +1,4 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
-import { getContrastingColor } from "@uiw/color-convert";
 import { Blocks, Check, CheckLine, ChevronDown, Key, Settings2, User, Wallet } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -35,7 +34,6 @@ import {
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
 import { useSettings } from "@/providers/settings-provider";
-import { useTheme } from "@/providers/theme-provider";
 import { Route } from "@/routes/_authenticated";
 
 const navLinks = [
@@ -50,7 +48,6 @@ const navLinks = [
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
   const { isMobile, toggleSidebar } = useSidebar();
-  const { theme, customColors } = useTheme();
   const { settings } = useSettings();
   const navigate = useNavigate();
   const router = useRouter();
@@ -76,15 +73,10 @@ const AppSidebar = () => {
     }
   };
 
-  const contrastingForegroundColor =
-    theme === "custom" && customColors?.background
-      ? getContrastingColor(customColors.background)
-      : undefined;
-
   useHotkeys("b", toggleSidebar, { description: "Toggle sidebar" }, [toggleSidebar]);
 
   return (
-    <Sidebar side={settings.sidebarPosition}>
+    <Sidebar side={settings.sidebarPosition} className="text-sidebar-foreground">
       <SidebarContent>
         <SidebarHeader>
           <SidebarMenu>
@@ -94,9 +86,9 @@ const AppSidebar = () => {
                   <SidebarMenuButton
                     variant="ghost"
                     size="lg"
-                    className="flex w-full justify-between px-1"
+                    className="flex w-full justify-between border px-1"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex min-w-0 items-center gap-2">
                       <Avatar role="button" className="size-7 rounded">
                         <AvatarImage
                           src={user?.image || undefined}
@@ -106,9 +98,7 @@ const AppSidebar = () => {
                         <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
                       </Avatar>
 
-                      <div className="flex flex-col gap-0.5 leading-none">
-                        <span className="font-medium">{user?.name}</span>
-                      </div>
+                      <span className="truncate font-medium">{user?.name}</span>
                     </div>
                     <ChevronDown className="icon-xs" />
                   </SidebarMenuButton>
@@ -180,9 +170,7 @@ const AppSidebar = () => {
         </SidebarHeader>
 
         <SidebarGroup>
-          <SidebarGroupLabel style={{ color: contrastingForegroundColor }}>
-            Navigation
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navLinks.map((item) => (
@@ -191,9 +179,8 @@ const AppSidebar = () => {
                     to={item.to}
                     variant="ghost"
                     size="sm"
-                    className="foreground flex w-full justify-start gap-2 transition-none hover:text-current"
+                    className="foreground flex w-full justify-start gap-2 transition-none hover:bg-sidebar-accent hover:text-current"
                     onClick={isMobile ? () => toggleSidebar() : undefined}
-                    style={{ color: contrastingForegroundColor }}
                   >
                     {/* <Icon className="icon-xs" /> */}
                     <item.icon className="icon-xs" />

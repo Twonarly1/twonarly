@@ -159,7 +159,7 @@ function BillingPage() {
             : plan.name === "Free";
 
           return (
-            <Card key={plan.name} className={cn("", isCurrent && "border-primary")}>
+            <Card key={plan.name} className={cn("bg-background", isCurrent && "border-primary")}>
               <CardHeader className="mb-3">
                 <CardTitle>{plan.name}</CardTitle>
                 <CardDescription>

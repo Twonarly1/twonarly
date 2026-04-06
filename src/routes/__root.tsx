@@ -60,10 +60,29 @@ function RootDocument({ children }: PropsWithChildren) {
   const htmlDataAttrs =
     settings.fontSize !== "default" ? { "data-font-size": settings.fontSize } : {};
 
+  const themeScript =
+    theme === "custom" && customColors
+      ? `(function(){
+          var r=document.documentElement.style;
+          var bg="${customColors.background || ""}";
+          var accent="${customColors.accent || ""}";
+          var border="${customColors.border || ""}";
+          function hex2rgb(h){h=h.replace("#","");return{r:parseInt(h.substring(0,2),16),g:parseInt(h.substring(2,4),16),b:parseInt(h.substring(4,6),16)};}
+          function adj(h,p){var c=hex2rgb(h),R=c.r,G=c.g,B=c.b;if(p>=0){R=Math.min(255,Math.floor(R+(255-R)*(p/100)));G=Math.min(255,Math.floor(G+(255-G)*(p/100)));B=Math.min(255,Math.floor(B+(255-B)*(p/100)));}else{var f=Math.abs(p)/100;R=Math.max(0,Math.floor(R*(1-f)));G=Math.max(0,Math.floor(G*(1-f)));B=Math.max(0,Math.floor(B*(1-f)));}var t=function(n){return n.toString(16).padStart(2,"0");};return"#"+t(R)+t(G)+t(B);}
+          function isDark(h){var c=hex2rgb(h);return(0.299*c.r+0.587*c.g+0.114*c.b)/255<0.5;}
+          if(bg){var d=isDark(bg);r.setProperty("--sidebar",bg);r.setProperty("--background",adj(bg,80));r.setProperty("--sidebar-accent",d?adj(bg,15):adj(bg,-10));r.setProperty("--sidebar-foreground",d?"#ffffff":"#1a1a1a");r.setProperty("--sidebar-accent-foreground",d?"#ffffff":"#1a1a1a");}
+          if(accent){r.setProperty("--primary",accent);r.setProperty("--ring",accent);}
+          if(border){r.setProperty("--border",border);r.setProperty("--input",border);}
+        })();`
+      : undefined;
   return (
     <html lang="en" className={htmlClassName} {...htmlDataAttrs}>
       <head>
         <HeadContent />
+        {themeScript && (
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Allow for theme
+          <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        )}
       </head>
       <body>
         {/* TODO: Handle providers better along with context wrap in router.tsx */}
