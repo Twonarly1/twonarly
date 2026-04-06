@@ -16,9 +16,6 @@ export const Route = createFileRoute("/_authenticated/accounts/")({
 });
 
 function AccountsPage() {
-  const { accounts, wallets } = Route.useLoaderData();
-  const { deviceSessions } = Route.useRouteContext();
-
   return (
     <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
       <h1 className="items-baseline font-medium text-h1">Security & Access</h1>
@@ -31,7 +28,7 @@ function AccountsPage() {
           </ItemContent>
         </Item>
 
-        <AccountList deviceSessions={deviceSessions} accounts={accounts} />
+        <AccountList />
       </div>
 
       <div className="space-y-4">
@@ -42,7 +39,7 @@ function AccountsPage() {
           </ItemContent>
         </Item>
 
-        <LinkedWalletList wallets={wallets} />
+        <LinkedWalletList />
       </div>
 
       {/* <div className="space-y-4">

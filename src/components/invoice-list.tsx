@@ -13,7 +13,7 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
-import { formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/format";
 import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
 
 import type { Intent } from "@/components/intent";

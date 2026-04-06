@@ -14,20 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup } from "@/components/ui/item";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
+import { Route } from "@/routes/_authenticated/accounts";
 
-import type { Session, User } from "better-auth";
+const AccountList = () => {
+  const { deviceSessions } = Route.useRouteContext();
+  const { accounts } = Route.useLoaderData();
 
-interface DeviceSession {
-  user: User;
-  session: Session;
-}
-
-interface Props {
-  deviceSessions: DeviceSession[];
-  accounts: { userId: string; providerId: string }[];
-}
-
-const AccountList = ({ deviceSessions, accounts }: Props) => {
   const router = useRouter();
   const navigate = useNavigate();
 

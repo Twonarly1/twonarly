@@ -1,6 +1,5 @@
 import { createContext, use, useCallback, useEffect, useState } from "react";
 
-import { adjustColorLightness } from "@/lib/utils";
 import {
   setCustomColors as setCustomColorsServerFn,
   setTheme as setThemeServerFn,
@@ -8,6 +7,25 @@ import {
 
 import type { PropsWithChildren } from "react";
 import type { CustomColors, Theme } from "@/server/functions/preferences/theme";
+
+function adjustColorLightness(hex: string, percentage: number): string {
+  // Remove # if present
+  const cleanHex = hex.replace("#", "");
+
+  // Convert to RGB
+  let r = parseInt(cleanHex.substring(0, 2), 16);
+  let g = parseInt(cleanHex.substring(2, 4), 16);
+  let b = parseInt(cleanHex.substring(4, 6), 16);
+
+  // Adjust lightness
+  r = Math.min(255, Math.floor(r + (255 - r) * (percentage / 100)));
+  g = Math.min(255, Math.floor(g + (255 - g) * (percentage / 100)));
+  b = Math.min(255, Math.floor(b + (255 - b) * (percentage / 100)));
+
+  // Convert back to hex
+  const toHex = (n: number) => n.toString(16).padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
 
 interface ThemeContext {
   theme: Theme;

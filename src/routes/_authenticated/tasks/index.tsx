@@ -16,7 +16,8 @@ import TableActions from "@/components/table/table-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { cn, formatDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/format";
 import { fetchTasks } from "@/server/functions/task/fetch-tasks";
 
 import type {

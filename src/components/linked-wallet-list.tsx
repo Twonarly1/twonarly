@@ -12,17 +12,18 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
-import { formatAddress } from "@/lib/utils";
+import { formatWalletAddress } from "@/lib/utils/format";
+import { Route } from "@/routes/_authenticated/accounts";
 
-import type { fetchLinkedWallets } from "@/server/functions/wallet/fetch-linked-wallets";
+import type { Wallet } from "@/lib/db/schema";
 
-type LinkedWallet = Awaited<ReturnType<typeof fetchLinkedWallets>>[number];
+const LinkedWalletList = () => {
+  const { wallets } = Route.useLoaderData();
 
-const LinkedWalletList = ({ wallets }: { wallets: LinkedWallet[] }) => {
   const router = useRouter();
   const [unlinkingId, setUnlinkingId] = useState<string | null>(null);
 
-  const handleUnlink = async (wallet: LinkedWallet) => {
+  const handleUnlink = async (wallet: Wallet) => {
     setUnlinkingId(wallet.id);
 
     try {
@@ -37,15 +38,15 @@ const LinkedWalletList = ({ wallets }: { wallets: LinkedWallet[] }) => {
 
       toast.success({
         title: "Wallet unlinked",
-        description: `${formatAddress(wallet.address)} removed from your account.`,
+        description: `${formatWalletAddress(wallet.address)} removed from your account.`,
       });
       router.invalidate();
     } catch (error) {
       console.error("Unlink wallet error:", error);
       toast.error({ title: "Failed to unlink wallet" });
-    } finally {
-      setUnlinkingId(null);
     }
+
+    setUnlinkingId(null);
   };
 
   return (
@@ -67,26 +68,30 @@ const LinkedWalletList = ({ wallets }: { wallets: LinkedWallet[] }) => {
           </ItemActions>
         </Item>
       ) : (
-        wallets.map((wallet) => {
-          return (
-            <Item key={wallet.id} size="sm">
-              <ItemContent>
-                <ItemTitle>{formatAddress(wallet.address)}</ItemTitle>
-                {/* <ItemDescription>Chain {wallet.chainId}</ItemDescription> */}
-              </ItemContent>
-              <ItemActions>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleUnlink(wallet)}
-                  disabled={unlinkingId === wallet.id}
-                >
-                  {unlinkingId === wallet.id ? "Unlinking..." : "Unlink"}
-                </Button>
-              </ItemActions>
-            </Item>
-          );
-        })
+        wallets.map((wallet) => (
+          <Item key={wallet.id} size="sm">
+            <ItemContent>
+              <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
+              <a
+                href={`https://etherscan.io/address/${wallet.address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on Etherscan
+              </a>
+            </ItemContent>
+            <ItemActions>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleUnlink(wallet)}
+                disabled={unlinkingId === wallet.id}
+              >
+                {unlinkingId === wallet.id ? "Unlinking..." : "Unlink"}
+              </Button>
+            </ItemActions>
+          </Item>
+        ))
       )}
     </ItemGroup>
   );

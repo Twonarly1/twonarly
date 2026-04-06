@@ -155,6 +155,8 @@ export const walletAddress = pgTable(
   (table) => [index("wallet_address_userId_idx").on(table.userId)],
 );
 
+export type Wallet = InferInsertModel<typeof walletAddress>;
+
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),

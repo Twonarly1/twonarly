@@ -4,8 +4,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { generateRandomString } from "better-auth/crypto";
 import { multiSession, siwe } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { createPublicClient, http, verifyMessage } from "viem";
-import { mainnet } from "wagmi/chains";
+import { verifyMessage } from "viem";
 
 import { app } from "@/lib/config/app.config";
 import { env } from "@/lib/config/t3.config";
@@ -50,31 +49,6 @@ export const auth = betterAuth({
           });
         } catch {
           return false;
-        }
-      },
-      ensLookup: async ({ walletAddress }) => {
-        try {
-          const client = createPublicClient({
-            chain: mainnet,
-            transport: http(),
-          });
-          const ensName = await client.getEnsName({
-            address: walletAddress as `0x${string}`,
-          });
-          const ensAvatar = ensName
-            ? await client.getEnsAvatar({
-                name: ensName,
-              })
-            : null;
-          return {
-            name: ensName || walletAddress,
-            avatar: ensAvatar || "",
-          };
-        } catch {
-          return {
-            name: walletAddress,
-            avatar: "",
-          };
         }
       },
     }),

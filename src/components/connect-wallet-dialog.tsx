@@ -1,12 +1,22 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, XCircle } from "lucide-react";
+import {
+  ChainNotConfiguredError,
+  ConnectorAccountNotFoundError,
+  ConnectorAlreadyConnectedError,
+  ConnectorNotConnectedError,
+  ConnectorNotFoundError,
+  ProviderNotFoundError,
+  getConnection,
+} from "@wagmi/core";
+import { ArrowLeft, ArrowUpRight, MousePointerClick, ShieldCheck, Vault } from "lucide-react";
 import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
+import { UserRejectedRequestError } from "viem";
 import { useConnect, useConnectors, useSignMessage } from "wagmi";
 
 import ConnectOptionList from "@/components/connect-option-list";
 import { WalletConnectIcon } from "@/components/icons/wallet-connect";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -18,11 +28,35 @@ import {
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth/auth-client";
+import { wagmiConfig } from "@/lib/config/wagmi.config";
+import { cn } from "@/lib/utils";
+import { StatusErrorIcon } from "./icons/status-error";
 
 import type { ReactNode } from "react";
 import type { Connector } from "wagmi";
 
-type SiweStep = "idle" | "connecting" | "signing" | "verifying" | "success" | "error";
+const WALLET_EXPLAINERS = [
+  {
+    title: "A home for your digital assets",
+    description:
+      "Wallets let you store, send, and receive digital assets like Ethereum. Think of it as a secure digital bank account that only you control.",
+    icon: Vault,
+  },
+  {
+    title: "A new way to sign in",
+    description:
+      "Instead of creating new accounts and passwords for every app, connect your wallet with one click. Your wallet is your universal login for the decentralized web.",
+    icon: MousePointerClick,
+  },
+  {
+    title: "You own your identity",
+    description:
+      "Unlike traditional accounts controlled by companies, your wallet is completely yours. No one can freeze it, shut it down, or access it without your permission.",
+    icon: ShieldCheck,
+  },
+];
+
+type SiweStep = "idle" | "connecting" | "signing" | "verifying" | "error";
 
 interface Props {
   trigger: ReactNode;
@@ -43,28 +77,50 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
   const [step, setStep] = useState<SiweStep>("idle");
   const [activeConnector, setActiveConnector] = useState<Connector | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [learnMoreOpen, setLearnMoreOpen] = useState(false);
 
-  const filteredConnectors = connectors.filter((c) => c.id !== "injected");
-  const installed = filteredConnectors.filter((c) => c.type === "injected");
-  const popular = filteredConnectors.filter((c) => c.type !== "injected");
+  const connectorsList = [
+    {
+      title: "Installed",
+      connectors: connectors.filter((c) => c.id !== "injected" && c.type === "injected"),
+    },
+    {
+      title: "Popular",
+      connectors: connectors.filter((c) => c.id !== "injected" && c.type !== "injected"),
+    },
+  ];
 
   // Not connecting, signing, or verifying
-  const isProcessing = step !== "idle" && step !== "error" && step !== "success";
+  const isProcessing = step !== "idle" && step !== "error";
 
   const handleConnect = async (connector: Connector) => {
     setActiveConnector(connector);
     setErrorMessage(null);
 
     try {
-      // 1. Connect
-      setStep("connecting");
-      const result = await connect.mutateAsync({ connector });
-      const address = result.accounts[0];
-      const chainId = result.chainId;
+      let address: `0x${string}`;
+      let chainId: number;
 
-      // 2. Get nonce + sign
+      // 1. Check if already connected
+      const connection = getConnection(wagmiConfig);
+
+      if (connection.status === "connected") {
+        address = connection.address;
+        chainId = connection.chainId;
+      } else {
+        setStep("connecting");
+        const result = await connect.mutateAsync({ connector });
+        address = result.accounts[0];
+        chainId = result.chainId;
+      }
+
+      if (!address) throw new Error("No address returned");
+      if (!chainId) throw new Error("No chainId returned");
+
+      // 2. Get nonce + signature
       setStep("signing");
       const { data: nonceData } = await authClient.siwe.nonce({ walletAddress: address, chainId });
+
       if (!nonceData?.nonce) throw new Error("Failed to get nonce");
 
       const message =
@@ -73,9 +129,10 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
           : `Sign this message to sign in with your wallet. Nonce: ${nonceData.nonce}`;
 
       const signature = await signMessage.mutateAsync({ message });
-      setStep("verifying");
 
       // 3. Verify
+      setStep("verifying");
+
       if (mode === "link") {
         const res = await fetch("/api/auth/siwe/link-wallet", {
           method: "POST",
@@ -83,9 +140,9 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
           credentials: "include",
           body: JSON.stringify({ message, signature, walletAddress: address, chainId }),
         });
+
         if (!res.ok) throw new Error("Link failed");
 
-        setStep("success");
         router.invalidate();
         toast.success({
           title: "Wallet linked",
@@ -98,16 +155,16 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
           walletAddress: address,
           chainId,
         });
+
         if (error || !data)
           throw new Error("This wallet isn't linked to an account. Link it in settings first.");
 
-        setStep("success");
         navigate({ to: "/tasks" });
       }
     } catch (error) {
-      console.error("Wallet error:", error);
-      setErrorMessage(error instanceof Error ? error.message : "Something went wrong");
       setStep("error");
+      console.error("Wallet error:", error);
+      setErrorMessage(getFriendlyError(error));
     }
   };
 
@@ -127,7 +184,7 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
     >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent showCloseButton={!isProcessing}>
-        {step === "idle" || step === "error" || step === "success" ? (
+        {step === "idle" || step === "error" ? (
           <>
             <DialogHeader>
               <DialogTitle>{mode === "link" ? "Link Wallet" : "Sign In With Ethereum"}</DialogTitle>
@@ -138,38 +195,80 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
             </DialogHeader>
 
             {step === "error" && (
-              <Item size="sm" className="rounded-lg border border-destructive/20 bg-destructive/5">
+              <Item variant="destructive" size="sm" className="rounded-lg">
                 <ItemMedia>
-                  <XCircle className="size-4 text-destructive" />
+                  <StatusErrorIcon />
                 </ItemMedia>
                 <ItemContent>
-                  <ItemTitle className="text-destructive">{activeConnector?.name} failed</ItemTitle>
+                  <ItemTitle className="text-destructive">Connection failed</ItemTitle>
                   <ItemDescription className="text-destructive/80">{errorMessage}</ItemDescription>
                 </ItemContent>
               </Item>
             )}
 
-            <div className="grid gap-4">
-              {[
-                { title: "Installed", connectors: installed },
-                { title: "Popular", connectors: popular },
-              ].map((section) => (
-                <Item key={section.title} size="sm" className="px-0">
-                  <ItemContent>
-                    <ItemTitle>{section.title}</ItemTitle>
-                    <ConnectOptionList
-                      connectors={section.connectors}
-                      onConnect={handleConnect}
-                      disabled={false}
-                    />
-                  </ItemContent>
-                </Item>
-              ))}
-            </div>
+            {!learnMoreOpen ? (
+              <div className="grid gap-4">
+                {connectorsList.map((section) => (
+                  <Item key={section.title} size="sm" className="px-0">
+                    <ItemContent>
+                      <ItemTitle>{section.title}</ItemTitle>
+                      <ConnectOptionList
+                        connectors={section.connectors}
+                        onConnect={handleConnect}
+                        disabled={isProcessing}
+                      />
+                    </ItemContent>
+                  </Item>
+                ))}
 
-            <p className="text-center text-body-sm text-muted-foreground hover:underline">
-              What's a wallet?
-            </p>
+                <Button
+                  variant="ghost"
+                  className="mx-auto w-fit"
+                  onClick={() => setLearnMoreOpen(true)}
+                >
+                  What&apos;s a wallet?
+                </Button>
+              </div>
+            ) : (
+              <div className="grid gap-2">
+                {WALLET_EXPLAINERS.map((explainer, index) => (
+                  <Item
+                    key={explainer.title}
+                    variant="outline"
+                    size="sm"
+                    className={cn("rounded-lg", index === 1 ? "border-primary" : "")}
+                  >
+                    <ItemContent>
+                      <ItemTitle>{explainer.title}</ItemTitle>
+                      <ItemDescription className="line-clamp-none">
+                        {explainer.description}
+                      </ItemDescription>
+                    </ItemContent>
+                    {explainer.icon && (
+                      <ItemMedia>
+                        <explainer.icon className="icon-sm" />
+                      </ItemMedia>
+                    )}
+                  </Item>
+                ))}
+
+                <div className="flex items-end justify-end gap-2">
+                  <Button variant="ghost" onClick={() => setLearnMoreOpen(false)}>
+                    Cancel
+                  </Button>
+                  <a
+                    href="https://ethereum.org/wallets/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    // className="text-center hover:underline"
+                    className={cn("mt-4 w-fit", buttonVariants({ variant: "outline" }))}
+                  >
+                    Learn more
+                    <ArrowUpRight className="icon-sm text-muted-foreground" />
+                  </a>
+                </div>
+              </div>
+            )}
           </>
         ) : (
           <>
@@ -210,11 +309,44 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
                 </div>
               </div>
               {step === "connecting" && "Click connect in your wallet popup"}
-              {step === "signing" && "Waiting for wallet confirmation…"}{" "}
+              {step === "signing" && "Waiting for wallet confirmation…"}
             </div>
           </>
         )}
       </DialogContent>
     </Dialog>
   );
+}
+
+function getFriendlyError(error: unknown): string {
+  if (error instanceof ConnectorAlreadyConnectedError)
+    return "Wallet is already connected. Please try again.";
+
+  if (error instanceof ConnectorAccountNotFoundError) return "No account found in your wallet.";
+
+  if (error instanceof ConnectorNotFoundError)
+    return "Wallet not detected. Make sure your extension is installed.";
+
+  if (error instanceof ConnectorNotConnectedError)
+    return "Wallet connection was lost. Please try again.";
+
+  if (error instanceof ChainNotConfiguredError)
+    return "This network isn't supported. Please switch networks in your wallet.";
+
+  if (error instanceof ProviderNotFoundError)
+    return "Wallet not detected. Make sure your extension is installed.";
+
+  if (error instanceof UserRejectedRequestError) return "You declined the request in your wallet.";
+
+  // Fallback for non-wagmi errors (your own throws, fetch failures, etc.)
+  const message = error instanceof Error ? error.message.toLowerCase() : "";
+
+  if (message.includes("nonce")) return "Authentication failed. Please try again.";
+
+  if (message.includes("link failed")) return "Failed to link wallet. Please try again.";
+
+  if (message.includes("not linked") || message.includes("link it in settings"))
+    return "This wallet isn't linked to an account yet. You can link it in settings.";
+
+  return "Something went wrong. Please try again.";
 }

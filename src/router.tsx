@@ -21,6 +21,8 @@ export function getRouter() {
     defaultNotFoundComponent: DefaultNotFound,
     defaultPendingComponent: DefaultPending,
     defaultPreloadStaleTime: 0,
+    defaultPendingMs: 300,
+    defaultPendingMinMs: 200,
     scrollRestoration: true,
     Wrap: ({ children }: PropsWithChildren) => (
       <WagmiProvider config={wagmiConfig}>

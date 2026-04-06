@@ -26,7 +26,8 @@ import {
 } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth/auth-client";
-import { capitalizeFirstLetter, cn, formatDate } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { capitalizeFirstLetter, formatDate } from "@/lib/utils/format";
 import { fetchActiveSubscriptions } from "@/server/functions/subscriptions/fetch-active-subscriptions";
 import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
 import { fetchPlans } from "@/server/functions/subscriptions/fetch-plans";
