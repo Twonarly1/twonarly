@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import AccountList from "@/components/account-list";
 import LinkedWalletList from "@/components/linked-wallet-list";
+import PageContainer from "@/components/page-container";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { fetchAccounts } from "@/server/functions/accounts/fetch-accounts";
 import { fetchLinkedWallets } from "@/server/functions/wallet/fetch-linked-wallets";
@@ -17,7 +18,7 @@ export const Route = createFileRoute("/_authenticated/accounts/")({
 
 function AccountsPage() {
   return (
-    <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
+    <PageContainer>
       <h1 className="items-baseline font-medium text-h1">Security & Access</h1>
 
       <div className="space-y-4">
@@ -52,6 +53,6 @@ function AccountsPage() {
 
         <PasskeyList passkeys={passkeys} />
       </div> */}
-    </div>
+    </PageContainer>
   );
 }

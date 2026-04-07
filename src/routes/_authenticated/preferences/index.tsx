@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 
 import ColorPickerDialog from "@/components/color-picker";
+import PageContainer from "@/components/page-container";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
@@ -33,7 +34,7 @@ const THEME_OPTIONS = [
   { value: "dark", label: "Dark", icon: Moon },
   { value: "system", label: "System", icon: Monitor },
   { value: "custom", label: "Custom", icon: Droplet },
-] as const;
+];
 
 export const Route = createFileRoute("/_authenticated/preferences/")({
   component: SettingsPage,
@@ -41,8 +42,8 @@ export const Route = createFileRoute("/_authenticated/preferences/")({
 
 function SettingsPage() {
   const { theme, setTheme, customColors, setCustomColors, clearCustomColors } = useTheme();
-  const isMobile = useIsMobile();
   const { settings, setFontSize, setUsePointerCursor, setSidebarPosition } = useSettings();
+  const isMobile = useIsMobile();
 
   const [backgroundHex, setBackgroundHex] = useState(customColors?.background);
   const [accentHex, setAccentHex] = useState(customColors?.accent);
@@ -66,7 +67,7 @@ function SettingsPage() {
   }, [backgroundHex, accentHex, borderHex, theme, setCustomColors]);
 
   return (
-    <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
+    <PageContainer>
       <h1 className="items-baseline font-medium text-h1">Preferences</h1>
 
       <ItemGroup className="rounded-lg border">
@@ -225,6 +226,6 @@ function SettingsPage() {
           </ItemActions>
         </Item>
       </ItemGroup>
-    </div>
+    </PageContainer>
   );
 }

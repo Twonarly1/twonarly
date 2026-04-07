@@ -1,11 +1,11 @@
 "use client";
 
 import { X } from "lucide-react";
-import { useTheme } from "next-themes";
 import { Toaster as ToasterPrimitive, toast as toastPrimitive } from "sonner";
 
 import { INTENT_ICONS } from "@/components/intent";
-import { Button } from "./button";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/providers/theme-provider";
 
 import type { ToasterProps } from "sonner";
 import type { Intent } from "@/components/intent";
@@ -48,7 +48,7 @@ toast.warning = (d: ToastData) => toast("warning", d);
 // TODO: Add promise with loading state in the future
 
 function Toaster(props: ToasterProps) {
-  const { theme = "system" } = useTheme();
+  const { theme } = useTheme();
 
   return (
     <ToasterPrimitive

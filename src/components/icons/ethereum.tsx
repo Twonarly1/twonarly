@@ -1,22 +1,9 @@
-import { cn } from "@/lib/utils";
-
+// https://simpleicons.org/?q=ethereum
 export function EthereumIcon({ className }: { className?: string }) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width=".63em"
-      height="1em"
-      fill="none"
-      className={cn("text-[35px] opacity-85 hover:opacity-100", className)}
-      viewBox="0 0 115 182"
-    >
-      <title>Ethereum Icon</title>
-      <path fill="#F0CDC2" stroke="#1616B4" d="M57.505 181v-45.16L1.641 103.171z"></path>
-      <path fill="#C9B3F5" stroke="#1616B4" d="M57.69 181v-45.16l55.865-32.669z"></path>
-      <path fill="#88AAF1" stroke="#1616B4" d="M57.506 124.615V66.979L1 92.28z"></path>
-      <path fill="#C9B3F5" stroke="#1616B4" d="M57.69 124.615V66.979l56.506 25.302z"></path>
-      <path fill="#F0CDC2" stroke="#1616B4" d="M1 92.281 57.505 1v65.979z"></path>
-      <path fill="#B8FAF6" stroke="#1616B4" d="M114.196 92.281 57.691 1v65.979z"></path>
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <title>Ethereum</title>
+      <path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z" />
     </svg>
   );
 }

@@ -185,7 +185,7 @@ function TasksPage() {
   }, [table]);
 
   return (
-    <>
+    <div>
       <div className="mx-auto space-y-6 p-4 px-6 lg:px-12">
         <h1 className="items-baseline font-medium text-h1">
           Tasks {data?.length ? `(${data.length})` : ""}
@@ -209,6 +209,6 @@ function TasksPage() {
       <DataTable table={table} />
 
       <TableActions table={table} />
-    </>
+    </div>
   );
 }

@@ -1,8 +1,16 @@
-import { useNavigate, useRouter } from "@tanstack/react-router";
-import { Blocks, Check, CheckLine, ChevronDown, Key, Settings2, User, Wallet } from "lucide-react";
+import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  Blocks,
+  Check,
+  CheckLine,
+  ChevronDown,
+  Settings2,
+  ShieldCog,
+  User,
+  Wallet,
+} from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
-import Link from "@/components/core/link";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,10 +48,10 @@ const navLinks = [
   { label: "Tasks", to: "/tasks", icon: CheckLine },
   { label: "Preferences", to: "/preferences", icon: Settings2 },
   { label: "Profile", to: "/profile", icon: User },
-  { label: "Security & Access", to: "/accounts", icon: Key },
+  { label: "Security & Access", to: "/accounts", icon: ShieldCog },
   { label: "Billing", to: "/billing", icon: Wallet },
   { label: "Integrations", to: "/integrations", icon: Blocks },
-] as const;
+];
 
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
@@ -61,15 +69,11 @@ const AppSidebar = () => {
     if (!token) return;
     try {
       await authClient.multiSession.setActive({ sessionToken: token });
-      toast.success({
-        title: "Account switched",
-      });
+      toast.success({ title: "Account switched" });
       router.invalidate();
     } catch (err) {
       console.error("Failed to switch account:", err);
-      toast.error({
-        title: "Failed to switch account",
-      });
+      toast.error({ title: "Failed to switch account" });
     }
   };
 
@@ -84,9 +88,8 @@ const AppSidebar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild className="flex w-full flex-1 transition-none">
                   <SidebarMenuButton
-                    variant="ghost"
                     size="lg"
-                    className="flex w-full justify-between border px-1"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                   >
                     <div className="flex min-w-0 items-center gap-2">
                       <Avatar role="button" className="size-7 rounded">
@@ -100,7 +103,7 @@ const AppSidebar = () => {
 
                       <span className="truncate font-medium">{user?.name}</span>
                     </div>
-                    <ChevronDown className="icon-xs" />
+                    <ChevronDown className="icon-xs ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
 
@@ -175,18 +178,16 @@ const AppSidebar = () => {
             <SidebarMenu>
               {navLinks.map((item) => (
                 <SidebarMenuItem key={item.to}>
-                  <Link
-                    to={item.to}
-                    variant="ghost"
-                    size="sm"
-                    className="foreground flex w-full justify-start gap-2 transition-none hover:bg-sidebar-accent hover:text-current"
-                    onClick={isMobile ? () => toggleSidebar() : undefined}
+                  <SidebarMenuButton
+                    asChild
+                    isActive={item.to === router.state.location.pathname}
+                    onClick={isMobile ? toggleSidebar : undefined}
                   >
-                    {/* <Icon className="icon-xs" /> */}
-                    <item.icon className="icon-xs" />
-
-                    <p className="text-body">{item.label}</p>
-                  </Link>
+                    <Link to={item.to}>
+                      <item.icon className="icon-sm" />
+                      <p className="text-body">{item.label}</p>
+                    </Link>
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

@@ -1,7 +1,4 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
-import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 import { Toaster } from "@/components/ui/toast";
 import { app } from "@/lib/config/app.config";
@@ -84,7 +81,7 @@ function RootDocument({ children }: PropsWithChildren) {
           <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         )}
       </head>
-      <body>
+      <body className="flex min-h-dvh w-full">
         {/* TODO: Handle providers better along with context wrap in router.tsx */}
         <ThemeProvider theme={theme} customColors={customColors}>
           <SettingsProvider settings={settings}>
@@ -93,20 +90,6 @@ function RootDocument({ children }: PropsWithChildren) {
           </SettingsProvider>
         </ThemeProvider>
 
-        <TanStackDevtools
-          plugins={[
-            {
-              name: "TanStack Query",
-              render: <ReactQueryDevtoolsPanel />,
-              defaultOpen: true,
-            },
-            {
-              name: "TanStack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-              defaultOpen: false,
-            },
-          ]}
-        />
         <Scripts />
       </body>
     </html>

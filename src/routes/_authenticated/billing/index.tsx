@@ -6,6 +6,7 @@ import { match } from "ts-pattern";
 import { z } from "zod";
 
 import InvoiceList from "@/components/invoice-list";
+import PageContainer from "@/components/page-container";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -125,7 +126,7 @@ function BillingPage() {
   }, [upgraded, navigate]);
 
   return (
-    <div className="container mx-auto space-y-6 p-4 sm:space-y-12">
+    <PageContainer>
       <div className="space-y-1">
         <h1 className="items-baseline font-medium text-h1">Billing</h1>
         <p className="text-muted-foreground text-sm">Manage your subscription and billing</p>
@@ -201,6 +202,6 @@ function BillingPage() {
 
         <InvoiceList invoices={invoices.invoices} hasMore={invoices.hasMore} />
       </div>
-    </div>
+    </PageContainer>
   );
 }

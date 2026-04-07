@@ -4,6 +4,7 @@ import { Pen, Trash } from "lucide-react";
 import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
+import PageContainer from "@/components/page-container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,7 +52,7 @@ function ProfilePage() {
 
   const router = useRouter();
   const navigate = useNavigate();
-  const { data: session, refetch } = authClient.useSession();
+  const { refetch } = authClient.useSession();
 
   const removeAvatarFn = useServerFn(removeAvatar);
   const uploadAvatarFn = useServerFn(uploadAvatar);
@@ -118,7 +119,7 @@ function ProfilePage() {
   });
 
   return (
-    <div ref={containerRef} className="container mx-auto space-y-6 p-4 sm:space-y-12">
+    <PageContainer ref={containerRef}>
       <h1 className="items-baseline font-medium text-h1">Profile</h1>
 
       <ItemGroup className="rounded-lg border">
@@ -201,9 +202,7 @@ function ProfilePage() {
             <ItemTitle>Email</ItemTitle>
           </ItemContent>
           <ItemActions>
-            <div className="flex h-8 items-center">
-              <p className="font-medium">{session?.user.email}</p>
-            </div>
+            <p className="py-1.5">{user.email}</p>
           </ItemActions>
         </Item>
 
@@ -264,6 +263,6 @@ function ProfilePage() {
         onChange={handleFileUpload}
         className="hidden"
       />
-    </div>
+    </PageContainer>
   );
 }
