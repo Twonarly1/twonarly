@@ -41,7 +41,6 @@ import {
 } from "@/components/ui/sidebar";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
-import { useSettings } from "@/providers/settings-provider";
 import { Route } from "@/routes/_authenticated";
 
 const navLinks = [
@@ -56,7 +55,6 @@ const navLinks = [
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
   const { isMobile, toggleSidebar } = useSidebar();
-  const { settings } = useSettings();
   const navigate = useNavigate();
   const router = useRouter();
 
@@ -80,29 +78,24 @@ const AppSidebar = () => {
   useHotkeys("b", toggleSidebar, { description: "Toggle sidebar" }, [toggleSidebar]);
 
   return (
-    <Sidebar side={settings.sidebarPosition} className="text-sidebar-foreground">
+    <Sidebar>
       <SidebarContent>
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem className="mt-1 flex w-full flex-1 items-center">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild className="flex w-full flex-1 transition-none">
-                  <SidebarMenuButton
-                    size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                  >
-                    <div className="flex min-w-0 items-center gap-2">
-                      <Avatar role="button" className="size-7 rounded">
-                        <AvatarImage
-                          src={user?.image || undefined}
-                          alt={user?.name || "User avatar"}
-                          className="rounded"
-                        />
-                        <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
-                      </Avatar>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton className="px-0.5 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:p-0.5!">
+                    <Avatar role="button" className="size-6 rounded">
+                      <AvatarImage
+                        src={user?.image || undefined}
+                        alt={user?.name || "User avatar"}
+                        className="rounded"
+                      />
+                      <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
+                    </Avatar>
 
-                      <span className="truncate font-medium">{user?.name}</span>
-                    </div>
+                    <span className="truncate font-medium">{user?.name}</span>
                     <ChevronDown className="icon-xs ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -178,16 +171,16 @@ const AppSidebar = () => {
             <SidebarMenu>
               {navLinks.map((item) => (
                 <SidebarMenuItem key={item.to}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={item.to === router.state.location.pathname}
-                    onClick={isMobile ? toggleSidebar : undefined}
-                  >
-                    <Link to={item.to}>
+                  <Link to={item.to}>
+                    <SidebarMenuButton
+                      isActive={item.to === router.state.location.pathname}
+                      onClick={isMobile ? toggleSidebar : undefined}
+                      tooltip={item.label}
+                    >
                       <item.icon className="icon-sm" />
-                      <p className="text-body">{item.label}</p>
-                    </Link>
-                  </SidebarMenuButton>
+                      <span className="text-body">{item.label}</span>
+                    </SidebarMenuButton>
+                  </Link>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

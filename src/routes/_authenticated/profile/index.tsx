@@ -123,7 +123,7 @@ function ProfilePage() {
       <h1 className="items-baseline font-medium text-h1">Profile</h1>
 
       <ItemGroup className="rounded-lg border">
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemTitle>Profile picture</ItemTitle>
           </ItemContent>
@@ -197,7 +197,7 @@ function ProfilePage() {
           </ItemActions>
         </Item>
 
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemTitle>Email</ItemTitle>
           </ItemContent>
@@ -206,7 +206,7 @@ function ProfilePage() {
           </ItemActions>
         </Item>
 
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemTitle>Username</ItemTitle>
           </ItemContent>
@@ -217,7 +217,7 @@ function ProfilePage() {
       </ItemGroup>
 
       <ItemGroup className="rounded-lg border">
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemTitle>Delete account</ItemTitle>
             <ItemDescription>All your data will be permanently deleted.</ItemDescription>

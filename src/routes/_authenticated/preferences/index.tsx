@@ -42,7 +42,14 @@ export const Route = createFileRoute("/_authenticated/preferences/")({
 
 function SettingsPage() {
   const { theme, setTheme, customColors, setCustomColors, clearCustomColors } = useTheme();
-  const { settings, setFontSize, setUsePointerCursor, setSidebarPosition } = useSettings();
+  const {
+    settings,
+    setFontSize,
+    setUsePointerCursor,
+    setSidebarPosition,
+    setSidebarVariant,
+    setSidebarCollapsible,
+  } = useSettings();
   const isMobile = useIsMobile();
 
   const [backgroundHex, setBackgroundHex] = useState(customColors?.background);
@@ -72,7 +79,7 @@ function SettingsPage() {
 
       <ItemGroup className="rounded-lg border">
         <Collapsible open={theme === "custom"} className="w-full">
-          <Item size="sm" className="px-0">
+          <Item className="px-0">
             <ItemContent className="px-4">
               <ItemTitle>Interface theme</ItemTitle>
               <ItemDescription>Choose your theme</ItemDescription>
@@ -122,7 +129,7 @@ function SettingsPage() {
 
             {theme === "custom" && (
               <CollapsibleContent className="w-full border-t">
-                <Item size="sm">
+                <Item>
                   <ItemContent>
                     <ItemTitle>Background</ItemTitle>
                   </ItemContent>
@@ -131,7 +138,7 @@ function SettingsPage() {
                   </ItemActions>
                 </Item>
 
-                <Item size="sm">
+                <Item>
                   <ItemContent>
                     <ItemTitle>Accent</ItemTitle>
                   </ItemContent>
@@ -140,7 +147,7 @@ function SettingsPage() {
                   </ItemActions>
                 </Item>
 
-                <Item size="sm" className="border-b">
+                <Item className="border-b">
                   <ItemContent>
                     <ItemTitle>Wireframe</ItemTitle>
                   </ItemContent>
@@ -161,7 +168,7 @@ function SettingsPage() {
           </Item>
         </Collapsible>
 
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemTitle>Font size</ItemTitle>
             <ItemDescription>Adjust the font size to your preference</ItemDescription>
@@ -188,7 +195,7 @@ function SettingsPage() {
         </Item>
 
         {!isMobile && (
-          <Item size="sm">
+          <Item>
             <ItemContent>
               <ItemTitle>Use pointer cursors</ItemTitle>
               <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
@@ -202,30 +209,89 @@ function SettingsPage() {
             </ItemActions>
           </Item>
         )}
-
-        <Item size="sm">
-          <ItemContent>
-            <ItemTitle>Sidebar position</ItemTitle>
-            <ItemDescription>Choose the position of the sidebar</ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Select value={settings.sidebarPosition} onValueChange={setSidebarPosition}>
-              <SelectTrigger asChild>
-                <Button variant="outline" size="sm" className="transition-none">
-                  <SelectValue placeholder="Select sidebar position" />
-                  <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
-                </Button>
-              </SelectTrigger>
-              <SelectContent align="end">
-                <SelectGroup>
-                  <SelectItem value="left">Left</SelectItem>
-                  <SelectItem value="right">Right</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </ItemActions>
-        </Item>
       </ItemGroup>
+
+      <div className="space-y-4">
+        <Item>
+          <ItemContent>
+            <ItemTitle>Sidebar</ItemTitle>
+            <ItemDescription>Customize the appearance and behavior of the sidebar</ItemDescription>
+          </ItemContent>
+        </Item>
+
+        <ItemGroup className="rounded-lg border">
+          <Item>
+            <ItemContent>
+              <ItemTitle>Sidebar position</ItemTitle>
+              <ItemDescription>Choose the position of the sidebar</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Select value={settings.sidebarPosition} onValueChange={setSidebarPosition}>
+                <SelectTrigger asChild>
+                  <Button variant="outline" size="sm" className="transition-none">
+                    <SelectValue placeholder="Select sidebar position" />
+                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                  </Button>
+                </SelectTrigger>
+                <SelectContent align="end">
+                  <SelectGroup>
+                    <SelectItem value="left">Left</SelectItem>
+                    <SelectItem value="right">Right</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </ItemActions>
+          </Item>
+
+          <Item>
+            <ItemContent>
+              <ItemTitle>Sidebar variant</ItemTitle>
+              <ItemDescription>Choose the variant of the sidebar</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Select value={settings.sidebarVariant} onValueChange={setSidebarVariant}>
+                <SelectTrigger asChild>
+                  <Button variant="outline" size="sm" className="transition-none">
+                    <SelectValue placeholder="Select sidebar variant" />
+                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                  </Button>
+                </SelectTrigger>
+                <SelectContent align="end">
+                  <SelectGroup>
+                    <SelectItem value="classic">Classic</SelectItem>
+                    <SelectItem value="floating">Floating</SelectItem>
+                    <SelectItem value="inset">Inset</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </ItemActions>
+          </Item>
+
+          <Item>
+            <ItemContent>
+              <ItemTitle>Collapsible sidebar</ItemTitle>
+              <ItemDescription>Choose how the sidebar collapses</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Select value={settings.sidebarCollapsible} onValueChange={setSidebarCollapsible}>
+                <SelectTrigger asChild>
+                  <Button variant="outline" size="sm" className="transition-none">
+                    <SelectValue placeholder="Select sidebar collapsible option" />
+                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                  </Button>
+                </SelectTrigger>
+                <SelectContent align="end">
+                  <SelectGroup>
+                    <SelectItem value="offcanvas">Off canvas</SelectItem>
+                    <SelectItem value="icon">Icon</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </ItemActions>
+          </Item>
+        </ItemGroup>
+      </div>
     </PageContainer>
   );
 }

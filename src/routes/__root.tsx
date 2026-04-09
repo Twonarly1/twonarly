@@ -82,7 +82,6 @@ function RootDocument({ children }: PropsWithChildren) {
         )}
       </head>
       <body className="flex min-h-dvh w-full">
-        {/* TODO: Handle providers better along with context wrap in router.tsx */}
         <ThemeProvider theme={theme} customColors={customColors}>
           <SettingsProvider settings={settings}>
             {children}

@@ -133,7 +133,7 @@ function BillingPage() {
       </div>
 
       <ItemGroup className="rounded-lg border">
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemTitle className="flex items-center gap-2">
               {isActive ? `${capitalizeFirstLetter(subscription.plan)} plan` : "Free plan"}
@@ -194,7 +194,7 @@ function BillingPage() {
         })}
       </div>
       <div className="space-y-4">
-        <Item className="px-0">
+        <Item>
           <ItemContent>
             <ItemTitle>Recent invoices</ItemTitle>
           </ItemContent>

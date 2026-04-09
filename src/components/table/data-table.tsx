@@ -41,7 +41,7 @@ export function DataTable({ table }: Props) {
 
   return (
     <div className="relative flex w-full">
-      <GridCanvas rows={rows.map((row) => row.original)} />
+      {/* <GridCanvas rows={rows.map((row) => row.original)} /> */}
 
       <div className="relative flex w-full flex-col">
         <div
@@ -95,7 +95,7 @@ export function DataTable({ table }: Props) {
                         data-row-id={row.id}
                         tabIndex={0}
                         data-state={row.getIsSelected() && "selected"}
-                        className="group"
+                        className="group bg-background hover:bg-background"
                       >
                         {row.getVisibleCells().map((cell) => (
                           <TableCell

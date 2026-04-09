@@ -46,7 +46,7 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
   if (invoices.length === 0) {
     return (
       <ItemGroup className="rounded-lg border">
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <span className="text-muted-foreground">No invoices yet</span>
           </ItemContent>
@@ -58,7 +58,7 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
   return (
     <ItemGroup className="rounded-lg border">
       {invoices.map((invoice) => (
-        <Item size="sm" key={invoice.id}>
+        <Item key={invoice.id}>
           <ItemContent>
             <ItemTitle className="flex items-center gap-2 font-normal">
               {invoice.lines.map((line) => line.description).join(", ")}
@@ -95,7 +95,7 @@ const InvoiceList = ({ invoices: initial, hasMore: initialHasMore }: Props) => {
       ))}
 
       {hasMore && (
-        <Item size="sm">
+        <Item>
           <ItemContent className="items-center">
             <Button variant="ghost" size="sm" onClick={loadMore} disabled={loading}>
               {loading ? "Loading…" : "Show older invoices"}

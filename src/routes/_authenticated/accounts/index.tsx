@@ -22,7 +22,7 @@ function AccountsPage() {
       <h1 className="items-baseline font-medium text-h1">Security & Access</h1>
 
       <div className="space-y-4">
-        <Item size="sm" className="px-0">
+        <Item>
           <ItemContent>
             <ItemTitle>Accounts</ItemTitle>
             <ItemDescription>Accounts you've signed into on this device</ItemDescription>
@@ -33,7 +33,7 @@ function AccountsPage() {
       </div>
 
       <div className="space-y-4">
-        <Item size="sm" className="px-0">
+        <Item>
           <ItemContent>
             <ItemTitle>Ethereum wallet</ItemTitle>
             <ItemDescription>Link a wallet to Sign In With Ethereum</ItemDescription>

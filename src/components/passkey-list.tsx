@@ -45,7 +45,7 @@ const PasskeyList = ({ passkeys }: Props) => {
   return (
     <ItemGroup className="rounded-lg border">
       {passkeys.map((pk: Passkey) => (
-        <Item size="sm" key={pk.id}>
+        <Item key={pk.id}>
           <ItemContent>
             <div className="flex items-center gap-2">
               <Fingerprint className="size-8 p-1 text-muted-foreground" />

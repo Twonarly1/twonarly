@@ -10,6 +10,8 @@ type Settings = {
   fontSize: FontSize;
   usePointerCursor: boolean;
   sidebarPosition: "left" | "right";
+  sidebarVariant: "floating" | "inset" | "classic";
+  sidebarCollapsible: "offcanvas" | "icon" | "none";
 };
 
 interface SettingsContext {
@@ -18,6 +20,10 @@ interface SettingsContext {
   setUsePointerCursor: (value: boolean) => void;
   sidebarPosition: "left" | "right";
   setSidebarPosition: (position: "left" | "right") => void;
+  sidebarVariant: "floating" | "inset" | "classic";
+  setSidebarVariant: (variant: "floating" | "inset" | "classic") => void;
+  sidebarCollapsible: "offcanvas" | "icon" | "none";
+  setSidebarCollapsible: (value: "offcanvas" | "icon" | "none") => void;
 }
 
 const SettingsContext = createContext<SettingsContext | null>(null);
@@ -47,7 +53,26 @@ export function SettingsProvider({
     } else {
       document.documentElement.classList.remove("pointer-cursor");
     }
-  }, [settings.fontSize, settings.usePointerCursor]);
+
+    // Apply sidebar position
+    if (settings.sidebarPosition === "left") {
+      document.documentElement.setAttribute("data-sidebar-position", "left");
+    } else {
+      document.documentElement.setAttribute("data-sidebar-position", "right");
+    }
+
+    // Apply sidebar collapsible
+    document.documentElement.setAttribute("data-sidebar-collapsible", settings.sidebarCollapsible);
+
+    // Apply sidebar variant
+    document.documentElement.setAttribute("data-sidebar-variant", settings.sidebarVariant);
+  }, [
+    settings.fontSize,
+    settings.usePointerCursor,
+    settings.sidebarPosition,
+    settings.sidebarVariant,
+    settings.sidebarCollapsible,
+  ]);
 
   // Debounced server sync - only sends after 500ms of no changes
   const syncToServer = useCallback(() => {
@@ -75,15 +100,6 @@ export function SettingsProvider({
     [syncToServer],
   );
 
-  const setSidebarPosition = useCallback(
-    (position: "left" | "right") => {
-      setSettingsState((prev) => ({ ...prev, sidebarPosition: position }));
-      pendingSettingsRef.current.sidebarPosition = position;
-      syncToServer();
-    },
-    [syncToServer],
-  );
-
   const setUsePointerCursor = useCallback(
     (usePointerCursor: boolean) => {
       // Update DOM immediately for instant feedback
@@ -98,6 +114,32 @@ export function SettingsProvider({
 
       // Queue server update (debounced)
       pendingSettingsRef.current.usePointerCursor = usePointerCursor;
+      syncToServer();
+    },
+    [syncToServer],
+  );
+
+  const setSidebarPosition = useCallback(
+    (position: "left" | "right") => {
+      setSettingsState((prev) => ({ ...prev, sidebarPosition: position }));
+      pendingSettingsRef.current.sidebarPosition = position;
+      syncToServer();
+    },
+    [syncToServer],
+  );
+
+  const setSidebarVariant = useCallback(
+    (variant: "floating" | "inset" | "classic") => {
+      setSettingsState((prev) => ({ ...prev, sidebarVariant: variant }));
+      pendingSettingsRef.current.sidebarVariant = variant;
+      syncToServer();
+    },
+    [syncToServer],
+  );
+  const setSidebarCollapsible = useCallback(
+    (collapsible: "offcanvas" | "icon" | "none") => {
+      setSettingsState((prev) => ({ ...prev, sidebarCollapsible: collapsible }));
+      pendingSettingsRef.current.sidebarCollapsible = collapsible;
       syncToServer();
     },
     [syncToServer],
@@ -120,6 +162,10 @@ export function SettingsProvider({
         setUsePointerCursor,
         setSidebarPosition,
         sidebarPosition: settings.sidebarPosition,
+        sidebarVariant: settings.sidebarVariant,
+        setSidebarVariant,
+        sidebarCollapsible: settings.sidebarCollapsible,
+        setSidebarCollapsible,
       }}
     >
       {children}

@@ -127,7 +127,7 @@ const AccountList = () => {
         );
       })}
 
-      <Item size="sm">
+      <Item>
         <ItemContent>
           <ItemDescription>Sign in with another account</ItemDescription>
         </ItemContent>

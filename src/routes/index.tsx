@@ -39,11 +39,9 @@ function App() {
   // };
 
   return (
-    <div className="flex h-dvh items-center justify-center">
+    <div className="flex h-dvh w-full items-center justify-center">
       {session ? (
-        <div className="flex flex-col items-center gap-8">
-          <Link to="/tasks">Enter Shell</Link>
-        </div>
+        <Link to="/tasks">Get Started</Link>
       ) : (
         <div className="rounded-lg border p-8">
           <h1 className="text-center font-semibold text-h2 text-primary">Log in to {app.name}</h1>
@@ -75,6 +73,7 @@ function App() {
               <div className="h-px w-full bg-border" />
             </div>
 
+            {/* Disabled until hosting related problem with Vercel (I think) is resolved */}
             <Button
               variant="outline"
               size="lg"

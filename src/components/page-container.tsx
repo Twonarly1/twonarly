@@ -6,7 +6,7 @@ interface Props extends React.ComponentPropsWithRef<"div"> {
 
 const PageContainer = ({ children, ...rest }: Props) => {
   return (
-    <div className="container mx-auto space-y-6 p-4 sm:space-y-12" {...rest}>
+    <div className="container mx-auto space-y-12 p-4" {...rest}>
       {children}
     </div>
   );

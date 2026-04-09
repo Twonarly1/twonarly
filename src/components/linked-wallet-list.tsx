@@ -52,7 +52,7 @@ const LinkedWalletList = () => {
   return (
     <ItemGroup className="rounded-lg border">
       {wallets?.length === 0 ? (
-        <Item size="sm">
+        <Item>
           <ItemContent>
             <ItemDescription>Connect a wallet to link it</ItemDescription>
           </ItemContent>
