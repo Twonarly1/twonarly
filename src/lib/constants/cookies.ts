@@ -6,7 +6,4 @@ export const COOKIES = {
   sidebar: `${app.name.toLowerCase()}.sidebar.state`,
   fontSize: `${app.name.toLowerCase()}.settings.fontSize`,
   pointerCursor: `${app.name.toLowerCase()}.settings.pointerCursor`,
-  sidebarPosition: `${app.name.toLowerCase()}.settings.sidebarPosition`,
-  sidebarVariant: `${app.name.toLowerCase()}.settings.sidebarVariant`,
-  sidebarCollapsible: `${app.name.toLowerCase()}.settings.sidebarCollapsible`,
 } as const;

@@ -4,6 +4,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
 body {
   @apply m-0;
   font-family:
@@ -54,6 +55,11 @@ code {
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.646 0.196 293.756);
 
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+
   /* Default font size */
   --font-size-base: 14px;
   /* Default icon size */
@@ -87,6 +93,9 @@ html[data-font-size="large"] {
 html[data-font-size="larger"] {
   --icon-size-base: 16px;
 }
+
+/* Sidebar icon width */
+
 
 .dark {
   --background: oklch(0.141 0.005 285.823);
@@ -173,6 +182,7 @@ html[data-font-size="larger"] {
   --color-violet-800: #5d0ec0;
   --color-violet-900: #4d179a;
   --color-violet-950: #2f0d68;
+  
 }
 
 @layer base {
@@ -287,6 +297,11 @@ html.pointer-cursor label:has(input[type="file"]) * {
   padding: 1rem;
 }
 
+.color-picker-custom .react-colorful {
+  width: 100%;
+  height: 200px;
+}
+
 .color-picker-custom .react-colorful__saturation-pointer {
   width: 12px;
   height: 12px;
@@ -309,3 +324,4 @@ html.pointer-cursor label:has(input[type="file"]) * {
   box-shadow: 0 0 0 0.5px var(--color-foreground);
   transition: none;
 }
+

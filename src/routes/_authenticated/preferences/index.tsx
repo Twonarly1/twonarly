@@ -26,8 +26,12 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { useSettings } from "@/providers/settings-provider";
+import { useAppearance } from "@/providers/appearance-provider";
+import { useLayout } from "@/providers/layout-provider";
 import { useTheme } from "@/providers/theme-provider";
+
+import type { AppearanceSettings } from "@/providers/appearance-provider";
+import type { LayoutSettings } from "@/providers/layout-provider";
 
 const THEME_OPTIONS = [
   { value: "light", label: "Light", icon: Sun },
@@ -42,14 +46,8 @@ export const Route = createFileRoute("/_authenticated/preferences/")({
 
 function SettingsPage() {
   const { theme, setTheme, customColors, setCustomColors, clearCustomColors } = useTheme();
-  const {
-    settings,
-    setFontSize,
-    setUsePointerCursor,
-    setSidebarPosition,
-    setSidebarVariant,
-    setSidebarCollapsible,
-  } = useSettings();
+  const { appearance, updateAppearance } = useAppearance();
+  const { layout, updateLayout } = useLayout();
   const isMobile = useIsMobile();
 
   const [backgroundHex, setBackgroundHex] = useState(customColors?.background);
@@ -77,145 +75,167 @@ function SettingsPage() {
     <PageContainer>
       <h1 className="items-baseline font-medium text-h1">Preferences</h1>
 
-      <ItemGroup className="rounded-lg border">
-        <Collapsible open={theme === "custom"} className="w-full">
-          <Item className="px-0">
-            <ItemContent className="px-4">
-              <ItemTitle>Interface theme</ItemTitle>
-              <ItemDescription>Choose your theme</ItemDescription>
+      <div className="space-y-4">
+        <Item>
+          <ItemContent>
+            <ItemTitle>Appearance</ItemTitle>
+            <ItemDescription>
+              Customize the appearance and behavior of the application
+            </ItemDescription>
+          </ItemContent>
+        </Item>
+        <ItemGroup className="rounded-lg border">
+          <Collapsible open={theme === "custom"} className="w-full">
+            <Item className="px-0">
+              <ItemContent className="px-4">
+                <ItemTitle>Interface theme</ItemTitle>
+                <ItemDescription>Choose your theme</ItemDescription>
+              </ItemContent>
+              <ItemActions className="px-4">
+                <Select value={theme} onValueChange={setTheme}>
+                  <SelectTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center gap-2 transition-none"
+                    >
+                      {match(theme)
+                        .with("light", () => <Sun className="icon-xs" />)
+                        .with("dark", () => <Moon className="icon-xs" />)
+                        .with("system", () => <Monitor className="icon-xs" />)
+                        .with("custom", () => (
+                          <Droplet className="icon-xs fill-primary text-primary" />
+                        ))
+                        .exhaustive()}
+                      <SelectValue placeholder="Select a theme" />
+                      <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                    </Button>
+                  </SelectTrigger>
+                  <SelectContent align="end">
+                    <SelectGroup>
+                      {THEME_OPTIONS.map((option) => (
+                        <SelectItem
+                          key={option.value}
+                          value={option.value}
+                          icon={
+                            <option.icon
+                              className={cn(
+                                "icon-xs",
+                                option.value === "custom" ? "fill-primary text-primary" : "",
+                              )}
+                            />
+                          }
+                        >
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </ItemActions>
+
+              {theme === "custom" && (
+                <CollapsibleContent className="w-full p-0">
+                  <Item>
+                    <ItemContent>
+                      <ItemTitle>Background</ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <ColorPickerDialog value={backgroundHex} onChange={setBackgroundHex} />
+                    </ItemActions>
+                  </Item>
+
+                  <Item>
+                    <ItemContent>
+                      <ItemTitle>Accent</ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <ColorPickerDialog value={accentHex} onChange={setAccentHex} />
+                    </ItemActions>
+                  </Item>
+
+                  <Item>
+                    <ItemContent>
+                      <ItemTitle>Wireframe</ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <ColorPickerDialog value={borderHex} onChange={setBorderHex} />
+                    </ItemActions>
+                  </Item>
+
+                  {(backgroundHex || accentHex || borderHex) && (
+                    <div className="flex justify-end pt-2 pb-0">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleResetCustomTheme}
+                        className="mr-4"
+                      >
+                        Reset to Default
+                      </Button>
+                    </div>
+                  )}
+                </CollapsibleContent>
+              )}
+            </Item>
+          </Collapsible>
+
+          <Item>
+            <ItemContent>
+              <ItemTitle>Font size</ItemTitle>
+              <ItemDescription>Adjust the font size to your preference</ItemDescription>
             </ItemContent>
-            <ItemActions className="px-4">
-              <Select value={theme} onValueChange={setTheme}>
+            <ItemActions>
+              <Select
+                value={appearance.fontSize}
+                onValueChange={(v) =>
+                  updateAppearance({ fontSize: v as AppearanceSettings["fontSize"] })
+                }
+              >
                 <SelectTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 transition-none"
-                  >
-                    {match(theme)
-                      .with("light", () => <Sun className="icon-xs" />)
-                      .with("dark", () => <Moon className="icon-xs" />)
-                      .with("system", () => <Monitor className="icon-xs" />)
-                      .with("custom", () => (
-                        <Droplet className="icon-xs fill-primary text-primary" />
-                      ))
-                      .exhaustive()}
-                    <SelectValue placeholder="Select a theme" />
+                  <Button variant="outline" size="sm" className="transition-none">
+                    <SelectValue placeholder="Select font size" />
                     <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
                   </Button>
                 </SelectTrigger>
                 <SelectContent align="end">
                   <SelectGroup>
-                    {THEME_OPTIONS.map((option) => (
-                      <SelectItem
-                        key={option.value}
-                        value={option.value}
-                        icon={
-                          <option.icon
-                            className={cn(
-                              "icon-xs",
-                              option.value === "custom" ? "fill-primary text-primary" : "",
-                            )}
-                          />
-                        }
-                      >
-                        {option.label}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="smaller">Smaller</SelectItem>
+                    <SelectItem value="small">Small</SelectItem>
+                    <SelectItem value="default">Default</SelectItem>
+                    <SelectItem value="large">Large</SelectItem>
+                    <SelectItem value="larger">Larger</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
             </ItemActions>
-
-            {theme === "custom" && (
-              <CollapsibleContent className="w-full border-t">
-                <Item>
-                  <ItemContent>
-                    <ItemTitle>Background</ItemTitle>
-                  </ItemContent>
-                  <ItemActions>
-                    <ColorPickerDialog value={backgroundHex} onChange={setBackgroundHex} />
-                  </ItemActions>
-                </Item>
-
-                <Item>
-                  <ItemContent>
-                    <ItemTitle>Accent</ItemTitle>
-                  </ItemContent>
-                  <ItemActions>
-                    <ColorPickerDialog value={accentHex} onChange={setAccentHex} />
-                  </ItemActions>
-                </Item>
-
-                <Item className="border-b">
-                  <ItemContent>
-                    <ItemTitle>Wireframe</ItemTitle>
-                  </ItemContent>
-                  <ItemActions>
-                    <ColorPickerDialog value={borderHex} onChange={setBorderHex} />
-                  </ItemActions>
-                </Item>
-
-                {(backgroundHex || accentHex || borderHex) && (
-                  <div className="mt-3 mr-4 flex justify-end">
-                    <Button variant="outline" size="sm" onClick={handleResetCustomTheme}>
-                      Reset to Default
-                    </Button>
-                  </div>
-                )}
-              </CollapsibleContent>
-            )}
           </Item>
-        </Collapsible>
 
-        <Item>
-          <ItemContent>
-            <ItemTitle>Font size</ItemTitle>
-            <ItemDescription>Adjust the font size to your preference</ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Select value={settings.fontSize} onValueChange={setFontSize}>
-              <SelectTrigger asChild>
-                <Button variant="outline" size="sm" className="transition-none">
-                  <SelectValue placeholder="Select font size" />
-                  <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
-                </Button>
-              </SelectTrigger>
-              <SelectContent align="end">
-                <SelectGroup>
-                  <SelectItem value="smaller">Smaller</SelectItem>
-                  <SelectItem value="small">Small</SelectItem>
-                  <SelectItem value="default">Default</SelectItem>
-                  <SelectItem value="large">Large</SelectItem>
-                  <SelectItem value="larger">Larger</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </ItemActions>
-        </Item>
-
-        {!isMobile && (
-          <Item>
-            <ItemContent>
-              <ItemTitle>Use pointer cursors</ItemTitle>
-              <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              <Switch
-                id="switch-pointer-cursor"
-                checked={settings.usePointerCursor}
-                onCheckedChange={setUsePointerCursor}
-              />
-            </ItemActions>
-          </Item>
-        )}
-      </ItemGroup>
+          {!isMobile && (
+            <Item>
+              <ItemContent>
+                <ItemTitle>Use pointer cursors</ItemTitle>
+                <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
+              </ItemContent>
+              <ItemActions>
+                <Switch
+                  id="switch-pointer-cursor"
+                  checked={appearance.usePointerCursor}
+                  onCheckedChange={(v) => updateAppearance({ usePointerCursor: v })}
+                />
+              </ItemActions>
+            </Item>
+          )}
+        </ItemGroup>
+      </div>
 
       <div className="space-y-4">
         <Item>
           <ItemContent>
-            <ItemTitle>Sidebar</ItemTitle>
-            <ItemDescription>Customize the appearance and behavior of the sidebar</ItemDescription>
+            <ItemTitle>Sidebar customization</ItemTitle>
+            <ItemDescription>
+              Customize the appearance and behavior of the sidebar and app layout
+            </ItemDescription>
           </ItemContent>
         </Item>
 
@@ -226,7 +246,12 @@ function SettingsPage() {
               <ItemDescription>Choose the position of the sidebar</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Select value={settings.sidebarPosition} onValueChange={setSidebarPosition}>
+              <Select
+                value={layout.sidebarPosition}
+                onValueChange={(v) =>
+                  updateLayout({ sidebarPosition: v as LayoutSettings["sidebarPosition"] })
+                }
+              >
                 <SelectTrigger asChild>
                   <Button variant="outline" size="sm" className="transition-none">
                     <SelectValue placeholder="Select sidebar position" />
@@ -249,7 +274,12 @@ function SettingsPage() {
               <ItemDescription>Choose the variant of the sidebar</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Select value={settings.sidebarVariant} onValueChange={setSidebarVariant}>
+              <Select
+                value={layout.sidebarVariant}
+                onValueChange={(v) =>
+                  updateLayout({ sidebarVariant: v as LayoutSettings["sidebarVariant"] })
+                }
+              >
                 <SelectTrigger asChild>
                   <Button variant="outline" size="sm" className="transition-none">
                     <SelectValue placeholder="Select sidebar variant" />
@@ -273,7 +303,12 @@ function SettingsPage() {
               <ItemDescription>Choose how the sidebar collapses</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Select value={settings.sidebarCollapsible} onValueChange={setSidebarCollapsible}>
+              <Select
+                value={layout.sidebarCollapsible}
+                onValueChange={(v) =>
+                  updateLayout({ sidebarCollapsible: v as LayoutSettings["sidebarCollapsible"] })
+                }
+              >
                 <SelectTrigger asChild>
                   <Button variant="outline" size="sm" className="transition-none">
                     <SelectValue placeholder="Select sidebar collapsible option" />

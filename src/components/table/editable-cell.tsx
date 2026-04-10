@@ -53,7 +53,6 @@ const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, u
     try {
       await updateTaskFn({
         data: {
-          id: row.original.id,
           ...row.original,
           [column.id]: trimmed,
         },

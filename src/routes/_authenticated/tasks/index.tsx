@@ -193,7 +193,10 @@ function TasksPage() {
 
         <div className="flex items-center gap-2">
           <div className="group relative flex w-full gap-2">
-            <Search className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground" />
+            <Search
+              strokeWidth={2.5}
+              className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground"
+            />
             <Input
               placeholder="Search tasks..."
               value={searchInput}

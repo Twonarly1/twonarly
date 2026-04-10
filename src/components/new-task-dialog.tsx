@@ -68,7 +68,7 @@ const NewTaskDialog = () => {
       <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
         <TooltipTrigger asChild>
           <DialogTrigger asChild>
-            <Button size="sm" className="flex gap-2 active:scale-[0.97]">
+            <Button size="sm" className="flex pointer-hover:scale-[1.04] gap-2 active:scale-[0.97]">
               New Task
             </Button>
           </DialogTrigger>
@@ -128,7 +128,7 @@ const NewTaskDialog = () => {
                 <Button
                   type="submit"
                   disabled={!canSubmit || isSubmitting || isDefaultValue}
-                  className="mt-2 ml-auto flex active:scale-[0.97]"
+                  className="mt-2 ml-auto flex pointer-hover:scale-[1.04] active:scale-[0.97]"
                 >
                   Create task
                 </Button>

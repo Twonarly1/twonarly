@@ -28,7 +28,7 @@ const ConnectOptionList = ({ connectors, onConnect, disabled }: ConnectOptionLis
               {match(connector.id)
                 .with("walletConnect", () => <WalletConnectIcon className="size-5" />)
                 .otherwise(() => (
-                  <img src={connector.icon} alt={connector.name} className="size-5 rounded" />
+                  <img src={connector.icon} alt={connector.name} className="size-5" />
                 ))}
             </ItemMedia>
             <ItemContent>

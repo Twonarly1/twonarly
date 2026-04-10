@@ -80,16 +80,18 @@ const ThemeProvider = ({
     if (theme === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
       const applySystemTheme = () => {
-        root.className = mediaQuery.matches ? "dark" : "light";
+        root.classList.toggle("dark", mediaQuery.matches);
+        root.classList.toggle("light", !mediaQuery.matches);
       };
-
       applySystemTheme();
-
       mediaQuery.addEventListener("change", applySystemTheme);
-
       return () => mediaQuery.removeEventListener("change", applySystemTheme);
+    } else if (theme === "custom") {
+      // Keep the current light/dark base class, just add custom overrides on top
+      // Don't change the class at all — the custom colors effect handles the rest
     } else {
-      root.className = theme;
+      root.classList.remove("dark", "light");
+      root.classList.add(theme);
     }
   }, [theme]);
 

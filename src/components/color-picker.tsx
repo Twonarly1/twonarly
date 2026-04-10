@@ -40,7 +40,7 @@ const ColorPicker = ({ value, onChange }: Props) => {
         value={inputValue}
         onChange={handleInputChange}
         placeholder="#000000"
-        className="w-full transition-none"
+        className="w-full shadow-none transition-none"
       />
       <PopoverTrigger asChild>
         <Button variant="outline" size="icon" className="shrink-0">

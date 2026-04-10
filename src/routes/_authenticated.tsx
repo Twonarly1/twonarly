@@ -2,6 +2,8 @@ import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 import AppSidebar from "@/components/app-sidebar";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { LayoutProvider } from "@/providers/layout-provider";
+import { fetchLayout } from "@/server/functions/preferences/layout";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
 import { getSession } from "@/server/functions/session/get-session";
 
@@ -10,49 +12,32 @@ export const Route = createFileRoute("/_authenticated")({
     const session = await getSession();
     if (!session) throw redirect({ to: "/" });
 
-    const deviceSessions = await getDeviceSessions();
-    return { user: session.user, deviceSessions };
+    const [deviceSessions, layoutSettings] = await Promise.all([
+      getDeviceSessions(),
+      fetchLayout(),
+    ]);
+
+    return { user: session.user, deviceSessions, layoutSettings };
   },
   component: AuthenticatedLayout,
 });
 
 function AuthenticatedLayout() {
+  const { layoutSettings } = Route.useRouteContext();
+
   return (
-    <SidebarProvider>
-      <AppSidebar />
+    <LayoutProvider initial={layoutSettings}>
+      <SidebarProvider>
+        <AppSidebar />
 
-      <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2">
-          <div className="flex flex-1 items-center gap-2 px-2">
+        <SidebarInset>
+          <header className="sticky top-0 flex shrink-0 items-center gap-2">
             <SidebarTrigger />
-            {/* <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="line-clamp-1">Tasks</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb> */}
-          </div>
-          {/* <div className="ml-auto flex items-center gap-2 px-3">
-            <Button variant="ghost" size="icon-sm">
-              <Star className="icon-sm" />
-            </Button>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon-sm">
-                  <MoreHorizontal className="icon-sm" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-56 overflow-hidden rounded-lg p-0" align="end">
-                todo
-              </PopoverContent>
-            </Popover>
-          </div> */}
-        </header>
+          </header>
 
-        <Outlet />
-      </SidebarInset>
-    </SidebarProvider>
+          <Outlet />
+        </SidebarInset>
+      </SidebarProvider>
+    </LayoutProvider>
   );
 }

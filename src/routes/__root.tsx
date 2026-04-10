@@ -2,9 +2,9 @@ import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanst
 
 import { Toaster } from "@/components/ui/toast";
 import { app } from "@/lib/config/app.config";
-import { SettingsProvider } from "@/providers/settings-provider";
+import { AppearanceProvider } from "@/providers/appearance-provider";
 import ThemeProvider from "@/providers/theme-provider";
-import { getSettings } from "@/server/functions/preferences/settings";
+import { getAppearance } from "@/server/functions/preferences/appearance";
 import { getCustomColors, getTheme } from "@/server/functions/preferences/theme";
 import appCss from "../styles.css?url";
 
@@ -22,9 +22,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   loader: async () => {
     const theme = await getTheme();
     const customColors = await getCustomColors();
-    const settings = await getSettings();
+    const appearance = await getAppearance();
 
-    return { theme, customColors, settings };
+    return { theme, customColors, appearance };
   },
   head: () => ({
     meta: [
@@ -46,16 +46,16 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: PropsWithChildren) {
-  const { theme, customColors, settings } = Route.useLoaderData();
+  const { theme, customColors, appearance } = Route.useLoaderData();
 
   // Build className for html element
-  const htmlClassName = [theme, settings.usePointerCursor ? "pointer-cursor" : ""]
+  const htmlClassName = [theme, appearance.usePointerCursor ? "pointer-cursor" : ""]
     .filter(Boolean)
     .join(" ");
 
   // Build data attributes
   const htmlDataAttrs =
-    settings.fontSize !== "default" ? { "data-font-size": settings.fontSize } : {};
+    appearance.fontSize !== "default" ? { "data-font-size": appearance.fontSize } : {};
 
   const themeScript =
     theme === "custom" && customColors
@@ -83,10 +83,10 @@ function RootDocument({ children }: PropsWithChildren) {
       </head>
       <body className="flex min-h-dvh w-full">
         <ThemeProvider theme={theme} customColors={customColors}>
-          <SettingsProvider settings={settings}>
+          <AppearanceProvider initial={appearance}>
             {children}
             <Toaster richColors />
-          </SettingsProvider>
+          </AppearanceProvider>
         </ThemeProvider>
 
         <Scripts />

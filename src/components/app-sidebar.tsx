@@ -41,6 +41,8 @@ import {
 } from "@/components/ui/sidebar";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
+import { cn } from "@/lib/utils";
+import { useLayout } from "@/providers/layout-provider";
 import { Route } from "@/routes/_authenticated";
 
 const navLinks = [
@@ -54,9 +56,10 @@ const navLinks = [
 
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
-  const { isMobile, toggleSidebar } = useSidebar();
+  const { isMobile, toggleSidebar, state } = useSidebar();
   const navigate = useNavigate();
   const router = useRouter();
+  const { layout } = useLayout();
 
   const handleSignOut = async () => {
     await signOut();
@@ -82,27 +85,39 @@ const AppSidebar = () => {
       <SidebarContent>
         <SidebarHeader>
           <SidebarMenu>
-            <SidebarMenuItem className="mt-1 flex w-full flex-1 items-center">
+            <SidebarMenuItem className={state === "collapsed" ? "w-fit" : undefined}>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <SidebarMenuButton className="px-0.5 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground group-data-[collapsible=icon]:p-0.5!">
-                    <Avatar role="button" className="size-6 rounded">
-                      <AvatarImage
-                        src={user?.image || undefined}
-                        alt={user?.name || "User avatar"}
-                        className="rounded"
-                      />
-                      <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
-                    </Avatar>
+                <DropdownMenuTrigger
+                  className={cn(
+                    "flex w-full items-center gap-2 rounded-lg border border-transparent text-body hover:bg-sidebar-accent",
+                    "outline-hidden focus-visible:border focus-visible:border-primary",
+                    "transition-[transform,opacity] duration-200 ease-out-strong",
+                    state === "collapsed" ? "w-full" : "px-2 py-1",
+                    layout.sidebarVariant === "inset" && "mt-2.5",
+                    layout.sidebarVariant === "classic" && "mt-px",
+                  )}
+                >
+                  <Avatar role="button" className="size-6 overflow-hidden rounded-lg">
+                    <AvatarImage
+                      src={user?.image || undefined}
+                      alt={user?.name || "User avatar"}
+                      className="rounded"
+                    />
+                    <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
+                  </Avatar>
 
-                    <span className="truncate font-medium">{user?.name}</span>
-                    <ChevronDown className="icon-xs ml-auto" />
-                  </SidebarMenuButton>
+                  <span className="truncate font-medium group-data-[collapsible=icon]:hidden">
+                    {user?.name}
+                  </span>
+                  <ChevronDown className="icon-sm ml-auto group-data-[collapsible=icon]:hidden" />
+                  {/* </SidebarMenuButton> */}
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent
-                  className="w-(--radix-dropdown-menu-trigger-width)"
-                  align="start"
+                  className="min-w-52"
+                  align={layout.sidebarPosition === "left" ? "start" : "end"}
+                  side="bottom"
+                  sideOffset={4}
                 >
                   <DropdownMenuGroup className="space-y-0.5">
                     {!isMobile && (
@@ -161,6 +176,7 @@ const AppSidebar = () => {
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
+              {/* <SidebarTrigger /> */}
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarHeader>
@@ -171,16 +187,19 @@ const AppSidebar = () => {
             <SidebarMenu>
               {navLinks.map((item) => (
                 <SidebarMenuItem key={item.to}>
-                  <Link to={item.to}>
-                    <SidebarMenuButton
-                      isActive={item.to === router.state.location.pathname}
-                      onClick={isMobile ? toggleSidebar : undefined}
-                      tooltip={item.label}
+                  <SidebarMenuButton
+                    isActive={item.to === router.state.location.pathname}
+                    tooltip={item.label}
+                    asChild
+                  >
+                    <Link
+                      to={item.to}
+                      className="rounded-lg group-data-[collapsible=icon]:[&>span]:hidden"
                     >
                       <item.icon className="icon-sm" />
                       <span className="text-body">{item.label}</span>
-                    </SidebarMenuButton>
-                  </Link>
+                    </Link>
+                  </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

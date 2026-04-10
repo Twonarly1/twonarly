@@ -18,7 +18,7 @@ function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.V
 }
 
 function SelectTrigger({ ...props }: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
-  return <SelectPrimitive.Trigger data-slot="select-trigger" {...props} />;
+  return <SelectPrimitive.Trigger data-slot="select-trigger" className="text-body" {...props} />;
 }
 
 function SelectContent({

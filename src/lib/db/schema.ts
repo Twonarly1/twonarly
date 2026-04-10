@@ -10,7 +10,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
 
 const generateDefaultId = () => uuid().primaryKey().defaultRandom();
 
@@ -33,10 +33,6 @@ export const tasks = pgTable(
   (table) => [uniqueIndex().on(table.id), index().on(table.userId)],
 );
 
-export type Task = InferInsertModel<typeof tasks>;
-export type SelectTask = InferSelectModel<typeof tasks>;
-
-// AUTH SCHEMA TABLES
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   stripeCustomerId: text("stripe_customer_id"),
@@ -155,11 +151,28 @@ export const walletAddress = pgTable(
   (table) => [index("wallet_address_userId_idx").on(table.userId)],
 );
 
-export type Wallet = InferInsertModel<typeof walletAddress>;
+export const userSettings = pgTable(
+  "user_settings",
+  {
+    id: generateDefaultId(),
+    userId: text("user_id")
+      .notNull()
+      .unique()
+      .references(() => user.id, { onDelete: "cascade" }),
+    sidebarPosition: text("sidebar_position").notNull().default("left"),
+    sidebarVariant: text("sidebar_variant").notNull().default("inset"),
+    sidebarCollapsible: text("sidebar_collapsible").notNull().default("none"),
+    usePointerCursor: boolean("use_pointer_cursor").notNull().default(false),
+    createdAt: generateDefaultDate(),
+    updatedAt: generateDefaultDate(),
+  },
+  (table) => [index("user_settings_userId_idx").on(table.userId)],
+);
 
-export const userRelations = relations(user, ({ many }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
   sessions: many(session),
   accounts: many(account),
+  settings: one(userSettings),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -189,3 +202,14 @@ export const walletAddressRelations = relations(walletAddress, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export const userSettingsRelations = relations(userSettings, ({ one }) => ({
+  user: one(user, {
+    fields: [userSettings.userId],
+    references: [user.id],
+  }),
+}));
+
+export type Task = InferSelectModel<typeof tasks>;
+export type Wallet = InferSelectModel<typeof walletAddress>;
+export type UserSettings = InferSelectModel<typeof userSettings>;

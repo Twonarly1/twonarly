@@ -303,7 +303,7 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
                       <img
                         src={activeConnector?.icon}
                         alt={activeConnector?.name}
-                        className="size-10 rounded"
+                        className="size-10"
                       />
                     ))}
                 </div>
