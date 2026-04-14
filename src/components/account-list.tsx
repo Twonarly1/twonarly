@@ -62,8 +62,8 @@ const AccountList = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="font-medium text-body">{deviceSession.user.name}</p>
-                    {provider === "google" && <GoogleIcon className="size-3.5" />}
-                    {provider === "github" && <GitHubIcon className="size-3.5" />}
+                    {provider === "google" && <GoogleIcon className="size-3" />}
+                    {provider === "github" && <GitHubIcon className="size-3" />}
                     {isCurrent && (
                       <span className="font-medium text-body-sm text-green-600">Active</span>
                     )}

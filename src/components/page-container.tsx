@@ -1,12 +1,14 @@
+import { cn } from "@/lib/utils";
+
 import type { ReactNode } from "react";
 
 interface Props extends React.ComponentPropsWithRef<"div"> {
   children: ReactNode;
 }
 
-const PageContainer = ({ children, ...rest }: Props) => {
+const PageContainer = ({ children, className, ...rest }: Props) => {
   return (
-    <div className="container mx-auto mb-12 h-full space-y-12" {...rest}>
+    <div className={cn("no-scrollbar container mx-auto flex-1 space-y-12", className)} {...rest}>
       {children}
     </div>
   );

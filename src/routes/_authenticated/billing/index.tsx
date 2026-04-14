@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import confetti from "canvas-confetti";
 import { Check } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 import { z } from "zod";
 
@@ -33,25 +33,27 @@ import { fetchActiveSubscriptions } from "@/server/functions/subscriptions/fetch
 import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
 import { fetchPlans } from "@/server/functions/subscriptions/fetch-plans";
 
+import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
+
 export const Route = createFileRoute("/_authenticated/billing/")({
   component: BillingPage,
   validateSearch: z.object({
     upgraded: z.boolean().optional(),
   }),
   loader: async () => {
-    const [subscriptions, invoices, plans] = await Promise.all([
+    const [subscriptions, plans] = await Promise.all([
       fetchActiveSubscriptions(),
-      fetchInvoices({ data: { limit: 6, startingAfter: undefined } }),
+      // fetchInvoices({ data: { limit: 6, startingAfter: undefined } }),
       fetchPlans(),
     ]);
 
-    return { subscriptions, invoices, plans };
+    return { subscriptions, plans };
   },
 });
 
 function BillingPage() {
   const { upgraded } = Route.useSearch();
-  const { invoices, subscriptions, plans } = Route.useLoaderData();
+  const { subscriptions, plans } = Route.useLoaderData();
   const navigate = useNavigate();
 
   const subscription = subscriptions?.find(
@@ -87,6 +89,17 @@ function BillingPage() {
         `Active until ${formatDate(cancellationDate, { year: true })}. You won't be charged again.`,
     )
     .otherwise(() => `Next payment on ${formatDate(subscription?.periodEnd, { year: true })}`);
+
+  const [invoiceData, setInvoiceData] = useState<{ invoices: Invoice[]; hasMore: boolean } | null>(
+    null,
+  );
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchInvoices({ data: { limit: 6, startingAfter: undefined } });
+      setInvoiceData(data);
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (!upgraded) return;
@@ -168,7 +181,12 @@ function BillingPage() {
                   {plan.interval}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col gap-1.5 border-t py-3">
+              <CardContent
+                className={cn(
+                  "flex flex-col gap-1.5 border-t py-3",
+                  isCurrent && "border-t-primary",
+                )}
+              >
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
                     <Check className="icon-xs shrink-0 text-primary" />
@@ -200,7 +218,7 @@ function BillingPage() {
           </ItemContent>
         </Item>
 
-        <InvoiceList invoices={invoices.invoices} hasMore={invoices.hasMore} />
+        <InvoiceList />
       </div>
     </PageContainer>
   );

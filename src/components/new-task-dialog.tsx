@@ -64,7 +64,7 @@ const NewTaskDialog = () => {
   );
 
   return (
-    <Tooltip delayDuration={500}>
+    <Tooltip delayDuration={400}>
       <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
         <TooltipTrigger asChild>
           <DialogTrigger asChild>

@@ -167,7 +167,7 @@ function ProfilePage() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Tooltip delayDuration={500}>
+              <Tooltip delayDuration={400}>
                 <TooltipTrigger asChild>
                   <Avatar
                     onClick={triggerFileUpload}

@@ -72,7 +72,7 @@ function SettingsPage() {
   }, [backgroundHex, accentHex, borderHex, theme, setCustomColors]);
 
   return (
-    <PageContainer>
+    <PageContainer className="last:mb-12">
       <h1 className="items-baseline font-medium text-h1">Preferences</h1>
 
       <div className="space-y-4">

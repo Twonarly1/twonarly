@@ -72,6 +72,7 @@ function RootDocument({ children }: PropsWithChildren) {
           if(border){r.setProperty("--border",border);r.setProperty("--input",border);}
         })();`
       : undefined;
+
   return (
     <html lang="en" className={htmlClassName} {...htmlDataAttrs}>
       <head>

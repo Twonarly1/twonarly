@@ -14,6 +14,7 @@ import {
 import { toast } from "@/components/ui/toast";
 import { formatWalletAddress } from "@/lib/utils/format";
 import { Route } from "@/routes/_authenticated/accounts";
+import CopyButton from "./copy-to-clipboard";
 
 import type { Wallet } from "@/lib/db/schema";
 
@@ -71,14 +72,21 @@ const LinkedWalletList = () => {
         wallets.map((wallet) => (
           <Item key={wallet.id} size="sm">
             <ItemContent>
-              <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
-              <a
-                href={`https://etherscan.io/address/${wallet.address}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on Etherscan
-              </a>
+              <div>
+                <div className="flex items-center gap-2">
+                  <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
+                  <CopyButton text={wallet.address} />
+                </div>
+
+                <a
+                  href={`https://etherscan.io/address/${wallet.address}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cursor-pointer text-body-sm text-muted-foreground hover:underline"
+                >
+                  View on Etherscan &#8599;
+                </a>
+              </div>
             </ItemContent>
             <ItemActions>
               <Button

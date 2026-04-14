@@ -89,7 +89,7 @@ const AppSidebar = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-lg border border-transparent text-body hover:bg-sidebar-accent",
+                    "flex w-full select-none items-center gap-2 rounded-lg border border-transparent text-body hover:bg-sidebar-accent",
                     "outline-hidden focus-visible:border focus-visible:border-primary",
                     "transition-[transform,opacity] duration-200 ease-out-strong",
                     state === "collapsed" ? "w-full" : "px-2 py-1",
