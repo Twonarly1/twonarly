@@ -211,7 +211,13 @@ function ProfilePage() {
             <ItemTitle>Username</ItemTitle>
           </ItemContent>
           <ItemActions>
-            <Input value={name} onChange={(e) => setName(e.target.value)} id="name" required />
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              id="name"
+              required
+              className="shadow-none"
+            />
           </ItemActions>
         </Item>
       </ItemGroup>

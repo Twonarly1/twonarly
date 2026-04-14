@@ -13,7 +13,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { COOKIES } from "@/lib/constants/cookies";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -102,28 +102,26 @@ function SidebarProvider({
 
   return (
     <SidebarContext.Provider value={contextValue}>
-      <TooltipProvider delayDuration={400} skipDelayDuration={300}>
-        <div
-          data-slot="sidebar-wrapper"
-          style={
-            {
-              "--sidebar-width": SIDEBAR_WIDTH,
-              ...style,
-            } as CSSProperties
-          }
-          className={cn(
-            "group/sidebar-wrapper min-h-svh w-full",
-            layout.sidebarVariant === "inset" ? "flex bg-sidebar" : "flex",
-            layout.sidebarPosition === "right" && "flex-row-reverse",
-            layout.sidebarVariant === "inset" && "max-h-svh",
+      <div
+        data-slot="sidebar-wrapper"
+        style={
+          {
+            "--sidebar-width": SIDEBAR_WIDTH,
+            ...style,
+          } as CSSProperties
+        }
+        className={cn(
+          "group/sidebar-wrapper min-h-svh w-full",
+          layout.sidebarVariant === "inset" ? "flex bg-sidebar" : "flex",
+          layout.sidebarPosition === "right" && "flex-row-reverse",
+          layout.sidebarVariant === "inset" && "max-h-svh",
 
-            className,
-          )}
-          {...props}
-        >
-          {children}
-        </div>
-      </TooltipProvider>
+          className,
+        )}
+        {...props}
+      >
+        {children}
+      </div>
     </SidebarContext.Provider>
   );
 }
@@ -233,8 +231,6 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
   const { toggleSidebar, isMobile, state } = useSidebar();
   const { layout } = useLayout();
 
-  // if (layout.sidebarCollapsible === "none" && !isMobile) return null;
-
   return (
     <div
       className={cn(
@@ -308,7 +304,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
 
 function SidebarInset({ className, children, ...props }: React.ComponentProps<"main">) {
   const { layout } = useLayout();
-  const { state, isMobile } = useSidebar();
+  const { state } = useSidebar();
 
   const insetClass =
     layout.sidebarVariant === "inset"
@@ -325,12 +321,7 @@ function SidebarInset({ className, children, ...props }: React.ComponentProps<"m
   return (
     <main
       data-slot="sidebar-inset"
-      className={cn(
-        "relative flex w-full flex-1 flex-col",
-        insetClass,
-        isMobile && "m-2",
-        className,
-      )}
+      className={cn("relative flex w-full flex-1 flex-col", insetClass, className)}
       {...props}
     >
       {children}
@@ -486,21 +477,9 @@ function SidebarMenuButton({
   );
 }
 
-function SidebarFooter({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="sidebar-footer"
-      data-sidebar="footer"
-      className={cn("flex flex-col gap-2 p-2", className)}
-      {...props}
-    />
-  );
-}
-
 export {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,

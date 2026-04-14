@@ -8,7 +8,10 @@ interface Props extends React.ComponentPropsWithRef<"div"> {
 
 const PageContainer = ({ children, className, ...rest }: Props) => {
   return (
-    <div className={cn("no-scrollbar container mx-auto flex-1 space-y-12", className)} {...rest}>
+    <div
+      className={cn("no-scrollbar container mx-auto flex-1 space-y-12 last:mb-24", className)}
+      {...rest}
+    >
       {children}
     </div>
   );

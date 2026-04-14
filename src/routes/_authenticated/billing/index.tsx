@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import confetti from "canvas-confetti";
 import { Check } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { match } from "ts-pattern";
 import { z } from "zod";
 
@@ -30,10 +30,7 @@ import { authClient } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter, formatDate } from "@/lib/utils/format";
 import { fetchActiveSubscriptions } from "@/server/functions/subscriptions/fetch-active-subscriptions";
-import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
 import { fetchPlans } from "@/server/functions/subscriptions/fetch-plans";
-
-import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 
 export const Route = createFileRoute("/_authenticated/billing/")({
   component: BillingPage,
@@ -41,11 +38,7 @@ export const Route = createFileRoute("/_authenticated/billing/")({
     upgraded: z.boolean().optional(),
   }),
   loader: async () => {
-    const [subscriptions, plans] = await Promise.all([
-      fetchActiveSubscriptions(),
-      // fetchInvoices({ data: { limit: 6, startingAfter: undefined } }),
-      fetchPlans(),
-    ]);
+    const [subscriptions, plans] = await Promise.all([fetchActiveSubscriptions(), fetchPlans()]);
 
     return { subscriptions, plans };
   },
@@ -89,17 +82,6 @@ function BillingPage() {
         `Active until ${formatDate(cancellationDate, { year: true })}. You won't be charged again.`,
     )
     .otherwise(() => `Next payment on ${formatDate(subscription?.periodEnd, { year: true })}`);
-
-  const [invoiceData, setInvoiceData] = useState<{ invoices: Invoice[]; hasMore: boolean } | null>(
-    null,
-  );
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchInvoices({ data: { limit: 6, startingAfter: undefined } });
-      setInvoiceData(data);
-    };
-    fetchData();
-  }, []);
 
   useEffect(() => {
     if (!upgraded) return;

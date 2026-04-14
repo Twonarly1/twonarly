@@ -5,6 +5,7 @@ import { Toaster as ToasterPrimitive, toast as toastPrimitive } from "sonner";
 
 import { INTENT_ICONS } from "@/components/intent";
 import { Button } from "@/components/ui/button";
+import { useIsPhone } from "@/lib/hooks/use-phone";
 import { useTheme } from "@/providers/theme-provider";
 
 import type { ToasterProps } from "sonner";
@@ -17,7 +18,7 @@ interface ToastData {
 
 function toast(intent: Intent, data: ToastData) {
   return toastPrimitive.custom((id) => (
-    <div className="relative flex min-w-sm items-center gap-3 rounded-lg bg-background px-3 py-2 shadow-lg ring-1 ring-black/5">
+    <div className="relative flex items-center gap-3 rounded-lg bg-background px-3 py-2 shadow-lg ring-1 ring-black/5 sm:min-w-sm">
       <Button
         variant="unstyled"
         size="icon-xs"
@@ -49,12 +50,14 @@ toast.warning = (d: ToastData) => toast("warning", d);
 
 function Toaster(props: ToasterProps) {
   const { theme } = useTheme();
+  const isPhone = useIsPhone();
 
   return (
     <ToasterPrimitive
       icons={INTENT_ICONS}
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      position={isPhone ? "top-center" : "bottom-right"}
       {...props}
     />
   );

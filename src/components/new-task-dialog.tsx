@@ -68,18 +68,19 @@ const NewTaskDialog = () => {
       <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
         <TooltipTrigger asChild>
           <DialogTrigger asChild>
-            <Button size="sm" className="flex pointer-hover:scale-[1.04] gap-2 active:scale-[0.97]">
+            <Button className="flex pointer-hover:scale-[1.04] gap-2 active:scale-[0.97]">
               New Task
             </Button>
           </DialogTrigger>
         </TooltipTrigger>
-        <DialogContent>
+        <DialogContent className="p-3">
           <DialogHeader className="sr-only">
+            <DialogTitle className="hidden" />
             <DialogDescription className="hidden" />
           </DialogHeader>
 
           <DialogHeader>
-            <DialogTitle className="text-body-lg">New Task</DialogTitle>
+            <DialogTitle className="text-body-lg text-sidebar-foreground">New Task</DialogTitle>
           </DialogHeader>
 
           <form
@@ -117,6 +118,7 @@ const NewTaskDialog = () => {
                   value={field.state.value ?? ""}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
+                  className="min-h-24"
                 />
               )}
             </form.Field>

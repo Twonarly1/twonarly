@@ -1,6 +1,6 @@
 import { flexRender } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { useLayoutEffect, useRef } from "react";
+import { useRef } from "react";
 
 import HeaderCell from "@/components/table/header-cell";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
@@ -40,151 +40,145 @@ export function DataTable({ table }: Props) {
     virtualRows.length > 0 ? totalSize - (virtualRows[virtualRows.length - 1]?.end || 0) : 0;
 
   return (
-    <div className="relative flex w-full">
-      {/* <GridCanvas rows={rows.map((row) => row.original)} /> */}
-
-      <div className="relative flex w-full flex-col">
-        <div
-          ref={tableContainerRef}
-          className="overflow-auto"
-          style={{ height: "calc(100vh - 210px)" }}
-        >
-          <Table>
-            <TableHeader className="sticky top-0 z-0 bg-background">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id} className="hover:bg-transparent">
-                  {headerGroup.headers.map((header) => {
-                    return <HeaderCell key={header.id} header={header} />;
-                  })}
-                </TableRow>
+    <div
+      ref={tableContainerRef}
+      className="flex-1 overflow-auto"
+      style={{ height: "calc(100vh - 180px)" }}
+    >
+      <Table>
+        <TableHeader className="sticky top-0 z-0">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              {headerGroup.headers.map((header) => {
+                return <HeaderCell key={header.id} header={header} />;
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {isEmpty ? (
+            <TableRow className="hover:bg-transparent">
+              {table.getAllColumns().map((column) => (
+                <TableCell
+                  key={column.id}
+                  style={{
+                    width: column.getSize(),
+                    maxWidth: column.getSize(),
+                    minWidth: column.getSize(),
+                  }}
+                  className="leading-7"
+                >
+                  {column.id === "name" && (
+                    <div className="group flex h-7 w-full items-center truncate rounded border border-transparent px-2 text-foreground leading-7 focus-visible:border-border">
+                      No results
+                    </div>
+                  )}
+                </TableCell>
               ))}
-            </TableHeader>
-            <TableBody>
-              {isEmpty ? (
-                <TableRow className="hover:bg-transparent">
-                  {table.getAllColumns().map((column) => (
-                    <TableCell
-                      key={column.id}
-                      style={{
-                        width: column.getSize(),
-                        maxWidth: column.getSize(),
-                        minWidth: column.getSize(),
-                      }}
-                      className="leading-7"
-                    >
-                      {column.id === "name" && (
-                        <div className="group flex h-7 w-full items-center truncate rounded border border-transparent px-2 text-foreground leading-7 focus-visible:border-border">
-                          No results
-                        </div>
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ) : (
-                <>
-                  {paddingTop > 0 && (
-                    <tr>
-                      <td style={{ height: `${paddingTop}px` }} />
-                    </tr>
-                  )}
-                  {virtualRows.map((virtualRow) => {
-                    const row = rows[virtualRow.index];
-                    return (
-                      <TableRow
-                        key={row.id}
-                        data-row-id={row.id}
-                        tabIndex={0}
-                        data-state={row.getIsSelected() && "selected"}
-                        className="group bg-background hover:bg-background"
-                      >
-                        {row.getVisibleCells().map((cell) => (
-                          <TableCell
-                            key={cell.id}
-                            style={{
-                              width: cell.column.getSize(),
-                              maxWidth: cell.column.getSize(),
-                              minWidth: cell.column.getSize(),
-                            }}
-                          >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    );
-                  })}
-                  {paddingBottom > 0 && (
-                    <tr>
-                      <td style={{ height: `${paddingBottom}px` }} />
-                    </tr>
-                  )}
-                </>
+            </TableRow>
+          ) : (
+            <>
+              {paddingTop > 0 && (
+                <tr>
+                  <td style={{ height: `${paddingTop}px` }} />
+                </tr>
               )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+              {virtualRows.map((virtualRow) => {
+                const row = rows[virtualRow.index];
+                return (
+                  <TableRow
+                    key={row.id}
+                    data-row-id={row.id}
+                    tabIndex={0}
+                    data-state={row.getIsSelected() && "selected"}
+                    className="group bg-background hover:bg-background"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell
+                        key={cell.id}
+                        style={{
+                          width: cell.column.getSize(),
+                          maxWidth: cell.column.getSize(),
+                          minWidth: cell.column.getSize(),
+                        }}
+                      >
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+              {paddingBottom > 0 && (
+                <tr>
+                  <td style={{ height: `${paddingBottom}px` }} />
+                </tr>
+              )}
+            </>
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }
 
-const COLUMN_WIDTHS = [24, 200, 320, 56, 32];
-const ROW_H = 32;
+// const COLUMN_WIDTHS = [24, 200, 320, 56, 32];
+// const ROW_H = 32;
 
-function GridCanvas({ rows }: { rows: Task[] }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+// function GridCanvas({ rows }: { rows: Task[] }) {
+//   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useLayoutEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+//   useLayoutEffect(() => {
+//     const canvas = canvasRef.current;
+//     if (!canvas) return;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+//     const ctx = canvas.getContext("2d");
+//     if (!ctx) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+//     const dpr = window.devicePixelRatio || 1;
+//     const rect = canvas.getBoundingClientRect();
+//     canvas.width = rect.width * dpr;
+//     canvas.height = rect.height * dpr;
+//     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    ctx.clearRect(0, 0, rect.width, rect.height);
+//     ctx.clearRect(0, 0, rect.width, rect.height);
 
-    const totalWidth = COLUMN_WIDTHS.reduce((a, b) => a + b, 0);
+//     const totalWidth = COLUMN_WIDTHS.reduce((a, b) => a + b, 0);
 
-    // Background
-    // ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, totalWidth, ROW_H + rows.length * ROW_H);
+//     // Background
+//     // ctx.fillStyle = "#ffffff";
+//     ctx.fillRect(0, 0, totalWidth, ROW_H + rows.length * ROW_H);
 
-    // Horizontal lines
-    // ctx.strokeStyle = "hsl(var(--border))";
-    ctx.lineWidth = 1;
+//     // Horizontal lines
+//     // ctx.strokeStyle = "hsl(var(--border))";
+//     ctx.lineWidth = 1;
 
-    // Header bottom border
-    ctx.beginPath();
-    ctx.moveTo(0, ROW_H + 0.5);
-    ctx.lineTo(totalWidth, ROW_H + 0.5);
-    ctx.stroke();
+//     // Header bottom border
+//     ctx.beginPath();
+//     ctx.moveTo(0, ROW_H + 0.5);
+//     ctx.lineTo(totalWidth, ROW_H + 0.5);
+//     ctx.stroke();
 
-    // Row borders
-    for (let r = 1; r <= rows.length; r++) {
-      const y = ROW_H + r * ROW_H;
-      ctx.beginPath();
-      ctx.moveTo(0, y + 0.5);
-      ctx.lineTo(totalWidth, y + 0.5);
-      ctx.stroke();
-    }
-  }, [rows]);
+//     // Row borders
+//     for (let r = 1; r <= rows.length; r++) {
+//       const y = ROW_H + r * ROW_H;
+//       ctx.beginPath();
+//       ctx.moveTo(0, y + 0.5);
+//       ctx.lineTo(totalWidth, y + 0.5);
+//       ctx.stroke();
+//     }
+//   }, [rows]);
 
-  const totalWidth = COLUMN_WIDTHS.reduce((a, b) => a + b, 0);
+//   const totalWidth = COLUMN_WIDTHS.reduce((a, b) => a + b, 0);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="pointer-events-none absolute inset-0"
-      style={{
-        width: totalWidth,
-        height: ROW_H + rows.length * ROW_H,
-        zIndex: -1,
-      }}
-    />
-  );
-}
+//   return (
+//     <canvas
+//       ref={canvasRef}
+//       className="pointer-events-none absolute inset-0"
+//       style={{
+//         width: totalWidth,
+//         height: ROW_H + rows.length * ROW_H,
+//         zIndex: -1,
+//       }}
+//     />
+//   );
+// }

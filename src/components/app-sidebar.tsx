@@ -1,14 +1,5 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import {
-  Blocks,
-  Check,
-  CheckLine,
-  ChevronDown,
-  Settings2,
-  ShieldCog,
-  User,
-  Wallet,
-} from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { GitHubIcon } from "@/components/icons/github";
@@ -41,18 +32,10 @@ import {
 } from "@/components/ui/sidebar";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
+import { navLinks } from "@/lib/constants/nav-links";
 import { cn } from "@/lib/utils";
 import { useLayout } from "@/providers/layout-provider";
 import { Route } from "@/routes/_authenticated";
-
-const navLinks = [
-  { label: "Tasks", to: "/tasks", icon: CheckLine },
-  { label: "Preferences", to: "/preferences", icon: Settings2 },
-  { label: "Profile", to: "/profile", icon: User },
-  { label: "Security & Access", to: "/accounts", icon: ShieldCog },
-  { label: "Billing", to: "/billing", icon: Wallet },
-  { label: "Integrations", to: "/integrations", icon: Blocks },
-];
 
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
@@ -110,7 +93,6 @@ const AppSidebar = () => {
                     {user?.name}
                   </span>
                   <ChevronDown className="icon-sm ml-auto group-data-[collapsible=icon]:hidden" />
-                  {/* </SidebarMenuButton> */}
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent

@@ -1,10 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { ExternalLink } from "lucide-react";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { match } from "ts-pattern";
 
 import Link from "@/components/core/link";
-import { INTENT_ICONS } from "@/components/intent";
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -16,9 +14,12 @@ import {
 } from "@/components/ui/item";
 import { formatDate } from "@/lib/utils/format";
 import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
+import { StatusErrorIcon } from "./icons/status-error";
+import { StatusInfoIcon } from "./icons/status-info";
+import { StatusSuccessIcon } from "./icons/status-success";
+import { StatusWarningIcon } from "./icons/status-warning";
 import { Skeleton } from "./ui/skeleton";
 
-import type { Intent } from "@/components/intent";
 import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 
 const INVOICE_LIMIT = 6;
@@ -64,17 +65,20 @@ const InvoiceList = () => {
     return (
       <ItemGroup className="divide-none">
         {Array.from({ length: 4 }).map((_, i) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: Allow
-          <Item key={i}>
-            <ItemContent>
-              <Skeleton className="h-4 w-48" />
-              <Skeleton className="h-3.5 w-28" />
-            </ItemContent>
-            <ItemActions>
-              <Skeleton className="h-6 w-16" />
-              <Skeleton className="h-6 w-16" />
-            </ItemActions>
-          </Item>
+          // biome-ignore lint/suspicious/noArrayIndexKey: Okay
+          <Fragment key={i}>
+            <Item>
+              <Skeleton className="flex size-4 sm:hidden" />
+              <ItemContent>
+                <Skeleton className="h-4 w-48" />
+                <Skeleton className="h-3.5 w-28" />
+              </ItemContent>
+              <ItemActions className="hidden sm:flex">
+                <Skeleton className="h-6 w-16" />
+                <Skeleton className="h-6 w-16" />
+              </ItemActions>
+            </Item>
+          </Fragment>
         ))}
       </ItemGroup>
     );
@@ -91,7 +95,7 @@ const InvoiceList = () => {
     );
 
   return (
-    <ItemGroup className="divide-none">
+    <ItemGroup className="sm:divide-none">
       {invoices.map((invoice, i) => {
         const shouldAnimate = i >= animateFromIndex.current;
 
@@ -108,35 +112,48 @@ const InvoiceList = () => {
             }
           >
             <ItemContent>
-              <ItemTitle className="flex items-center gap-2 font-normal">
-                {invoice.lines.map((line) => line.description).join(", ")}
-              </ItemTitle>
-              <ItemDescription>
-                {formatDate(new Date(invoice.created * 1000), { year: true })}
-              </ItemDescription>
+              <div className="flex items-center gap-2">
+                <div className="flex w-6 sm:hidden">
+                  {match(invoice.status)
+                    .with("paid", () => <StatusSuccessIcon className="icon-sm" />)
+                    .with("uncollectible", () => <StatusErrorIcon className="icon-sm" />)
+                    .with("open", "draft", "void", () => <StatusWarningIcon className="icon-sm" />)
+                    .otherwise(() => (
+                      <StatusInfoIcon className="icon-sm" />
+                    ))}
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <ItemTitle className="flex items-center gap-2 font-normal">
+                    {invoice.lines.map((line) => line.description).join(", ")}
+                  </ItemTitle>
+                  <ItemDescription>
+                    {formatDate(new Date(invoice.created * 1000), { year: true })}
+                  </ItemDescription>
+                </div>
+              </div>
             </ItemContent>
 
-            <ItemActions>
-              <span className="flex items-center gap-2 px-2">
-                {
-                  INTENT_ICONS[
-                    match(invoice.status)
-                      .with("paid", () => "success" as Intent)
-                      .with("uncollectible", () => "error" as Intent)
-                      .with("open", "draft", "void", () => "warning" as Intent)
-                      .otherwise(() => "info" as Intent)
-                  ]
-                }
+            <ItemActions className="space-x-2">
+              <span className="hidden items-center gap-2 sm:flex">
+                {match(invoice.status)
+                  .with("paid", () => <StatusSuccessIcon className="icon-sm" />)
+                  .with("uncollectible", () => <StatusErrorIcon className="icon-sm" />)
+                  .with("open", "draft", "void", () => <StatusWarningIcon className="icon-sm" />)
+                  .otherwise(() => (
+                    <StatusInfoIcon className="icon-sm" />
+                  ))}
                 <span className="first-letter:uppercase">{invoice.status}</span>
               </span>
+
               <Link
                 variant="ghost"
                 to={invoice.hostedInvoiceUrl || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <ExternalLink className="icon-xs" />
-                View
+                &#8599;
+                <span className="hidden sm:flex">View</span>
               </Link>
             </ItemActions>
           </Item>

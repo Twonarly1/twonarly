@@ -87,7 +87,7 @@ const ActionCell = memo(({ row, table }: Props) => {
           }}
           variant="ghost"
           size="icon"
-          className="mr-4 opacity-0 group-hover:opacity-100 data-[state=open]:opacity-100"
+          className="mx-auto group-hover:opacity-100 data-[state=open]:opacity-100 sm:opacity-0"
         >
           <MoreHorizontal className="icon-sm" />
         </Button>

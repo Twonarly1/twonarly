@@ -55,15 +55,15 @@ function TasksPage() {
         accessorKey: "completed",
         header: "",
         enableSorting: false,
-        size: 24,
+        size: 40,
         cell: ({ row }) => (
-          <div className="ml-2 flex w-fit md:w-8">
+          <div className="flex">
             <Checkbox
               tabIndex={-1}
               className={cn(
                 "mx-auto flex size-3.5 items-center justify-center",
                 !row.getIsSelected() &&
-                  "opacity-0 hover:border hover:border-primary group-hover:opacity-100",
+                  "hover:border hover:border-primary group-hover:opacity-100 sm:opacity-0",
               )}
               checked={row.getIsSelected()}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
@@ -80,7 +80,7 @@ function TasksPage() {
       {
         accessorKey: "description",
         header: "Description",
-        size: 320,
+        size: 200,
         sortingFn: "alphanumeric",
       },
       {
@@ -91,14 +91,22 @@ function TasksPage() {
         sortingFn: "datetime",
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
-          return <span className="px-2 font-medium">{formatDate(createdAt)}</span>;
+          return (
+            <span className="px-2 font-medium text-body-sm text-muted-foreground">
+              {formatDate(createdAt)}
+            </span>
+          );
         },
       },
       {
         id: "actions",
         enableSorting: false,
-        size: 32,
-        cell: ({ row, table }) => <ActionCell row={row} table={table} />,
+        size: 56,
+        cell: ({ row, table }) => (
+          <div className="flex">
+            <ActionCell row={row} table={table} />
+          </div>
+        ),
       },
     ],
     [],
@@ -185,8 +193,8 @@ function TasksPage() {
   }, [table]);
 
   return (
-    <div>
-      <div className="mx-auto space-y-6 p-4 px-6 lg:px-12">
+    <div className="">
+      <div className="container space-y-6 p-4">
         <h1 className="items-baseline font-medium text-h1">
           Tasks {data?.length ? `(${data.length})` : ""}
         </h1>
