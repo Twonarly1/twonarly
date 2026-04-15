@@ -40,13 +40,9 @@ export function DataTable({ table }: Props) {
     virtualRows.length > 0 ? totalSize - (virtualRows[virtualRows.length - 1]?.end || 0) : 0;
 
   return (
-    <div
-      ref={tableContainerRef}
-      className="flex-1 overflow-auto"
-      style={{ height: "calc(100vh - 180px)" }}
-    >
+    <div ref={tableContainerRef} className="min-h-0 flex-1 overflow-auto">
       <Table>
-        <TableHeader className="sticky top-0 z-0">
+        <TableHeader className="sticky top-0 z-0 bg-background">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
               {headerGroup.headers.map((header) => {

@@ -33,7 +33,7 @@ export default function CopyButton({ text = "Copy me!" }: Props) {
     <div className="relative grid place-items-center">
       <Button
         variant="outline"
-        size="icon-xs"
+        size="icon-sm"
         onClick={handleCopy}
         disabled={copied}
         className="transition-transform duration-150 ease-out active:scale-[0.97]"
@@ -42,7 +42,7 @@ export default function CopyButton({ text = "Copy me!" }: Props) {
           viewBox="0 0 24 24"
           fill="none"
           className={cn(
-            "absolute size-3",
+            "icon-sm absolute",
             "transition-[opacity,filter] duration-150 ease-out",
             copied ? hide : show,
           )}
@@ -60,7 +60,7 @@ export default function CopyButton({ text = "Copy me!" }: Props) {
 
       <StatusSuccessIcon
         className={cn(
-          "pointer-events-none absolute size-3",
+          "icon-sm pointer-events-none absolute",
           "transition-[opacity,filter] duration-150 ease-out",
           copied ? show : hide,
         )}

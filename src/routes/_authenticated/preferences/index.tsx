@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
+import { useIsPhone } from "@/lib/hooks/use-phone";
 import { cn } from "@/lib/utils";
 import { useAppearance } from "@/providers/appearance-provider";
 import { useLayout } from "@/providers/layout-provider";
@@ -49,6 +50,7 @@ function SettingsPage() {
   const { appearance, updateAppearance } = useAppearance();
   const { layout, updateLayout } = useLayout();
   const isMobile = useIsMobile();
+  const isPhone = useIsPhone();
 
   const [backgroundHex, setBackgroundHex] = useState(customColors?.background);
   const [accentHex, setAccentHex] = useState(customColors?.accent);
@@ -230,7 +232,7 @@ function SettingsPage() {
         </ItemGroup>
       </div>
 
-      {!isMobile && (
+      {!isPhone && (
         <div className="space-y-4">
           <Item>
             <ItemContent>
@@ -270,63 +272,69 @@ function SettingsPage() {
               </ItemActions>
             </Item>
 
-            <Item>
-              <ItemContent>
-                <ItemTitle>Sidebar variant</ItemTitle>
-                <ItemDescription>Choose the variant of the sidebar</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Select
-                  value={layout.sidebarVariant}
-                  onValueChange={(v) =>
-                    updateLayout({ sidebarVariant: v as LayoutSettings["sidebarVariant"] })
-                  }
-                >
-                  <SelectTrigger asChild>
-                    <Button variant="outline" size="sm" className="transition-none">
-                      <SelectValue placeholder="Select sidebar variant" />
-                      <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
-                    </Button>
-                  </SelectTrigger>
-                  <SelectContent align="end">
-                    <SelectGroup>
-                      <SelectItem value="classic">Classic</SelectItem>
-                      <SelectItem value="floating">Floating</SelectItem>
-                      <SelectItem value="inset">Inset</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </ItemActions>
-            </Item>
+            {!isMobile && (
+              <>
+                <Item>
+                  <ItemContent>
+                    <ItemTitle>Sidebar variant</ItemTitle>
+                    <ItemDescription>Choose the variant of the sidebar</ItemDescription>
+                  </ItemContent>
+                  <ItemActions>
+                    <Select
+                      value={layout.sidebarVariant}
+                      onValueChange={(v) =>
+                        updateLayout({ sidebarVariant: v as LayoutSettings["sidebarVariant"] })
+                      }
+                    >
+                      <SelectTrigger asChild>
+                        <Button variant="outline" size="sm" className="transition-none">
+                          <SelectValue placeholder="Select sidebar variant" />
+                          <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                        </Button>
+                      </SelectTrigger>
+                      <SelectContent align="end">
+                        <SelectGroup>
+                          <SelectItem value="classic">Classic</SelectItem>
+                          <SelectItem value="floating">Floating</SelectItem>
+                          <SelectItem value="inset">Inset</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </ItemActions>
+                </Item>
 
-            <Item>
-              <ItemContent>
-                <ItemTitle>Collapsible sidebar</ItemTitle>
-                <ItemDescription>Choose how the sidebar collapses</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Select
-                  value={layout.sidebarCollapsible}
-                  onValueChange={(v) =>
-                    updateLayout({ sidebarCollapsible: v as LayoutSettings["sidebarCollapsible"] })
-                  }
-                >
-                  <SelectTrigger asChild>
-                    <Button variant="outline" size="sm" className="transition-none">
-                      <SelectValue placeholder="Select sidebar collapsible option" />
-                      <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
-                    </Button>
-                  </SelectTrigger>
-                  <SelectContent align="end">
-                    <SelectGroup>
-                      <SelectItem value="offcanvas">Off canvas</SelectItem>
-                      <SelectItem value="icon">Icon</SelectItem>
-                      <SelectItem value="none">None</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </ItemActions>
-            </Item>
+                <Item>
+                  <ItemContent>
+                    <ItemTitle>Collapsible sidebar</ItemTitle>
+                    <ItemDescription>Choose how the sidebar collapses</ItemDescription>
+                  </ItemContent>
+                  <ItemActions>
+                    <Select
+                      value={layout.sidebarCollapsible}
+                      onValueChange={(v) =>
+                        updateLayout({
+                          sidebarCollapsible: v as LayoutSettings["sidebarCollapsible"],
+                        })
+                      }
+                    >
+                      <SelectTrigger asChild>
+                        <Button variant="outline" size="sm" className="transition-none">
+                          <SelectValue placeholder="Select sidebar collapsible option" />
+                          <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                        </Button>
+                      </SelectTrigger>
+                      <SelectContent align="end">
+                        <SelectGroup>
+                          <SelectItem value="offcanvas">Off canvas</SelectItem>
+                          <SelectItem value="icon">Icon</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </ItemActions>
+                </Item>
+              </>
+            )}
           </ItemGroup>
         </div>
       )}

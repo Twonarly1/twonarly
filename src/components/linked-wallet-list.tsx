@@ -2,7 +2,7 @@ import { useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { ConnectWalletDialog } from "@/components/connect-wallet-dialog";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -12,9 +12,11 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
+import { cn } from "@/lib/utils";
 import { formatWalletAddress } from "@/lib/utils/format";
 import { Route } from "@/routes/_authenticated/accounts";
 import CopyButton from "./copy-to-clipboard";
+import { EtherscanIcon } from "./icons/etherscan";
 
 import type { Wallet } from "@/lib/db/schema";
 
@@ -72,23 +74,22 @@ const LinkedWalletList = () => {
         wallets.map((wallet) => (
           <Item key={wallet.id} size="sm">
             <ItemContent>
-              <div>
-                <div className="flex items-center gap-2">
-                  <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
-                  <CopyButton text={wallet.address} />
-                </div>
-
-                <a
-                  href={`https://etherscan.io/address/${wallet.address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cursor-pointer text-body-sm text-muted-foreground hover:underline"
-                >
-                  View on Etherscan &#8599;
-                </a>
-              </div>
+              <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
             </ItemContent>
             <ItemActions>
+              <a
+                href={`https://etherscan.io/address/${wallet.address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "mr-auto cursor-pointer",
+                  buttonVariants({ variant: "outline", size: "icon-sm" }),
+                )}
+              >
+                <EtherscanIcon className="icon-sm" />
+              </a>
+
+              <CopyButton text={wallet.address} />
               <Button
                 variant="ghost"
                 size="sm"

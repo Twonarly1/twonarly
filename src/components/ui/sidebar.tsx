@@ -165,9 +165,12 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
   const isFloating = variant === "floating";
 
   const borderClass = match({ variant, position })
-    .with({ variant: "classic", position: "left" }, () => "border-r")
-    .with({ variant: "classic", position: "right" }, () => "border-l")
-    .with({ variant: "floating" }, () => "rounded-lg border border-border")
+    .with({ variant: "classic", position: "left" }, () => "shadow-[1px_0_0_0_var(--color-border)]")
+    .with(
+      { variant: "classic", position: "right" },
+      () => "shadow-[-1px_0_0_0_var(--color-border)]",
+    )
+    .with({ variant: "floating" }, () => "rounded-lg outline outline-border")
     .otherwise(() => undefined);
 
   return (
@@ -192,7 +195,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
         className={cn(
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) md:flex",
           "transition-[transform,opacity] duration-300 ease-(--ease-out-strong)",
-          "group-data-[collapsible=icon]:w-fit",
+          "group-data-[collapsible=icon]:w-12",
           isLeft
             ? cn(
                 "left-0",
@@ -206,8 +209,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
                   ? "group-data-[collapsible=offcanvas]:translate-x-[calc(100%+0.5rem)]"
                   : "group-data-[collapsible=offcanvas]:translate-x-full",
               ),
-          isFloating && "py-2",
-          isFloating && (isLeft ? "ml-2" : "mr-2"),
+          isFloating && (isLeft ? "ml-2 py-2" : "mr-2 py-2"),
           className,
         )}
         {...props}
@@ -228,7 +230,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
 }
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar, isMobile, state } = useSidebar();
+  const { toggleSidebar } = useSidebar();
   const { layout } = useLayout();
 
   return (
@@ -236,18 +238,18 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       className={cn(
         "flex w-full",
         layout?.sidebarPosition === "right" && "justify-end",
-        layout.sidebarCollapsible === "none" && !isMobile && "invisible",
+        layout.sidebarCollapsible === "none" && "invisible",
       )}
     >
       <Button
         data-sidebar="trigger"
         data-slot="sidebar-trigger"
         variant="ghost"
-        size={layout.sidebarCollapsible === "icon" && state === "collapsed" ? "icon-sm" : "icon-lg"}
+        size="icon"
         className={cn(
           "z-10 flex transition-transform duration-150",
           layout.sidebarVariant === "inset" && "m-2",
-          layout.sidebarVariant === "classic" && "m-2",
+          layout.sidebarVariant === "classic" && "mt-4 ml-2",
           layout.sidebarVariant === "floating" && "m-4",
           className,
         )}
@@ -304,7 +306,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
 
 function SidebarInset({ className, children, ...props }: React.ComponentProps<"main">) {
   const { layout } = useLayout();
-  const { state } = useSidebar();
+  const { state, isMobile } = useSidebar();
 
   const insetClass =
     layout.sidebarVariant === "inset"
@@ -321,7 +323,12 @@ function SidebarInset({ className, children, ...props }: React.ComponentProps<"m
   return (
     <main
       data-slot="sidebar-inset"
-      className={cn("relative flex w-full flex-1 flex-col", insetClass, className)}
+      className={cn(
+        "relative grid min-h-0 w-full flex-1 grid-rows-[auto_1fr] overflow-hidden",
+        insetClass,
+        isMobile && "m-0 rounded-none",
+        className,
+      )}
       {...props}
     >
       {children}
@@ -380,20 +387,9 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "flex h-8 shrink-0 select-none items-center px-2 font-medium text-body text-sidebar-foreground/70 outline-hidden ring-sidebar-ring focus-visible:ring-2 group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0",
+        "flex h-8 shrink-0 select-none items-center px-0 font-medium text-body text-sidebar-foreground/70 outline-hidden ring-sidebar-ring focus-visible:ring-2 group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0",
         className,
       )}
-      {...props}
-    />
-  );
-}
-
-function SidebarGroupContent({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="sidebar-group-content"
-      data-sidebar="group-content"
-      className={cn("w-full", className)}
       {...props}
     />
   );
@@ -418,7 +414,11 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
     <li
       data-slot="sidebar-menu-item"
       data-sidebar="menu-item"
-      className={cn("group/menu-item relative", className)}
+      className={cn(
+        "group/menu-item relative",
+
+        className,
+      )}
       {...props}
     />
   );
@@ -445,14 +445,15 @@ function SidebarMenuButton({
       data-active={isActive}
       className={cn(
         "peer/menu-button group/menu-button group/button",
-        "flex h-auto w-full select-none items-center gap-1.5 overflow-hidden px-2 py-2 outline-none",
+        "flex h-8 w-full select-none items-center gap-1.5 overflow-hidden px-2 py-2 outline-none",
         "whitespace-nowrap font-medium text-sidebar-foreground/70 leading-snug",
-        "rounded border border-transparent",
+        "rounded-lg border border-transparent",
         "hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:border focus-visible:border-primary",
         "disabled:pointer-events-none disabled:opacity-50",
         "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-foreground",
-        "transition-none group-data-[collapsible=icon]:w-fit",
+        "transition-none group-data-[collapsible=icon]:size-8!",
         "[&>span:last-child]:truncate [&_svg]:shrink-0",
+
         className,
       )}
       {...props}
@@ -481,7 +482,6 @@ export {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,

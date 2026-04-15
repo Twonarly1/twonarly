@@ -21,7 +21,6 @@ import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
@@ -39,7 +38,7 @@ import { Route } from "@/routes/_authenticated";
 
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
-  const { isMobile, toggleSidebar, state } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
   const navigate = useNavigate();
   const router = useRouter();
   const { layout } = useLayout();
@@ -65,26 +64,23 @@ const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarContent>
-        <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem className={state === "collapsed" ? "w-fit" : undefined}>
-              <DropdownMenu>
-                <DropdownMenuTrigger
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton
                   className={cn(
-                    "flex w-full select-none items-center gap-2 rounded-lg border border-transparent text-body hover:bg-sidebar-accent",
-                    "outline-hidden focus-visible:border focus-visible:border-primary",
-                    "transition-[transform,opacity] duration-200 ease-out-strong",
-                    state === "collapsed" ? "w-full" : "px-2 py-1",
-                    layout.sidebarVariant === "inset" && "mt-2.5",
-                    layout.sidebarVariant === "classic" && "mt-px",
+                    "flex justify-start px-0!",
+                    layout.sidebarVariant === "inset" && "mt-2",
+                    layout.sidebarVariant === "classic" && "mt-2",
                   )}
                 >
-                  <Avatar role="button" className="size-6 overflow-hidden rounded-lg">
+                  <Avatar role="button" className="size-7.5 overflow-hidden rounded">
                     <AvatarImage
                       src={user?.image || undefined}
                       alt={user?.name || "User avatar"}
-                      className="rounded"
+                      className="rounded-lg"
                     />
                     <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
@@ -92,100 +88,97 @@ const AppSidebar = () => {
                   <span className="truncate font-medium group-data-[collapsible=icon]:hidden">
                     {user?.name}
                   </span>
-                  <ChevronDown className="icon-sm ml-auto group-data-[collapsible=icon]:hidden" />
-                </DropdownMenuTrigger>
+                  <ChevronDown className="icon-sm mr-2 ml-auto group-data-[collapsible=icon]:hidden" />
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
 
-                <DropdownMenuContent
-                  className="min-w-52"
-                  align={layout.sidebarPosition === "left" ? "start" : "end"}
-                  side="bottom"
-                  sideOffset={4}
-                >
-                  <DropdownMenuGroup className="space-y-0.5">
-                    {!isMobile && (
-                      <DropdownMenuSub>
-                        <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
-                        <DropdownMenuPortal>
-                          <DropdownMenuSubContent className="space-y-0.5">
-                            {deviceSessions?.map((deviceSession) => (
-                              <DropdownMenuItem
-                                key={deviceSession.session.token}
-                                onSelect={() => handleAccountSwitch(deviceSession.session.token)}
-                              >
-                                <Avatar className="mr-0.5 size-6 rounded">
-                                  <AvatarImage
-                                    src={deviceSession.user.image || undefined}
-                                    alt={deviceSession.user.name}
-                                  />
-                                  <AvatarFallback>
-                                    {deviceSession.user.name.charAt(0)}
-                                  </AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col">
-                                  <p className="text-body">{deviceSession.user.name}</p>
-                                  <p className="text-body-sm text-muted-foreground">
-                                    {deviceSession.user.email}
-                                  </p>
-                                </div>
-                                {deviceSession.user.id === user?.id && (
-                                  <Check className="icon-xs ml-auto" />
-                                )}
-                              </DropdownMenuItem>
-                            ))}
+              <DropdownMenuContent
+                className="min-w-52"
+                align={layout.sidebarPosition === "left" ? "start" : "end"}
+                side="bottom"
+                sideOffset={4}
+              >
+                <DropdownMenuGroup className="space-y-0.5">
+                  {!isMobile && (
+                    <DropdownMenuSub>
+                      <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent className="space-y-0.5">
+                          {deviceSessions?.map((deviceSession) => (
+                            <DropdownMenuItem
+                              key={deviceSession.session.token}
+                              onSelect={() => handleAccountSwitch(deviceSession.session.token)}
+                            >
+                              <Avatar className="mr-0.5 size-6 rounded">
+                                <AvatarImage
+                                  src={deviceSession.user.image || undefined}
+                                  alt={deviceSession.user.name}
+                                />
+                                <AvatarFallback>{deviceSession.user.name.charAt(0)}</AvatarFallback>
+                              </Avatar>
+                              <div className="flex flex-col">
+                                <p className="text-body">{deviceSession.user.name}</p>
+                                <p className="text-body-sm text-muted-foreground">
+                                  {deviceSession.user.email}
+                                </p>
+                              </div>
+                              {deviceSession.user.id === user?.id && (
+                                <Check className="icon-xs ml-auto" />
+                              )}
+                            </DropdownMenuItem>
+                          ))}
 
-                            <DropdownMenuSeparator />
+                          <DropdownMenuSeparator />
 
-                            <DropdownMenuSub>
-                              <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
-                              <DropdownMenuPortal>
-                                <DropdownMenuSubContent>
-                                  <DropdownMenuItem onSelect={() => signIn("google")}>
-                                    <GoogleIcon className="size-4" />
-                                    Google
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem onSelect={() => signIn("github")}>
-                                    <GitHubIcon className="size-4" />
-                                    GitHub
-                                  </DropdownMenuItem>
-                                </DropdownMenuSubContent>
-                              </DropdownMenuPortal>
-                            </DropdownMenuSub>
-                          </DropdownMenuSubContent>
-                        </DropdownMenuPortal>
-                      </DropdownMenuSub>
-                    )}
-                    <DropdownMenuItem onSelect={handleSignOut}>Log out</DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              {/* <SidebarTrigger /> */}
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarHeader>
+                          <DropdownMenuSub>
+                            <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
+                            <DropdownMenuPortal>
+                              <DropdownMenuSubContent>
+                                <DropdownMenuItem onSelect={() => signIn("google")}>
+                                  <GoogleIcon className="size-4" />
+                                  Google
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => signIn("github")}>
+                                  <GitHubIcon className="size-4" />
+                                  GitHub
+                                </DropdownMenuItem>
+                              </DropdownMenuSubContent>
+                            </DropdownMenuPortal>
+                          </DropdownMenuSub>
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  )}
+                  <DropdownMenuItem onSelect={handleSignOut}>Log out</DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
 
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navLinks.map((item) => (
-                <SidebarMenuItem key={item.to}>
-                  <SidebarMenuButton
-                    isActive={item.to === router.state.location.pathname}
-                    tooltip={item.label}
-                    asChild
+          <SidebarMenu>
+            {navLinks.map((item) => (
+              <SidebarMenuItem key={item.to}>
+                <SidebarMenuButton
+                  isActive={item.to === router.state.location.pathname}
+                  tooltip={item.label}
+                  asChild
+                >
+                  <Link
+                    to={item.to}
+                    className="rounded-lg group-data-[collapsible=icon]:[&>span]:hidden"
                   >
-                    <Link
-                      to={item.to}
-                      className="rounded-lg group-data-[collapsible=icon]:[&>span]:hidden"
-                    >
-                      <item.icon className="icon-sm" />
-                      <span className="text-body">{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+                    <item.icon className="icon-sm" />
+                    <span className="text-body">{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 

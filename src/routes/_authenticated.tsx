@@ -54,7 +54,7 @@ function DesktopLayout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 hidden shrink-0 items-center gap-2 sm:flex">
+        <header className="shrink-0 items-center gap-2">
           <SidebarTrigger />
         </header>
         <Outlet />

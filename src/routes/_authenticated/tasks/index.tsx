@@ -193,7 +193,7 @@ function TasksPage() {
   }, [table]);
 
   return (
-    <div className="">
+    <div className="grid min-h-0 grid-rows-[auto_1fr]">
       <div className="container space-y-6 p-4">
         <h1 className="items-baseline font-medium text-h1">
           Tasks {data?.length ? `(${data.length})` : ""}
