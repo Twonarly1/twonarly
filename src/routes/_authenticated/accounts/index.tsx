@@ -3,8 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import AccountList from "@/components/account-list";
 import LinkedWalletList from "@/components/linked-wallet-list";
 import PageContainer from "@/components/page-container";
+import PasskeyList from "@/components/passkey-list";
+import { Badge } from "@/components/ui/badge";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { fetchAccounts } from "@/server/functions/accounts/fetch-accounts";
+import { fetchUserPasskeys } from "@/server/functions/user/fetch-passkeys";
 import { fetchLinkedWallets } from "@/server/functions/wallet/fetch-linked-wallets";
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
@@ -12,7 +15,8 @@ export const Route = createFileRoute("/_authenticated/accounts/")({
   loader: async () => {
     const accounts = await fetchAccounts();
     const wallets = await fetchLinkedWallets();
-    return { accounts, wallets };
+    const passkeys = await fetchUserPasskeys();
+    return { accounts, wallets, passkeys };
   },
 });
 
@@ -43,16 +47,21 @@ function AccountsPage() {
         <LinkedWalletList />
       </div>
 
-      {/* <div className="space-y-4">
-        <Item className="px-0">
+      <div className="space-y-4">
+        <Item>
           <ItemContent>
-            <ItemTitle>Passkeys</ItemTitle>
+            <ItemTitle>
+              Passkeys{" "}
+              <Badge variant="outline-primary" className="text-body-xs">
+                Coming Soon
+              </Badge>
+            </ItemTitle>
             <ItemDescription>Sign in with biometrics like Face ID or Touch ID</ItemDescription>
           </ItemContent>
         </Item>
 
-        <PasskeyList passkeys={passkeys} />
-      </div> */}
+        <PasskeyList />
+      </div>
     </PageContainer>
   );
 }

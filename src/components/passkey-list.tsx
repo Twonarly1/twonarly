@@ -6,14 +6,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup } from "@/components/ui/item";
 import { authClient } from "@/lib/auth/auth-client";
+import { Route } from "@/routes/_authenticated/accounts";
 
 import type { Passkey } from "@better-auth/passkey/client";
 
-interface Props {
-  passkeys: Passkey[];
-}
+const PasskeyList = () => {
+  const { passkeys } = Route.useLoaderData();
 
-const PasskeyList = ({ passkeys }: Props) => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const router = useRouter();
@@ -108,7 +107,7 @@ const PasskeyList = ({ passkeys }: Props) => {
           <ItemDescription>No passkeys yet</ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button variant="ghost" size="sm" onClick={handleAddPasskey}>
+          <Button disabled variant="ghost" size="sm" onClick={handleAddPasskey}>
             Add passkey
           </Button>
         </ItemActions>
