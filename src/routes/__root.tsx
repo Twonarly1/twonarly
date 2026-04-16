@@ -3,7 +3,7 @@ import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanst
 import { Toaster } from "@/components/ui/toast";
 import { app } from "@/lib/config/app.config";
 import { AppearanceProvider } from "@/providers/appearance-provider";
-import ThemeProvider from "@/providers/theme-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
 import { getAppearance } from "@/server/functions/preferences/appearance";
 import { getCustomColors, getTheme } from "@/server/functions/preferences/theme";
 import appCss from "../styles.css?url";
@@ -16,6 +16,13 @@ interface RouterContext {
   queryClient: QueryClient;
   session: Session | null;
   user: User | undefined;
+}
+
+const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/;
+
+/** Only returns the value if it's a valid 6-digit hex color, otherwise empty string. */
+function safeHex(value: string | undefined): string {
+  return value && HEX_COLOR_RE.test(value) ? value : "";
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -57,13 +64,18 @@ function RootDocument({ children }: PropsWithChildren) {
   const htmlDataAttrs =
     appearance.fontSize !== "default" ? { "data-font-size": appearance.fontSize } : {};
 
+  // Validate colors before interpolating into the inline script
+  const safeBg = safeHex(customColors?.background);
+  const safeAccent = safeHex(customColors?.accent);
+  const safeBorder = safeHex(customColors?.border);
+
   const themeScript =
-    theme === "custom" && customColors
+    theme === "custom" && (safeBg || safeAccent || safeBorder)
       ? `(function(){
           var r=document.documentElement.style;
-          var bg="${customColors.background || ""}";
-          var accent="${customColors.accent || ""}";
-          var border="${customColors.border || ""}";
+          var bg="${safeBg}";
+          var accent="${safeAccent}";
+          var border="${safeBorder}";
           function hex2rgb(h){h=h.replace("#","");return{r:parseInt(h.substring(0,2),16),g:parseInt(h.substring(2,4),16),b:parseInt(h.substring(4,6),16)};}
           function adj(h,p){var c=hex2rgb(h),R=c.r,G=c.g,B=c.b;if(p>=0){R=Math.min(255,Math.floor(R+(255-R)*(p/100)));G=Math.min(255,Math.floor(G+(255-G)*(p/100)));B=Math.min(255,Math.floor(B+(255-B)*(p/100)));}else{var f=Math.abs(p)/100;R=Math.max(0,Math.floor(R*(1-f)));G=Math.max(0,Math.floor(G*(1-f)));B=Math.max(0,Math.floor(B*(1-f)));}var t=function(n){return n.toString(16).padStart(2,"0");};return"#"+t(R)+t(G)+t(B);}
           function isDark(h){var c=hex2rgb(h);return(0.299*c.r+0.587*c.g+0.114*c.b)/255<0.5;}

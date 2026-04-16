@@ -48,14 +48,14 @@ interface ThemeContext {
 
 const ThemeContext = createContext<ThemeContext | null>(null);
 
-const ThemeProvider = ({
+export function ThemeProvider({
   children,
   theme: initialTheme,
   customColors: initialCustomColors,
 }: PropsWithChildren<{
   theme: Theme;
   customColors: CustomColors | null;
-}>) => {
+}>) {
   const [theme, setThemeState] = useState<Theme>(initialTheme);
   const [customColors, setCustomColorsState] = useState<CustomColors | null>(initialCustomColors);
 
@@ -142,12 +142,10 @@ const ThemeProvider = ({
       {children}
     </ThemeContext>
   );
-};
+}
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) throw new Error("`useTheme` called outside of `<ThemeProvider />`");
   return context;
 };
-
-export default ThemeProvider;

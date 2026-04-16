@@ -11,10 +11,15 @@ const themeValidator = z.union([
   z.literal("custom"),
 ]);
 
+const hexColor = z
+  .string()
+  .regex(/^#[0-9a-fA-F]{6}$/, "Must be a valid hex color (e.g. #ff00aa)")
+  .optional();
+
 const customColorsValidator = z.object({
-  background: z.string().optional(),
-  accent: z.string().optional(),
-  border: z.string().optional(),
+  background: hexColor,
+  accent: hexColor,
+  border: hexColor,
 });
 
 const storageKey = COOKIES.theme;
@@ -29,7 +34,14 @@ export const getTheme = createServerFn().handler(
 
 export const getCustomColors = createServerFn().handler(async () => {
   const colors = getCookie(customColorsKey);
-  return colors ? (JSON.parse(colors) as CustomColors) : null;
+  if (!colors) return null;
+
+  try {
+    const parsed = customColorsValidator.parse(JSON.parse(colors));
+    return parsed;
+  } catch {
+    return null;
+  }
 });
 
 export const setTheme = createServerFn({ method: "POST" })
