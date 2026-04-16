@@ -1,4 +1,4 @@
-import { passkey } from "@better-auth/passkey";
+// import { passkey } from "@better-auth/passkey";
 import { stripe } from "@better-auth/stripe";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -34,7 +34,7 @@ export const auth = betterAuth({
   plugins: [
     // TODO: show a warning when the maximum number of sessions is reached and prevent new sign-ins until an existing session is signed out
     multiSession({ maximumSessions: 3 }),
-    passkey(),
+    // passkey(),
     siwe({
       domain: "twonarly.vercel.app",
       anonymous: true,

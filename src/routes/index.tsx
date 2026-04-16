@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { FingerprintPattern } from "lucide-react";
 
 import { ConnectWalletDialog } from "@/components/connect-wallet-dialog";
@@ -7,8 +7,7 @@ import { EthereumIcon } from "@/components/icons/ethereum";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast";
-import { authClient, signIn } from "@/lib/auth/auth-client";
+import { signIn } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
 import { getSession } from "@/server/functions/session/get-session";
 
@@ -22,23 +21,23 @@ export const Route = createFileRoute("/")({
 
 function App() {
   const { session } = Route.useLoaderData();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handlePasskeySignIn = async () => {
-    const { error } = await authClient.signIn.passkey({
-      // autoFill: true,
-      fetchOptions: {
-        onSuccess: () => navigate({ to: "/tasks" }),
-      },
-    });
+  // const handlePasskeySignIn = async () => {
+  //   const { error } = await authClient.signIn.passkey({
+  //     // autoFill: true,
+  //     fetchOptions: {
+  //       onSuccess: () => navigate({ to: "/tasks" }),
+  //     },
+  //   });
 
-    if (error) {
-      toast.error({
-        title: "Sign in failed",
-        description: "Could not sign in with passkey.",
-      });
-    }
-  };
+  //   if (error) {
+  //     toast.error({
+  //       title: "Sign in failed",
+  //       description: "Could not sign in with passkey.",
+  //     });
+  //   }
+  // };
 
   return (
     <div className="flex h-dvh w-full items-center justify-center">
@@ -77,9 +76,10 @@ function App() {
 
             {/* Disabled until hosting related problem with Vercel (I think) is resolved */}
             <Button
+              disabled
               variant="outline"
               size="lg"
-              onClick={handlePasskeySignIn}
+              // onClick={handlePasskeySignIn}
               className="px-12 py-4"
             >
               <FingerprintPattern className="size-4" />

@@ -1,37 +1,31 @@
 import { useRouter } from "@tanstack/react-router";
-import { Pencil, Trash } from "lucide-react";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup } from "@/components/ui/item";
 import { authClient } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
-import { Route } from "@/routes/_authenticated/accounts";
-
-import type { Passkey } from "@better-auth/passkey/client";
 
 const PasskeyList = () => {
-  const { passkeys } = Route.useLoaderData();
+  // const { passkeys } = Route.useLoaderData();
 
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState("");
+  // const [editingId, setEditingId] = useState<string | null>(null);
+  // const [editName, setEditName] = useState("");
   const router = useRouter();
 
-  const handleDeletePasskey = async (id: string) => {
-    await authClient.passkey.deletePasskey({ id });
-    router.invalidate();
-  };
+  // const handleDeletePasskey = async (id: string) => {
+  //   await authClient.passkey.deletePasskey({ id });
+  //   router.invalidate();
+  // };
 
-  const handleRenamePasskey = async (id: string) => {
-    if (!editName.trim()) return;
+  // const handleRenamePasskey = async (id: string) => {
+  //   if (!editName.trim()) return;
 
-    await authClient.passkey.updatePasskey({ id, name: editName.trim() });
+  //   await authClient.passkey.updatePasskey({ id, name: editName.trim() });
 
-    setEditingId(null);
-    setEditName("");
-    router.invalidate();
-  };
+  //   setEditingId(null);
+  //   setEditName("");
+  //   router.invalidate();
+  // };
 
   const handleAddPasskey = async () => {
     const { error } = await authClient.passkey.addPasskey({
@@ -44,7 +38,7 @@ const PasskeyList = () => {
 
   return (
     <ItemGroup className="rounded-lg border">
-      {passkeys.map((pk: Passkey) => (
+      {/* {passkeys.map((pk: Passkey) => (
         <Item key={pk.id}>
           <ItemContent>
             <div>
@@ -98,14 +92,14 @@ const PasskeyList = () => {
             </ItemActions>
           )}
         </Item>
-      ))}
+      ))} */}
 
       <Item>
         <ItemContent>
           <ItemDescription>No passkeys yet</ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button variant="ghost" size="sm" onClick={handleAddPasskey}>
+          <Button disabled variant="ghost" size="sm" onClick={handleAddPasskey}>
             Add passkey
           </Button>
         </ItemActions>
