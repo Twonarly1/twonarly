@@ -1,17 +1,27 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
+import z from "zod";
 
 import { auth } from "@/lib/config/auth.config";
 import { stripeClient } from "@/lib/config/stripe.config";
 
+const fetchInvoicesInput = z.object({
+  limit: z.number().int().min(1).max(100).optional(),
+  startingAfter: z
+    .string()
+    .regex(/^in_[A-Za-z0-9]+$/, "Invalid cursor")
+    .optional(),
+});
+
 export const fetchInvoices = createServerFn({ method: "GET" })
-  .inputValidator((data: { limit?: number; startingAfter?: string }) => data)
+  .inputValidator(fetchInvoicesInput)
   .handler(async ({ data }) => {
     const session = await auth.api.getSession({ headers: getRequestHeaders() });
 
     if (!session) {
       throw new Error("Unauthorized");
     }
+
     const stripeCustomerId = session.user?.stripeCustomerId;
 
     if (!stripeCustomerId) {
