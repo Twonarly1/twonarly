@@ -11,12 +11,23 @@ const config = defineConfig({
     tanstackStart(),
     nitro({
       rollupConfig: {
-        external: ["reflect-metadata", "tsyringe", "@peculiar/x509"],
+        treeshake: {
+          moduleSideEffects: (id) => {
+            if (id.includes("reflect-metadata")) return true;
+            // Nitro default configs - https://nitro.build/config#modulesideeffects
+            if (id.includes("unenv/polyfill/")) return true;
+            if (id.includes("node-fetch-native/polyfill")) return true;
+            return false;
+          },
+        },
       },
     }),
     react(),
     tailwindcss(),
   ],
+  ssr: {
+    noExternal: ["@peculiar/x509", "tsyringe", "reflect-metadata"],
+  },
   worker: {
     format: "es",
   },
