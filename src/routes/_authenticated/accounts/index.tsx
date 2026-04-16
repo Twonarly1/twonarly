@@ -4,7 +4,6 @@ import AccountList from "@/components/account-list";
 import LinkedWalletList from "@/components/linked-wallet-list";
 import PageContainer from "@/components/page-container";
 import PasskeyList from "@/components/passkey-list";
-import { Badge } from "@/components/ui/badge";
 import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { fetchAccounts } from "@/server/functions/accounts/fetch-accounts";
 import { fetchUserPasskeys } from "@/server/functions/user/fetch-passkeys";
@@ -50,12 +49,7 @@ function AccountsPage() {
       <div className="space-y-4">
         <Item>
           <ItemContent>
-            <ItemTitle>
-              Passkeys{" "}
-              <Badge variant="outline-primary" className="text-body-xs">
-                Coming Soon
-              </Badge>
-            </ItemTitle>
+            <ItemTitle>Passkeys</ItemTitle>
             <ItemDescription>Sign in with biometrics like Face ID or Touch ID</ItemDescription>
           </ItemContent>
         </Item>

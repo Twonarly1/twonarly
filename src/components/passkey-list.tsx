@@ -1,11 +1,12 @@
 import { useRouter } from "@tanstack/react-router";
-import { Fingerprint, Pencil, Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup } from "@/components/ui/item";
 import { authClient } from "@/lib/auth/auth-client";
+import { app } from "@/lib/config/app.config";
 import { Route } from "@/routes/_authenticated/accounts";
 
 import type { Passkey } from "@better-auth/passkey/client";
@@ -34,7 +35,7 @@ const PasskeyList = () => {
 
   const handleAddPasskey = async () => {
     const { error } = await authClient.passkey.addPasskey({
-      name: "example-passkey-name",
+      name: `${app.name} passkey`,
       authenticatorAttachment: "platform",
     });
 
@@ -46,46 +47,43 @@ const PasskeyList = () => {
       {passkeys.map((pk: Passkey) => (
         <Item key={pk.id}>
           <ItemContent>
-            <div className="flex items-center gap-2">
-              <Fingerprint className="size-8 p-1 text-muted-foreground" />
-              <div>
-                {editingId === pk.id ? (
-                  <form
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      handleRenamePasskey(pk.id);
-                    }}
-                    className="flex items-center gap-2"
-                  >
-                    <Input
-                      autoFocus
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      className="h-7 w-48"
-                    />
-                    <Button type="submit" size="sm" variant="ghost">
-                      Save
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={() => setEditingId(null)}>
-                      Cancel
-                    </Button>
-                  </form>
-                ) : (
-                  <>
-                    <p className="font-medium text-body">{pk.name || "Unnamed passkey"}</p>
-                    <p className="text-body-sm text-muted-foreground">
-                      Added {new Date(pk.createdAt).toLocaleDateString()}
-                    </p>
-                  </>
-                )}
-              </div>
+            <div>
+              {editingId === pk.id ? (
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    handleRenamePasskey(pk.id);
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <Input
+                    autoFocus
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    className="h-7 w-48"
+                  />
+                  <Button type="submit" size="sm" variant="ghost">
+                    Save
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => setEditingId(null)}>
+                    Cancel
+                  </Button>
+                </form>
+              ) : (
+                <div className="space-y-1">
+                  <p className="font-medium text-body">{pk.name || "Unnamed passkey"}</p>
+                  <p className="text-body-sm text-muted-foreground">
+                    Added {new Date(pk.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              )}
             </div>
           </ItemContent>
 
           {editingId !== pk.id && (
             <ItemActions>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="icon-sm"
                 onClick={() => {
                   setEditingId(pk.id);
@@ -94,7 +92,7 @@ const PasskeyList = () => {
               >
                 <Pencil className="icon-xs" />
               </Button>
-              <Button variant="ghost" size="icon-sm" onClick={() => handleDeletePasskey(pk.id)}>
+              <Button variant="outline" size="icon-sm" onClick={() => handleDeletePasskey(pk.id)}>
                 <Trash className="icon-xs" />
               </Button>
             </ItemActions>
@@ -107,7 +105,7 @@ const PasskeyList = () => {
           <ItemDescription>No passkeys yet</ItemDescription>
         </ItemContent>
         <ItemActions>
-          <Button disabled variant="ghost" size="sm" onClick={handleAddPasskey}>
+          <Button variant="ghost" size="sm" onClick={handleAddPasskey}>
             Add passkey
           </Button>
         </ItemActions>

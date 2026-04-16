@@ -247,9 +247,11 @@ function ProfilePage() {
                   </DialogClose>
                   <Button
                     variant="destructive"
-                    onClick={() => {
-                      deleteUserFn({ data: { id: user.id } });
-                      navigate({ to: "/" });
+                    onClick={async () => {
+                      await deleteUserFn({ data: { id: user.id } });
+                      await authClient.signOut();
+                      await router.invalidate();
+                      await navigate({ to: "/" });
                     }}
                   >
                     Delete

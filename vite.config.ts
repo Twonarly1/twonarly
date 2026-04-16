@@ -6,7 +6,17 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
-  plugins: [tsconfigPaths(), tanstackStart(), nitro(), react(), tailwindcss()],
+  plugins: [
+    tsconfigPaths(),
+    tanstackStart(),
+    nitro({
+      rollupConfig: {
+        external: ["reflect-metadata", "tsyringe", "@peculiar/x509"],
+      },
+    }),
+    react(),
+    tailwindcss(),
+  ],
   worker: {
     format: "es",
   },

@@ -21,3 +21,9 @@ tsconfig.tsbuildinfo
 # below are safe to commit
 !.env
 !.env.local.template
+
+# Vercel
+.vercel
+
+# GitHub
+.github
