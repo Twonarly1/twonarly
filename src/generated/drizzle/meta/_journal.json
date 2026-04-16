@@ -71,6 +71,13 @@
       "when": 1775747250489,
       "tag": "0009_nice_viper",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1776370562196,
+      "tag": "0010_useful_vapor",
+      "breakpoints": true
     }
   ]
 }

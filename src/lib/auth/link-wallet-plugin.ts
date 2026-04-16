@@ -1,5 +1,5 @@
 import { APIError, createAuthEndpoint, sessionMiddleware } from "better-auth/api";
-import { verifyMessage } from "viem";
+import { getAddress, isAddress, verifyMessage } from "viem";
 import * as z from "zod";
 
 import type { BetterAuthPlugin } from "better-auth";
@@ -63,8 +63,18 @@ export const linkWalletPlugin = (opts: { domain: string }) =>
           }),
         },
         async (ctx) => {
-          const { message, signature, walletAddress, chainId } = ctx.body;
+          const { message, signature, walletAddress: rawAddress, chainId } = ctx.body;
           const session = ctx.context.session;
+
+          // ── 0. Validate and normalize wallet address ──
+
+          if (!isAddress(rawAddress)) {
+            throw new APIError("BAD_REQUEST", {
+              message: "Invalid wallet address",
+            });
+          }
+
+          const walletAddress = getAddress(rawAddress);
 
           // ── 1. Parse the SIWE message and validate structural fields ──
 

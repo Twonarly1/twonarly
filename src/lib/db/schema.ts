@@ -148,7 +148,10 @@ export const walletAddress = pgTable(
     createdAt: generateDefaultDate(),
     isPrimary: boolean("is_primary").notNull().default(false),
   },
-  (table) => [index("wallet_address_userId_idx").on(table.userId)],
+  (table) => [
+    index("wallet_address_userId_idx").on(table.userId),
+    uniqueIndex("wallet_address_address_idx").on(table.address),
+  ],
 );
 
 export const userSettings = pgTable(

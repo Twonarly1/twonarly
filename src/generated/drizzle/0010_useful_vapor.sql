@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "wallet_address_address_idx" ON "wallet_address" USING btree ("address");
