@@ -24,6 +24,3 @@ tsconfig.tsbuildinfo
 
 # Vercel
 .vercel
-
-# GitHub
-.github
