@@ -82,7 +82,7 @@ const AppSidebar = () => {
                       alt={user?.name || "User avatar"}
                       className="rounded-lg"
                     />
-                    <AvatarFallback className="rounded">{user?.name?.charAt(0)}</AvatarFallback>
+                    <AvatarFallback className="rounded-lg">{user?.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
 
                   <span className="truncate font-medium group-data-[collapsible=icon]:hidden">

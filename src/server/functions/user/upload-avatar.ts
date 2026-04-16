@@ -50,7 +50,7 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       const oldKey = currentUser.image.replace(`${env.R2_PUBLIC_URL}/`, "");
       await r2.send(
         new DeleteObjectCommand({
-          Bucket: process.env.R2_BUCKET_NAME,
+          Bucket: env.R2_BUCKET_NAME,
           Key: oldKey,
         }),
       );
@@ -60,7 +60,7 @@ export const uploadAvatar = createServerFn({ method: "POST" })
 
     await r2.send(
       new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET_NAME,
+        Bucket: env.R2_BUCKET_NAME,
         Key: key,
         Body: Buffer.from(buffer),
         ContentType: detected.mime,

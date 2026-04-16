@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/config/auth.config";
 import { r2 } from "@/lib/config/r2.config";
+import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
 
@@ -22,10 +23,10 @@ export const removeAvatar = createServerFn({ method: "POST" }).handler(async () 
       .where(eq(user.id, session.user.id));
 
     if (currentUser?.image) {
-      const key = currentUser.image.replace(`${process.env.R2_PUBLIC_URL}/`, "");
+      const key = currentUser.image.replace(`${env.R2_PUBLIC_URL}/`, "");
       await r2.send(
         new DeleteObjectCommand({
-          Bucket: process.env.R2_BUCKET_NAME,
+          Bucket: env.R2_BUCKET_NAME,
           Key: key,
         }),
       );
