@@ -6,8 +6,20 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 const config = defineConfig({
-  plugins: [tsconfigPaths(), tanstackStart(), nitro(), react(), tailwindcss()],
-
+  plugins: [
+    tsconfigPaths(),
+    tanstackStart(),
+    nitro({
+      preset: "vercel",
+      vercel: {
+        functions: {
+          runtime: "nodejs24.x",
+        },
+      },
+    }),
+    react(),
+    tailwindcss(),
+  ],
   worker: {
     format: "es",
   },
