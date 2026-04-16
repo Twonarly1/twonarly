@@ -1,14 +1,15 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import { fileTypeFromBuffer } from "file-type";
 import z from "zod";
 
+import { auth } from "@/lib/config/auth.config";
 import { r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { ensureSession } from "@/server/functions/session/ensure-session";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024;
@@ -16,7 +17,12 @@ const MAX_SIZE = 5 * 1024 * 1024;
 export const uploadAvatar = createServerFn({ method: "POST" })
   .inputValidator(z.instanceof(FormData))
   .handler(async ({ data }) => {
-    const session = await ensureSession();
+    const session = await auth.api.getSession({ headers: getRequestHeaders() });
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
+
     const file = data.get("file") as File;
 
     if (!file || !(file instanceof File)) {

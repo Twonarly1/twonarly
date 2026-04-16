@@ -1,13 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 
+import { auth } from "@/lib/config/auth.config";
 import { stripeClient } from "@/lib/config/stripe.config";
-import { ensureSession } from "../session/ensure-session";
 
 export const fetchInvoices = createServerFn({ method: "GET" })
   .inputValidator((data: { limit?: number; startingAfter?: string }) => data)
   .handler(async ({ data }) => {
-    const session = await ensureSession();
+    const session = await auth.api.getSession({ headers: getRequestHeaders() });
 
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
     const stripeCustomerId = session.user?.stripeCustomerId;
 
     if (!stripeCustomerId) {

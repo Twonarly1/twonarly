@@ -1,10 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import z from "zod";
 
+import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { ensureSession } from "@/server/functions/session/ensure-session";
 
 export const updateUser = createServerFn({ method: "POST" })
   .inputValidator(
@@ -13,7 +14,11 @@ export const updateUser = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const session = await ensureSession();
+    const session = await auth.api.getSession({ headers: getRequestHeaders() });
+
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
 
     await db
       .update(user)

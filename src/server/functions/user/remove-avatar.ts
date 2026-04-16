@@ -1,14 +1,19 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
+import { auth } from "@/lib/config/auth.config";
 import { r2 } from "@/lib/config/r2.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
-import { ensureSession } from "@/server/functions/session/ensure-session";
 
 export const removeAvatar = createServerFn({ method: "POST" }).handler(async () => {
-  const session = await ensureSession();
+  const session = await auth.api.getSession({ headers: getRequestHeaders() });
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
 
   try {
     const [currentUser] = await db

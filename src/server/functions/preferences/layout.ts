@@ -6,7 +6,6 @@ import { z } from "zod";
 import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { userSettings } from "@/lib/db/schema";
-import { ensureSession } from "@/server/functions/session/ensure-session";
 
 export const fetchLayout = createServerFn({ method: "GET" }).handler(async () => {
   const session = await auth.api.getSession({ headers: getRequestHeaders() });
@@ -31,8 +30,11 @@ export const updateLayout = createServerFn({ method: "POST" })
     }),
   )
   .handler(async ({ data }) => {
-    const session = await ensureSession();
+    const session = await auth.api.getSession({ headers: getRequestHeaders() });
 
+    if (!session) {
+      throw new Error("Unauthorized");
+    }
     await db
       .insert(userSettings)
       .values({ userId: session.user.id, ...data })
