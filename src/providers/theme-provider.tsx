@@ -1,5 +1,5 @@
 import { getContrastingColor, hexToRgba } from "@uiw/color-convert";
-import { createContext, use, useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import {
   setCustomColors as setCustomColorsServerFn,
@@ -145,7 +145,7 @@ const ThemeProvider = ({
 };
 
 export const useTheme = () => {
-  const context = use(ThemeContext);
+  const context = useContext(ThemeContext);
   if (!context) throw new Error("`useTheme` called outside of `<ThemeProvider />`");
   return context;
 };

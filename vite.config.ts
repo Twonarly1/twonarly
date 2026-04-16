@@ -16,10 +16,12 @@ const config = defineConfig({
           runtime: "nodejs24.x",
         },
       },
+      // https://github.com/better-auth/better-auth/issues/7463#issuecomment-3874787825
       rollupConfig: {
         treeshake: {
           moduleSideEffects: (id) => {
             if (id.includes("reflect-metadata")) return true;
+            // Nitro default configs - https://nitro.build/config#modulesideeffects
             if (id.includes("unenv/polyfill/")) return true;
             if (id.includes("node-fetch-native/polyfill")) return true;
             return false;

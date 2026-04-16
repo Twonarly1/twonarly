@@ -125,8 +125,19 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
 
       const message =
         mode === "link"
-          ? `Sign in to ${window.location.host}\n\nWelcome 👋\n\nPlease sign this message to securely authenticate with your wallet.\nNo blockchain transaction will be made and no gas fees will apply.\n\nNonce: ${nonceData.nonce}`
-          : `Sign this message to sign in with your wallet. Nonce: ${nonceData.nonce}`;
+          ? buildSiweMessage({
+              address,
+              chainId,
+              nonce: nonceData.nonce,
+              statement:
+                "Welcome! Please sign this message to securely link your wallet. No blockchain transaction will be made and no gas fees will apply.",
+            })
+          : buildSiweMessage({
+              address,
+              chainId,
+              nonce: nonceData.nonce,
+              statement: "Sign this message to sign in with your wallet.",
+            });
 
       const signature = await signMessage.mutateAsync({ message });
 
@@ -349,4 +360,52 @@ function getFriendlyError(error: unknown): string {
     return "This wallet isn't linked to an account yet. You can link it in settings.";
 
   return "Something went wrong. Please try again.";
+}
+
+/**
+ * Build an ERC-4361 compliant SIWE message.
+ *
+ * Format:
+ *   {domain} wants you to sign in with your Ethereum account:
+ *   {address}
+ *
+ *   {statement}
+ *
+ *   URI: {uri}
+ *   Version: 1
+ *   Chain ID: {chainId}
+ *   Nonce: {nonce}
+ *   Issued At: {issuedAt}
+ *   Expiration Time: {expirationTime}
+ */
+function buildSiweMessage({
+  address,
+  chainId,
+  nonce,
+  statement,
+}: {
+  address: string;
+  chainId: number;
+  nonce: string;
+  statement: string;
+}) {
+  const domain = window.location.host;
+  const uri = window.location.origin;
+  const issuedAt = new Date().toISOString();
+  // Message is valid for 5 minutes
+  const expirationTime = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+
+  return [
+    `${domain} wants you to sign in with your Ethereum account:`,
+    address,
+    "",
+    statement,
+    "",
+    `URI: ${uri}`,
+    `Version: 1`,
+    `Chain ID: ${chainId}`,
+    `Nonce: ${nonce}`,
+    `Issued At: ${issuedAt}`,
+    `Expiration Time: ${expirationTime}`,
+  ].join("\n");
 }

@@ -1,5 +1,4 @@
 import { useRouter } from "@tanstack/react-router";
-import { useState } from "react";
 
 import { ConnectWalletDialog } from "@/components/connect-wallet-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -24,11 +23,8 @@ const LinkedWalletList = () => {
   const { wallets } = Route.useLoaderData();
 
   const router = useRouter();
-  const [unlinkingId, setUnlinkingId] = useState<string | null>(null);
 
   const handleUnlink = async (wallet: Wallet) => {
-    setUnlinkingId(wallet.id);
-
     try {
       const res = await fetch("/api/auth/siwe/unlink-wallet", {
         method: "POST",
@@ -48,8 +44,6 @@ const LinkedWalletList = () => {
       console.error("Unlink wallet error:", error);
       toast.error({ title: "Failed to unlink wallet" });
     }
-
-    setUnlinkingId(null);
   };
 
   return (
@@ -90,13 +84,8 @@ const LinkedWalletList = () => {
               </a>
 
               <CopyButton text={wallet.address} />
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleUnlink(wallet)}
-                disabled={unlinkingId === wallet.id}
-              >
-                {unlinkingId === wallet.id ? "Unlinking..." : "Unlink"}
+              <Button variant="ghost" size="sm" onClick={() => handleUnlink(wallet)}>
+                Unlink
               </Button>
             </ItemActions>
           </Item>

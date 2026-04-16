@@ -14,6 +14,8 @@ import * as schema from "@/lib/db/schema";
 import { linkWalletPlugin } from "../auth/link-wallet-plugin";
 import { stripeClient } from "./stripe.config";
 
+const SIWE_DOMAIN = env.BETTER_AUTH_URL ? new URL(env.BETTER_AUTH_URL).host : "twonarly.vercel.app";
+
 export const auth = betterAuth({
   appName: app.name,
   baseURL: env.BETTER_AUTH_URL,
@@ -36,7 +38,7 @@ export const auth = betterAuth({
     multiSession({ maximumSessions: 3 }),
     passkey(),
     siwe({
-      domain: "twonarly.vercel.app",
+      domain: SIWE_DOMAIN,
       anonymous: true,
       getNonce: async () => {
         return generateRandomString(32, "a-z", "A-Z", "0-9");
@@ -53,7 +55,7 @@ export const auth = betterAuth({
         }
       },
     }),
-    linkWalletPlugin(),
+    linkWalletPlugin({ domain: SIWE_DOMAIN }),
     stripe({
       stripeClient,
       stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,
