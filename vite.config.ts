@@ -10,6 +10,7 @@ const config = defineConfig({
     tsconfigPaths(),
     tanstackStart(),
     nitro({
+      preset: "vercel",
       rollupConfig: {
         treeshake: {
           moduleSideEffects: (id) => {
