@@ -11,6 +11,7 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
+import { AUTH_BASE } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 import { formatWalletAddress } from "@/lib/utils/format";
 import { Route } from "@/routes/_authenticated/accounts";
@@ -26,7 +27,7 @@ const LinkedWalletList = () => {
 
   const handleUnlink = async (wallet: Wallet) => {
     try {
-      const res = await fetch("/api/auth/siwe/unlink-wallet", {
+      const res = await fetch(`${AUTH_BASE}/siwe/unlink-wallet`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
-import { authClient } from "@/lib/auth/auth-client";
+import { AUTH_BASE, authClient } from "@/lib/auth/auth-client";
 import { wagmiConfig } from "@/lib/config/wagmi.config";
 import { cn } from "@/lib/utils";
 import { StatusErrorIcon } from "./icons/status-error";
@@ -145,7 +145,7 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
       setStep("verifying");
 
       if (mode === "link") {
-        const res = await fetch("/api/auth/siwe/link-wallet", {
+        const res = await fetch(`${AUTH_BASE}/siwe/link-wallet`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
