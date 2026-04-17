@@ -30,9 +30,9 @@
     "rules": {
       "recommended": true,
       "a11y": {
-        "useSemanticElements": "off",
-        "noStaticElementInteractions": "off",
-        "useKeyWithClickEvents": "off"
+        "useSemanticElements": "warn",
+        "noStaticElementInteractions": "warn",
+        "useKeyWithClickEvents": "warn"
       },
       "correctness": {
         "noUnusedImports": { "fix": "safe", "options": {}, "level": "error" }

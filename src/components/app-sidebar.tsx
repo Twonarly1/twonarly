@@ -76,7 +76,7 @@ const AppSidebar = () => {
                     layout.sidebarVariant === "classic" && "mt-2",
                   )}
                 >
-                  <Avatar role="button" className="size-7.5 overflow-hidden rounded">
+                  <Avatar className="size-7.5 overflow-hidden rounded">
                     <AvatarImage
                       src={user?.image || undefined}
                       alt={user?.name || "User avatar"}

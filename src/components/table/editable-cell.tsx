@@ -90,7 +90,8 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
 
   if (!isEditing) {
     return (
-      <div
+      <button
+        type="button"
         tabIndex={-1}
         onClick={() => setIsEditing(true)}
         className={cn(
@@ -107,7 +108,7 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
             {isDescriptionColumn ? "Add task description" : undefined}
           </span>
         )}
-      </div>
+      </button>
     );
   }
 
