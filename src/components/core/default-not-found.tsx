@@ -14,7 +14,7 @@ const DefaultNotFound = () => {
         <span className="font-medium text-7xl text-muted-foreground tabular-nums tracking-tight">
           404
         </span>
-        <h1 className="font-medium text-h2">Page not found</h1>
+        <h1 className="font-medium text-3xl">Page not found</h1>
         <p className="text-center text-muted-foreground text-sm">
           The page you're looking for doesn't exist or has been moved.
         </p>

@@ -3,13 +3,25 @@
 import { X } from "lucide-react";
 import { Toaster as ToasterPrimitive, toast as toastPrimitive } from "sonner";
 
-import { INTENT_ICONS } from "@/components/intent";
+import { StatusErrorIcon } from "@/components/icons/status-error";
+import { StatusInfoIcon } from "@/components/icons/status-info";
+import { StatusSuccessIcon } from "@/components/icons/status-success";
+import { StatusWarningIcon } from "@/components/icons/status-warning";
 import { Button } from "@/components/ui/button";
 import { useIsPhone } from "@/lib/hooks/use-phone";
 import { useTheme } from "@/providers/theme-provider";
 
+import type { ReactNode } from "react";
 import type { ToasterProps } from "sonner";
-import type { Intent } from "@/components/intent";
+
+type Intent = "success" | "error" | "info" | "warning";
+
+const INTENT_ICONS: Record<Intent, ReactNode> = {
+  success: <StatusSuccessIcon />,
+  error: <StatusErrorIcon />,
+  warning: <StatusWarningIcon />,
+  info: <StatusInfoIcon />,
+};
 
 interface ToastData {
   title: string;
@@ -25,16 +37,16 @@ function toast(intent: Intent, data: ToastData) {
         className="absolute top-1 right-1 text-muted-foreground hover:text-foreground"
         onClick={() => toastPrimitive.dismiss(id)}
       >
-        <X className="icon-xs" />
+        <X className="icon-sm" />
       </Button>
 
       <div className="space-y-0">
         <div className="flex items-center gap-2">
           {INTENT_ICONS[intent]}
-          <span className="font-medium text-body-sm leading-loose">{data.title}</span>
+          <span className="font-medium text-base leading-loose">{data.title}</span>
         </div>
         {data.description && (
-          <p className="ml-5.5 text-body-sm text-muted-foreground">{data.description}</p>
+          <p className="ml-5.5 text-base text-muted-foreground">{data.description}</p>
         )}
       </div>
     </div>

@@ -92,7 +92,7 @@ function TasksPage() {
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
           return (
-            <span className="px-2 font-medium text-body-sm text-muted-foreground">
+            <span className="px-2 font-medium text-muted-foreground text-sm">
               {formatDate(createdAt)}
             </span>
           );
@@ -194,8 +194,8 @@ function TasksPage() {
 
   return (
     <div className="grid min-h-0 grid-rows-[auto_1fr]">
-      <div className="container space-y-6 p-4">
-        <h1 className="items-baseline font-medium text-h1">
+      <div className="container mx-auto max-w-4xl space-y-6 p-4">
+        <h1 className="items-baseline font-medium text-4xl">
           Tasks {data?.length ? `(${data.length})` : ""}
         </h1>
 

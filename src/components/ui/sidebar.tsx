@@ -170,6 +170,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
       { variant: "classic", position: "right" },
       () => "shadow-[-1px_0_0_0_var(--color-border)]",
     )
+    // We use outline here to avoid layout shift with borders
     .with({ variant: "floating" }, () => "rounded-lg outline outline-border")
     .otherwise(() => undefined);
 
@@ -194,7 +195,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
         data-slot="sidebar-container"
         className={cn(
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) md:flex",
-          "transition-[transform,opacity] duration-300 ease-(--ease-out-strong)",
+          "transition-[transform,opacity] duration-300 ease-out-strong",
           "group-data-[collapsible=icon]:w-12",
           isLeft
             ? cn(
@@ -387,7 +388,7 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "flex h-8 shrink-0 select-none items-center px-0 font-medium text-body text-sidebar-foreground/70 outline-hidden ring-sidebar-ring focus-visible:ring-2 group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0",
+        "flex h-8 shrink-0 select-none items-center px-0 font-medium text-sidebar-foreground/70 text-sm outline-hidden group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0",
         className,
       )}
       {...props}

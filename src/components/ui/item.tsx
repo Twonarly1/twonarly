@@ -7,10 +7,9 @@ import { cn } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
-function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
+function ItemGroup({ className, ...props }: React.ComponentProps<"ul">) {
   return (
-    <div
-      role="list"
+    <ul
       data-slot="item-group"
       className={cn("group/item-group flex flex-col divide-y", className)}
       {...props}
@@ -30,12 +29,12 @@ function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Sepa
 }
 
 const itemVariants = cva(
-  "group/item flex items-center transition-none [a]:hover:bg-muted/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-ring focus-visible:ring-ring/50",
+  "group/item flex items-center transition-none [a]:hover:bg-muted/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-primary focus-visible:ring-primary/50",
   {
     variants: {
       variant: {
         default: "bg-transparent",
-        outline: "borderborder-border",
+        outline: "border border-border",
         muted: "bg-muted/50",
         destructive: "bg-destructive/5 border border-destructive/20",
       },
@@ -115,7 +114,10 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="item-title"
-      className={cn("flex w-fit items-center gap-2 font-medium text-body leading-snug", className)}
+      className={cn(
+        "flex w-fit items-center gap-2 font-medium text-base text-foreground leading-snug",
+        className,
+      )}
       {...props}
     />
   );
@@ -126,7 +128,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="item-description"
       className={cn(
-        "line-clamp-2 text-balance font-normal text-body-sm text-muted-foreground leading-normal",
+        "line-clamp-2 text-balance font-normal text-muted-foreground text-sm leading-normal",
         "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
         className,
       )}

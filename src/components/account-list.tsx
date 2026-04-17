@@ -61,14 +61,16 @@ const AccountList = () => {
                 </Avatar>
                 <div>
                   <div className="flex items-center gap-2">
-                    <p className="font-medium text-body">{deviceSession.user.name}</p>
+                    <p className="font-medium text-base text-foreground">
+                      {deviceSession.user.name}
+                    </p>
                     {provider === "google" && <GoogleIcon className="size-3" />}
                     {provider === "github" && <GitHubIcon className="size-3" />}
                     {isCurrent && (
-                      <span className="font-medium text-body-sm text-green-600">Active</span>
+                      <span className="font-medium text-green-600 text-sm">Active</span>
                     )}
                   </div>
-                  <p className="text-body-sm text-muted-foreground">{deviceSession.user.email}</p>
+                  <p className="text-muted-foreground text-sm">{deviceSession.user.email}</p>
                 </div>
               </div>
             </ItemContent>

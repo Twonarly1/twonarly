@@ -36,14 +36,14 @@ export default function CopyButton({ text = "Copy me!" }: Props) {
         size="icon-sm"
         onClick={handleCopy}
         disabled={copied}
-        className="transition-transform duration-150 ease-out active:scale-[0.97]"
+        className="transition-transform duration-150 ease-out-strong active:scale-[0.97]"
       >
         <svg
           viewBox="0 0 24 24"
           fill="none"
           className={cn(
             "icon-sm absolute",
-            "transition-[opacity,filter] duration-150 ease-out",
+            "transition-[opacity,filter] duration-150 ease-out-strong",
             copied ? hide : show,
           )}
         >
@@ -61,7 +61,7 @@ export default function CopyButton({ text = "Copy me!" }: Props) {
       <StatusSuccessIcon
         className={cn(
           "icon-sm pointer-events-none absolute",
-          "transition-[opacity,filter] duration-150 ease-out",
+          "transition-[opacity,filter] duration-150 ease-out-strong",
           copied ? show : hide,
         )}
       />

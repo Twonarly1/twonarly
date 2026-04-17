@@ -71,8 +71,10 @@ const PasskeyList = () => {
                 </form>
               ) : (
                 <div className="space-y-1">
-                  <p className="font-medium text-body">{pk.name || "Unnamed passkey"}</p>
-                  <p className="text-body-sm text-muted-foreground">
+                  <p className="font-medium text-base text-foreground">
+                    {pk.name || "Unnamed passkey"}
+                  </p>
+                  <p className="text-muted-foreground text-sm">
                     Added {new Date(pk.createdAt).toLocaleDateString()}
                   </p>
                 </div>

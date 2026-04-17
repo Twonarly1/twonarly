@@ -46,7 +46,7 @@ function App() {
         <Link to="/tasks">Get Started</Link>
       ) : (
         <div className="rounded-lg border p-8">
-          <h1 className="text-center font-semibold text-h2 text-primary">Log in to {app.name}</h1>
+          <h1 className="text-center font-semibold text-3xl text-primary">Log in to {app.name}</h1>
 
           <div className="mt-4 grid gap-2">
             <Button
@@ -56,7 +56,7 @@ function App() {
               className="px-12 py-4"
             >
               <GoogleIcon className="size-4" />
-              <p className="font-medium text-body-lg">Sign in with Google</p>
+              Sign in with Google
             </Button>
 
             <Button
@@ -66,7 +66,7 @@ function App() {
               className="px-12 py-4"
             >
               <GitHubIcon className="size-4" />
-              <p className="font-medium text-body-lg">Sign in with GitHub</p>
+              Sign in with GitHub
             </Button>
 
             <div className="flex w-full items-center gap-3 text-muted-foreground">
@@ -82,7 +82,7 @@ function App() {
               className="px-12 py-4"
             >
               <FingerprintPattern className="size-4" />
-              <p className="font-medium text-body-lg">Sign in with passkey</p>
+              Sign in with passkey
             </Button>
 
             <ConnectWalletDialog
@@ -90,7 +90,7 @@ function App() {
               trigger={
                 <Button variant="outline" size="lg" className="px-12 py-4">
                   <EthereumIcon className="size-4" />
-                  <p className="font-medium text-body-lg">Sign In With Ethereum</p>
+                  Sign In With Ethereum
                 </Button>
               }
             />

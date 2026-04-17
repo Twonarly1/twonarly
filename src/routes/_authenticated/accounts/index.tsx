@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_authenticated/accounts/")({
 function AccountsPage() {
   return (
     <PageContainer>
-      <h1 className="items-baseline font-medium text-h1">Security & Access</h1>
+      <h1 className="items-baseline font-medium text-4xl">Security & Access</h1>
 
       <div className="space-y-4">
         <Item>

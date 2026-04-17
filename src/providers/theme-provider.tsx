@@ -116,13 +116,11 @@ export function ThemeProvider({
 
       if (customColors.accent) {
         root.style.setProperty("--primary", customColors.accent);
-        root.style.setProperty("--ring", customColors.accent);
       }
 
       if (customColors.border) {
         const borderColor = adjustColorLightness(customColors.border, 0);
         root.style.setProperty("--border", borderColor);
-        root.style.setProperty("--input", borderColor);
       }
     } else {
       // Only remove properties when switching away from custom theme
@@ -132,8 +130,6 @@ export function ThemeProvider({
       root.style.removeProperty("--sidebar-foreground");
       root.style.removeProperty("--border");
       root.style.removeProperty("--primary");
-      root.style.removeProperty("--ring");
-      root.style.removeProperty("--input");
     }
   }, [theme, customColors]);
 

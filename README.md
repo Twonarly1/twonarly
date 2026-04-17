@@ -1,12 +1,14 @@
 # Twonarly
 
-A TanStack Start template with authentication, layout customization, and billing built in.
+A TanStack Start template with multi-provider auth, layout and theme customization, file storage, Stripe billing, and a demo task manager built in.
 
 ## What's included
 
 **Authentication** — Google, GitHub, passkey, and Sign In With Ethereum (SIWE) via better-auth. Multi-session support lets users switch between accounts without signing out.
 
 **Layout & theming** — Configurable sidebar (position, variant, collapsible mode) persisted in the database for cross-device sync, custom color themes with live preview, font size scaling, and pointer cursor preferences. Theme and appearance settings persist in cookies for instant SSR.
+
+**Design system** — A minimal, intentional token system built on oklch. Four-tier text hierarchy (foreground, secondary, muted, faded) inspired by Linear. Font sizes scale globally via a single `--font-size-base` variable with user preference support (smaller → larger). No unused shadcn defaults — every token is actively consumed.
 
 **Wallet linking** — Link an Ethereum wallet to an existing account with full SIWE nonce validation, domain/address/chainId verification, and one-time-use nonce consumption.
 

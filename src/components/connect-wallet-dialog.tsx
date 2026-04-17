@@ -292,7 +292,7 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
               >
                 <ArrowLeft className="icon-lg" />
               </Button>
-              <DialogTitle className="font-normal text-h3">
+              <DialogTitle className="font-normal text-2xl">
                 {match(step)
                   .with("connecting", () => "Connect")
                   .with("signing", () => `Sign`)
@@ -319,8 +319,12 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
                     ))}
                 </div>
               </div>
-              {step === "connecting" && "Click connect in your wallet popup"}
-              {step === "signing" && "Waiting for wallet confirmation…"}
+              {step === "connecting" && (
+                <span className="text-muted-foreground">Click connect in your wallet popup</span>
+              )}
+              {step === "signing" && (
+                <span className="text-muted-foreground">Waiting for wallet confirmation…</span>
+              )}
             </div>
           </>
         )}

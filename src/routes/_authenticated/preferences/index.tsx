@@ -75,7 +75,7 @@ function SettingsPage() {
 
   return (
     <PageContainer className="last:mb-24">
-      <h1 className="items-baseline font-medium text-h1">Preferences</h1>
+      <h1 className="items-baseline font-medium text-4xl">Preferences</h1>
 
       <div className="space-y-4">
         <Item>

@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { authClient } from "@/lib/auth/auth-client";
+import { authClient, signOut } from "@/lib/auth/auth-client";
 import { deleteUser } from "@/server/functions/user/delete-user";
 import { removeAvatar } from "@/server/functions/user/remove-avatar";
 import { updateUser } from "@/server/functions/user/update-user";
@@ -120,7 +120,7 @@ function ProfilePage() {
 
   return (
     <PageContainer ref={containerRef}>
-      <h1 className="items-baseline font-medium text-h1">Profile</h1>
+      <h1 className="items-baseline font-medium text-4xl">Profile</h1>
 
       <ItemGroup className="rounded-lg border">
         <Item>
@@ -189,7 +189,7 @@ function ProfilePage() {
                     </AvatarFallback>
                   </Avatar>
                 </TooltipTrigger>
-                <TooltipContent side="left" sideOffset={8} className="text-body-xs">
+                <TooltipContent side="left" sideOffset={8} className="text-xs">
                   Change avatar
                 </TooltipContent>
               </Tooltip>
@@ -202,7 +202,7 @@ function ProfilePage() {
             <ItemTitle>Email</ItemTitle>
           </ItemContent>
           <ItemActions>
-            <p className="py-1.5">{user.email}</p>
+            <p className="py-1.5 text-secondary-foreground">{user.email}</p>
           </ItemActions>
         </Item>
 
@@ -249,7 +249,7 @@ function ProfilePage() {
                     variant="destructive"
                     onClick={async () => {
                       await deleteUserFn({ data: { id: user.id } });
-                      await authClient.signOut();
+                      await signOut();
                       await router.invalidate();
                       await navigate({ to: "/" });
                     }}

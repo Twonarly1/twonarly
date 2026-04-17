@@ -44,9 +44,7 @@ const MobileBottomNav = () => {
               )}
             >
               <item.icon className={cn("size-5 transition-colors", isActive && "text-primary")} />
-              <span
-                className={cn("font-medium text-body-xs leading-none", isActive && "text-primary")}
-              >
+              <span className={cn("font-medium text-xs leading-none", isActive && "text-primary")}>
                 {item.label}
               </span>
             </Link>
@@ -64,10 +62,7 @@ const MobileBottomNav = () => {
           >
             <Ellipsis className={cn("size-5 transition-colors", isMoreActive && "text-primary")} />
             <span
-              className={cn(
-                "font-medium text-body-xs leading-none",
-                isMoreActive && "text-primary",
-              )}
+              className={cn("font-medium text-xs leading-none", isMoreActive && "text-primary")}
             >
               More
             </span>
@@ -87,8 +82,8 @@ const MobileBottomNav = () => {
                     to={item.to}
                     onClick={() => setMoreOpen(false)}
                     className={cn(
-                      "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-body transition-colors",
-                      "text-muted-foreground hover:bg-accent hover:text-foreground",
+                      "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-base transition-colors",
+                      "text-muted-foreground hover:bg-primary/10 hover:text-foreground",
                       isActive && "bg-muted text-foreground",
                     )}
                   >

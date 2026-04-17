@@ -125,7 +125,7 @@ export default function FeedbackWidget() {
   return (
     <Popover open={isPopoverOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <SidebarMenuButton className="transition-transform duration-160 ease-out active:scale-[.97]">
+        <SidebarMenuButton className="transition-transform duration-160 ease-out-strong active:scale-[.97]">
           <Signal className="icon-sm" />
           Feedback
         </SidebarMenuButton>

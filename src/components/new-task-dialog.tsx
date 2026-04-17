@@ -80,7 +80,7 @@ const NewTaskDialog = () => {
           </DialogHeader>
 
           <DialogHeader>
-            <DialogTitle className="text-body-lg text-sidebar-foreground">New Task</DialogTitle>
+            <DialogTitle className="text-foreground text-lg">New Task</DialogTitle>
           </DialogHeader>
 
           <form
@@ -145,7 +145,7 @@ const NewTaskDialog = () => {
         </DialogContent>
       </Dialog>
 
-      <TooltipContent side="left" sideOffset={8} className="flex items-center gap-2 text-body-sm">
+      <TooltipContent side="left" sideOffset={8} className="flex items-center gap-2 text-sm">
         Create new task <Kbd className="ml-2">c</Kbd>
       </TooltipContent>
     </Tooltip>

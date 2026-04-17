@@ -45,7 +45,8 @@ const AppSidebar = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate({ to: "/" });
+    await router.invalidate();
+    await navigate({ to: "/" });
   };
 
   const handleAccountSwitch = async (token: string | null | undefined) => {
@@ -53,7 +54,7 @@ const AppSidebar = () => {
     try {
       await authClient.multiSession.setActive({ sessionToken: token });
       toast.success({ title: "Account switched" });
-      router.invalidate();
+      await router.invalidate();
     } catch (err) {
       console.error("Failed to switch account:", err);
       toast.error({ title: "Failed to switch account" });
@@ -117,8 +118,8 @@ const AppSidebar = () => {
                                 <AvatarFallback>{deviceSession.user.name.charAt(0)}</AvatarFallback>
                               </Avatar>
                               <div className="flex flex-col">
-                                <p className="text-body">{deviceSession.user.name}</p>
-                                <p className="text-body-sm text-muted-foreground">
+                                <p className="text-base">{deviceSession.user.name}</p>
+                                <p className="text-muted-foreground text-sm">
                                   {deviceSession.user.email}
                                 </p>
                               </div>
@@ -173,7 +174,7 @@ const AppSidebar = () => {
                     className="rounded-lg group-data-[collapsible=icon]:[&>span]:hidden"
                   >
                     <item.icon className="icon-sm" />
-                    <span className="text-body">{item.label}</span>
+                    <span className="text-base">{item.label}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

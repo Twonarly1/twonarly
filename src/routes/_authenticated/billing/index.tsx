@@ -89,18 +89,14 @@ function BillingPage() {
     const duration = 2000;
     const end = Date.now() + duration;
 
+    // TODO: Fix colors
     const frame = () => {
       confetti({
         particleCount: 3,
         angle: 90,
         spread: 160,
         origin: { x: Math.random(), y: -0.1 },
-        colors: [
-          "hsl(var(--primary))",
-          "hsl(var(--accent))",
-          "hsl(var(--muted))",
-          "hsl(var(--secondary))",
-        ],
+        colors: ["#7f22fe", "#a684ff", "#ddd6ff", "#f5f3ff"],
         ticks: 400,
         gravity: 0.6,
         decay: 0.97,
@@ -123,7 +119,7 @@ function BillingPage() {
   return (
     <PageContainer>
       <div className="space-y-1">
-        <h1 className="items-baseline font-medium text-h1">Billing</h1>
+        <h1 className="items-baseline font-medium text-4xl">Billing</h1>
         <p className="text-muted-foreground text-sm">Manage your subscription and billing</p>
       </div>
 
@@ -134,7 +130,7 @@ function BillingPage() {
               {isActive ? `${capitalizeFirstLetter(subscription.plan)} plan` : "Free plan"}
 
               {isCanceling && (
-                <Badge variant="outline" className="text-body-xs">
+                <Badge variant="outline" className="text-xs">
                   Canceling
                 </Badge>
               )}
@@ -148,6 +144,7 @@ function BillingPage() {
           </ItemActions>
         </Item>
       </ItemGroup>
+
       <div className="grid gap-4 sm:grid-cols-2">
         {plans.map((plan) => {
           const isCurrent = subscription

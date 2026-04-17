@@ -95,16 +95,20 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
         tabIndex={-1}
         onClick={() => setIsEditing(true)}
         className={cn(
-          "group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium text-body text-foreground leading-7 focus-visible:border-border",
+          "group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium leading-7 focus-visible:border-border",
           isCompleted && "pointer-events-none",
         )}
       >
         {initialValue ? (
-          <span className={cn(isCompleted && "text-muted-foreground line-through")}>
+          <span
+            className={cn(
+              isCompleted ? "text-muted-foreground line-through" : "text-secondary-foreground",
+            )}
+          >
             {initialValue}
           </span>
         ) : (
-          <span className="text-muted-foreground/50 opacity-100 hover:text-muted-foreground group-hover:opacity-100 sm:opacity-0">
+          <span className="text-faded-foreground opacity-100 hover:text-muted-foreground group-hover:opacity-100 sm:opacity-0">
             {isDescriptionColumn ? "Add task description" : undefined}
           </span>
         )}

@@ -50,7 +50,7 @@ const HeaderCell = ({ header }: Props) => {
             variant="ghost"
             size="xs"
             onClick={handleSort}
-            className="group flex w-fit justify-between px-2 text-body-sm"
+            className="group flex w-fit justify-between px-2 text-sm"
           >
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
@@ -61,7 +61,7 @@ const HeaderCell = ({ header }: Props) => {
             />
           </Button>
         </TooltipTrigger>
-        <TooltipContent sideOffset={4} className="text-body-xs">
+        <TooltipContent sideOffset={4} className="text-xs">
           Order by {header.id}
         </TooltipContent>
       </Tooltip>
