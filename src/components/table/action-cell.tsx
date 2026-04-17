@@ -1,7 +1,7 @@
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, MoreHorizontal, Trash } from "lucide-react";
-import { memo, useCallback } from "react";
+import { useCallback } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,7 +22,7 @@ interface Props {
   table: Table<Task>;
 }
 
-const ActionCell = memo(({ row, table }: Props) => {
+const ActionCell = ({ row, table }: Props) => {
   const router = useRouter();
   const deleteTaskFn = useServerFn(deleteTask);
   const toggleCompletedFn = useServerFn(toggleTaskComplete);
@@ -104,6 +104,6 @@ const ActionCell = memo(({ row, table }: Props) => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-});
+};
 
 export default ActionCell;

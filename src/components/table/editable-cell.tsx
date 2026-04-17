@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { memo, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -9,8 +9,7 @@ import type { CellContext } from "@tanstack/react-table";
 import type { KeyboardEvent } from "react";
 import type { Task } from "@/lib/db/schema";
 
-// Extract the editable cell logic into a separate component
-const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, unknown>) => {
+const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknown>) => {
   const initialValue = (getValue() as string | undefined) ?? "";
   const [value, setValue] = useState(initialValue);
   const [isEditing, setIsEditing] = useState(false);
@@ -124,6 +123,6 @@ const EditableCell = memo(({ getValue, row, column, table }: CellContext<Task, u
       placeholder={column.id === "description" ? "Add task description..." : undefined}
     />
   );
-});
+};
 
 export default EditableCell;
