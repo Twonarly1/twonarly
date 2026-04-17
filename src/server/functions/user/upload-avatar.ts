@@ -10,11 +10,13 @@ import { r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
+import { rateLimit } from "@/server/rate-limit";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE = 5 * 1024 * 1024;
 
 export const uploadAvatar = createServerFn({ method: "POST" })
+  .middleware([rateLimit({ key: "upload-avatar", limit: 5, window: 60 })])
   .inputValidator(z.instanceof(FormData))
   .handler(async ({ data }) => {
     const session = await auth.api.getSession({ headers: getRequestHeaders() });

@@ -21,6 +21,18 @@ export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
   database: drizzleAdapter(db, { provider: "pg", schema }),
   emailAndPassword: { enabled: false },
+  rateLimit: {
+    enabled: true,
+    window: 10,
+    max: 100,
+    customRules: {
+      "/siwe/nonce": { window: 60, max: 5 },
+      "/siwe/link-wallet": { window: 60, max: 5 },
+      "/siwe/verify": { window: 60, max: 5 },
+      "/siwe/unlink-wallet": { window: 60, max: 5 },
+      "/sign-in/*": { window: 60, max: 10 },
+    },
+  },
   socialProviders: {
     github: {
       clientId: env.GITHUB_CLIENT_ID,

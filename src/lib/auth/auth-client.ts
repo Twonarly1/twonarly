@@ -8,7 +8,6 @@ export const AUTH_BASE = "/api/auth";
 type Provider = "google" | "github";
 
 export const authClient = createAuthClient({
-  baseURL: AUTH_BASE,
   plugins: [
     multiSessionClient(),
     passkeyClient(),
