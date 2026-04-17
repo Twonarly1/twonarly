@@ -90,7 +90,7 @@ function RootDocument({ children }: PropsWithChildren) {
       <head>
         <HeadContent />
         {themeScript && (
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: Allow for theme
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Safe — values validated against /^#[0-9a-fA-F]{6}$/
           <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         )}
       </head>
