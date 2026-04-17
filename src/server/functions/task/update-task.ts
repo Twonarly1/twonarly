@@ -7,15 +7,17 @@ import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { tasks } from "@/lib/db/schema";
 
+const updateTaskInput = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1, "Name is required").max(256),
+  description: z.string().max(4096).optional(),
+  completed: z.boolean().optional(),
+});
+
+export type UpdateTaskInput = z.infer<typeof updateTaskInput>;
+
 export const updateTask = createServerFn({ method: "POST" })
-  .inputValidator(
-    z.object({
-      id: z.string().min(1),
-      name: z.string().min(1, "Name is required"),
-      description: z.string().optional(),
-      completed: z.boolean().optional(),
-    }),
-  )
+  .inputValidator(updateTaskInput)
   .handler(async ({ data }) => {
     const session = await auth.api.getSession({ headers: getRequestHeaders() });
 

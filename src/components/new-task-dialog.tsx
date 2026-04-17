@@ -93,7 +93,7 @@ const NewTaskDialog = () => {
             <form.Field
               name="name"
               validators={{
-                onSubmit: z.string().min(1, "Name is required"),
+                onSubmit: z.string().min(1, "Name is required").max(256, "Name is too long"),
               }}
             >
               {(field) => (
@@ -110,7 +110,12 @@ const NewTaskDialog = () => {
               )}
             </form.Field>
 
-            <form.Field name="description">
+            <form.Field
+              name="description"
+              validators={{
+                onSubmit: z.string().max(4096, "Description is too long"),
+              }}
+            >
               {(field) => (
                 <Textarea
                   aria-label="Description"
