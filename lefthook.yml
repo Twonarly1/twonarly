@@ -3,6 +3,6 @@ pre-push:
     typecheck:
       run: bunx tsc --noEmit
     lint:
-      run: bunx biome check
+      run: bunx biome check --write
     knip:
       run: bunx knip-bun
