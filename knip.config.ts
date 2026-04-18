@@ -1,19 +1,13 @@
 import type { KnipConfig } from "knip";
 
-/**
- * Knip configuration.
- * @see https://knip.dev/overview/configuration
- */
 const knipConfig: KnipConfig = {
-  entry: ["src/routes/**/*.{ts,tsx}", "src/router.tsx"],
-  project: ["src/**/*.{ts,tsx,css}"],
-  ignore: [
-    "src/generated/**",
-    // "src/lib/config/**",
-    // "src/components/ui/**",
-    "src/server/server.ts",
-  ],
-  tags: ["-knipignore"],
+  ignoreDependencies: ["@radix-ui/react-*", "tailwindcss", "tw-animate-css"],
+  ignoreExportsUsedInFile: true,
+  entry: ["src/**/*.{ts,tsx}"],
+  project: ["src/**/*.{ts,tsx}"],
+  paths: {
+    "src/components/ui/*": ["src/components/ui/*"],
+  },
 };
 
 export default knipConfig;

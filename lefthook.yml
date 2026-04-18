@@ -1,0 +1,8 @@
+pre-push:
+  commands:
+    typecheck:
+      run: tsc --noEmit
+    lint:
+      run: biome check
+    knip:
+      run: knip-bun

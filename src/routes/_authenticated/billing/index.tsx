@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import confetti from "canvas-confetti";
 import { Check } from "lucide-react";
 import { useEffect } from "react";
 import { match } from "ts-pattern";
@@ -85,35 +84,8 @@ function BillingPage() {
 
   useEffect(() => {
     if (!upgraded) return;
-
-    const duration = 2000;
-    const end = Date.now() + duration;
-
-    // TODO: Fix colors
-    const frame = () => {
-      confetti({
-        particleCount: 3,
-        angle: 90,
-        spread: 160,
-        origin: { x: Math.random(), y: -0.1 },
-        colors: ["#7f22fe", "#a684ff", "#ddd6ff", "#f5f3ff"],
-        ticks: 400,
-        gravity: 0.6,
-        decay: 0.97,
-        startVelocity: 5,
-        shapes: ["circle"],
-        scalar: 1.1,
-        drift: Math.random() - 0.5,
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      } else {
-        navigate({ to: "/billing", search: {}, replace: true });
-      }
-    };
-
-    frame();
+    toast.success({ title: "Welcome to the Basic plan!" });
+    navigate({ to: "/billing", search: {}, replace: true });
   }, [upgraded, navigate]);
 
   return (

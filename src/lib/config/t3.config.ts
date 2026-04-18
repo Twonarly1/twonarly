@@ -25,8 +25,6 @@ export const env = createEnv({
     R2_SECRET_ACCESS_KEY: requiredString(),
     R2_BUCKET_NAME: requiredString(),
     R2_PUBLIC_URL: requiredUrl(),
-    R2_TOKEN_NAME: requiredString(),
-    R2_TOKEN_VALUE: requiredString(),
 
     // stripe
     STRIPE_SECRET_KEY: requiredString(),

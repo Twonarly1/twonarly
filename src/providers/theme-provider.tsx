@@ -1,4 +1,3 @@
-import { getContrastingColor, hexToRgba } from "@uiw/color-convert";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import {
@@ -8,6 +7,27 @@ import {
 
 import type { PropsWithChildren } from "react";
 import type { CustomColors, Theme } from "@/server/functions/preferences/theme";
+
+function hexToRgb(hex: string) {
+  const clean = hex.replace("#", "");
+  return {
+    r: parseInt(clean.substring(0, 2), 16),
+    g: parseInt(clean.substring(2, 4), 16),
+    b: parseInt(clean.substring(4, 6), 16),
+  };
+}
+
+function getContrastingColor(hex: string): string {
+  if (!hex) return "#ffffff";
+  const { r, g, b } = hexToRgb(hex);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "#000000" : "#ffffff";
+}
+
+function isColorDark(hex: string): boolean {
+  const { r, g, b } = hexToRgb(hex);
+  return (r * 299 + g * 587 + b * 114) / 1000 < 128;
+}
 
 function adjustColorLightness(hex: string, percentage: number): string {
   const cleanHex = hex.replace("#", "");
@@ -33,10 +53,10 @@ function adjustColorLightness(hex: string, percentage: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 
-function isColorDark(hex: string): boolean {
-  const { r, g, b } = hexToRgba(hex);
-  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
-}
+// function isColorDark(hex: string): boolean {
+//   const { r, g, b } = hexToRgba(hex);
+//   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+// }
 
 interface ThemeContext {
   theme: Theme;

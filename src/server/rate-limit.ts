@@ -1,6 +1,5 @@
 import { createMiddleware } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
-import { RateLimiterMemory } from "rate-limiter-flexible";
 
 function getClientIp(): string {
   return (
@@ -10,40 +9,30 @@ function getClientIp(): string {
   );
 }
 
-/**
- * Rate limit middleware for TanStack Start server functions.
- *
- * Uses `rate-limiter-flexible` with an in-memory store.
- *
- * Usage:
- *   createServerFn({ method: "POST" })
- *     .middleware([rateLimit({ key: "upload-avatar", limit: 5, window: 60 })])
- *     .handler(async () => { ... })
- */
+const stores = new Map<string, Map<string, { count: number; expires: number }>>();
+
 export const rateLimit = ({
   key,
   limit,
   window: windowSec,
 }: {
-  /** Unique key prefix for this endpoint */
   key: string;
-  /** Max requests allowed in the window */
   limit: number;
-  /** Window duration in seconds */
   window: number;
 }) => {
-  const limiter = new RateLimiterMemory({
-    keyPrefix: key,
-    points: limit,
-    duration: windowSec,
-  });
+  if (!stores.has(key)) stores.set(key, new Map());
+  const store = stores.get(key)!;
 
   return createMiddleware().server(async ({ next }) => {
     const ip = getClientIp();
+    const now = Date.now();
+    const entry = store.get(ip);
 
-    try {
-      await limiter.consume(ip);
-    } catch {
+    if (!entry || now > entry.expires) {
+      store.set(ip, { count: 1, expires: now + windowSec * 1000 });
+    } else if (entry.count < limit) {
+      entry.count++;
+    } else {
       throw new Error("Too many requests. Please try again later.");
     }
 
