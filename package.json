@@ -29,7 +29,6 @@
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.18",
     "@uiw/color-convert": "^2.9.5",
-    "@walletconnect/ethereum-provider": "^2.21.1",
     "better-auth": "^1.6.5",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
@@ -57,7 +56,6 @@
     "vaul": "^1.1.2",
     "viem": "^2.47.6",
     "vite-tsconfig-paths": "^5.1.4",
-    "wagmi": "^3.6.0",
     "zod": "^4.3.5",
     "zustand": "^5.0.10"
   },

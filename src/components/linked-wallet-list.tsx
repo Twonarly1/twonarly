@@ -23,6 +23,8 @@ import type { Wallet } from "@/lib/db/schema";
 const LinkedWalletList = () => {
   const { wallets } = Route.useLoaderData();
 
+  console.log("Linked wallets:", wallets);
+
   const router = useRouter();
 
   const handleUnlink = async (wallet: Wallet) => {

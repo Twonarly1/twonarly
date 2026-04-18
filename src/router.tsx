@@ -1,13 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
-import { WagmiProvider } from "wagmi";
 
 import DefaultError from "@/components/core/default-error";
 import DefaultNotFound from "@/components/core/default-not-found";
 import DefaultPending from "@/components/core/default-pending";
 import { routeTree } from "@/routeTree.gen";
-import { wagmiConfig } from "./lib/config/wagmi.config";
 
 import type { PropsWithChildren } from "react";
 
@@ -26,9 +24,7 @@ export function getRouter() {
     defaultStaleTime: 1000 * 60 * 5,
     scrollRestoration: true,
     Wrap: ({ children }: PropsWithChildren) => (
-      <WagmiProvider config={wagmiConfig}>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-      </WagmiProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     ),
   });
 

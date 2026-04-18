@@ -1,38 +1,31 @@
-import { match } from "ts-pattern";
-
-import { WalletConnectIcon } from "@/components/icons/wallet-connect";
 import { Button } from "@/components/ui/button";
 import { Item, ItemContent, ItemGroup, ItemMedia, ItemTitle } from "@/components/ui/item";
 
-import type { Connector } from "wagmi";
+import type { EIP6963Provider } from "@/lib/hooks/use-injected-wallets";
 
 interface ConnectOptionListProps {
-  connectors: Connector[];
-  onConnect: (connector: Connector) => void;
+  wallets: EIP6963Provider[];
+  onConnect: (wallet: EIP6963Provider) => void;
   disabled?: boolean;
 }
 
-const ConnectOptionList = ({ connectors, onConnect, disabled }: ConnectOptionListProps) => {
+const ConnectOptionList = ({ wallets, onConnect, disabled }: ConnectOptionListProps) => {
   return (
     <ItemGroup className="space-y-2">
-      {connectors.map((connector) => (
-        <Item key={connector.uid} asChild size="sm">
+      {wallets.map((wallet) => (
+        <Item key={wallet.info.uuid} asChild size="sm">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onConnect(connector)}
+            onClick={() => onConnect(wallet)}
             disabled={disabled}
             className="h-auto"
           >
             <ItemMedia>
-              {match(connector.id)
-                .with("walletConnect", () => <WalletConnectIcon className="size-5" />)
-                .otherwise(() => (
-                  <img src={connector.icon} alt={connector.name} className="size-5" />
-                ))}
+              <img src={wallet.info.icon} alt={wallet.info.name} className="size-5" />
             </ItemMedia>
             <ItemContent>
-              <ItemTitle>{connector.name}</ItemTitle>
+              <ItemTitle>{wallet.info.name}</ItemTitle>
             </ItemContent>
           </Button>
         </Item>
