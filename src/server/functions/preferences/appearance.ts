@@ -1,13 +1,17 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
-import { z } from "zod";
+import { boolean, object, optional, picklist } from "valibot";
 
 import { COOKIES } from "@/lib/constants/cookies";
 
-const fontSizeSchema = z.enum(["smaller", "small", "default", "large", "larger"]);
+import type { InferOutput } from "valibot";
+
+const fontSizeSchema = picklist(["smaller", "small", "default", "large", "larger"]);
+
+type FontSize = InferOutput<typeof fontSizeSchema>;
 
 export const getAppearance = createServerFn().handler(async () => {
-  const fontSize = (getCookie(COOKIES.fontSize) || "default") as z.infer<typeof fontSizeSchema>;
+  const fontSize = (getCookie(COOKIES.fontSize) || "default") as FontSize;
   const usePointerCursor = getCookie(COOKIES.pointerCursor) === "true";
 
   return { fontSize, usePointerCursor };
@@ -15,9 +19,9 @@ export const getAppearance = createServerFn().handler(async () => {
 
 export const setAppearance = createServerFn({ method: "POST" })
   .inputValidator(
-    z.object({
-      fontSize: fontSizeSchema.optional(),
-      usePointerCursor: z.boolean().optional(),
+    object({
+      fontSize: optional(fontSizeSchema),
+      usePointerCursor: optional(boolean()),
     }),
   )
   .handler(async ({ data }) => {

@@ -2,7 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useHotkeys } from "react-hotkeys-hook";
-import z from "zod";
+import { maxLength, minLength, pipe, string } from "valibot";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -93,7 +93,11 @@ const NewTaskDialog = () => {
             <form.Field
               name="name"
               validators={{
-                onSubmit: z.string().min(1, "Name is required").max(256, "Name is too long"),
+                onSubmit: pipe(
+                  string(),
+                  minLength(1, "Name is required"),
+                  maxLength(256, "Name is too long"),
+                ),
               }}
             >
               {(field) => (
@@ -113,7 +117,7 @@ const NewTaskDialog = () => {
             <form.Field
               name="description"
               validators={{
-                onSubmit: z.string().max(4096, "Description is too long"),
+                onSubmit: pipe(string(), maxLength(4096, "Description is too long")),
               }}
             >
               {(field) => (

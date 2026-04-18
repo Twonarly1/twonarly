@@ -14,7 +14,7 @@ import * as schema from "@/lib/db/schema";
 import { linkWalletPlugin } from "../auth/link-wallet-plugin";
 import { stripeClient } from "./stripe.config";
 
-const SIWE_DOMAIN = env.BETTER_AUTH_URL ? new URL(env.BETTER_AUTH_URL).host : "twonarly.vercel.app";
+const SIWE_DOMAIN = new URL(env.BETTER_AUTH_URL ?? app.url).host;
 
 export const auth = betterAuth({
   appName: app.name,

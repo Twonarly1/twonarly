@@ -19,7 +19,7 @@ type LayoutSettings = {
 const LAYOUT_DEFAULTS: LayoutSettings = {
   sidebarPosition: "left",
   sidebarVariant: "inset",
-  sidebarCollapsible: "none",
+  sidebarCollapsible: "offcanvas",
 };
 
 interface LayoutContextValue {

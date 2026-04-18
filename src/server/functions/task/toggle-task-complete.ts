@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { and, eq } from "drizzle-orm";
-import z from "zod";
+import { boolean, minLength, object, pipe, string } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
@@ -9,9 +9,9 @@ import { tasks } from "@/lib/db/schema";
 
 export const toggleTaskComplete = createServerFn({ method: "POST" })
   .inputValidator(
-    z.object({
-      id: z.string().min(1),
-      completed: z.boolean(),
+    object({
+      id: pipe(string(), minLength(1)),
+      completed: boolean(),
     }),
   )
   .handler(async ({ data }) => {

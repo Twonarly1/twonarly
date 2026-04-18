@@ -1,22 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
-import { z } from "zod";
+import { object, optional, parse, picklist, pipe, regex, string } from "valibot";
 
 import { COOKIES } from "@/lib/constants/cookies";
 
-const themeValidator = z.union([
-  z.literal("light"),
-  z.literal("dark"),
-  z.literal("system"),
-  z.literal("custom"),
-]);
+import type { InferOutput } from "valibot";
 
-const hexColor = z
-  .string()
-  .regex(/^#[0-9a-fA-F]{6}$/, "Must be a valid hex color (e.g. #ff00aa)")
-  .optional();
+const themeValidator = picklist(["light", "dark", "system", "custom"]);
 
-const customColorsValidator = z.object({
+const hexColor = optional(
+  pipe(string(), regex(/^#[0-9a-fA-F]{6}$/, "Must be a valid hex color (e.g. #ff00aa)")),
+);
+
+const customColorsValidator = object({
   background: hexColor,
   accent: hexColor,
   border: hexColor,
@@ -25,8 +21,8 @@ const customColorsValidator = z.object({
 const storageKey = COOKIES.theme;
 const customColorsKey = COOKIES.themeCustom;
 
-export type Theme = z.infer<typeof themeValidator>;
-export type CustomColors = z.infer<typeof customColorsValidator>;
+export type Theme = InferOutput<typeof themeValidator>;
+export type CustomColors = InferOutput<typeof customColorsValidator>;
 
 export const getTheme = createServerFn().handler(
   async () => (getCookie(storageKey) || "dark") as Theme,
@@ -37,7 +33,7 @@ export const getCustomColors = createServerFn().handler(async () => {
   if (!colors) return null;
 
   try {
-    const parsed = customColorsValidator.parse(JSON.parse(colors));
+    const parsed = parse(customColorsValidator, JSON.parse(colors));
     return parsed;
   } catch {
     return null;

@@ -1,16 +1,23 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
-import z from "zod";
+import {
+  integer,
+  maxValue,
+  minValue,
+  number,
+  object,
+  optional,
+  pipe,
+  regex,
+  string,
+} from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
 import { stripeClient } from "@/lib/config/stripe.config";
 
-const fetchInvoicesInput = z.object({
-  limit: z.number().int().min(1).max(100).optional(),
-  startingAfter: z
-    .string()
-    .regex(/^in_[A-Za-z0-9]+$/, "Invalid cursor")
-    .optional(),
+const fetchInvoicesInput = object({
+  limit: optional(pipe(number(), integer(), minValue(1), maxValue(100))),
+  startingAfter: optional(pipe(string(), regex(/^in_[A-Za-z0-9]+$/, "Invalid cursor"))),
 });
 
 export const fetchInvoices = createServerFn({ method: "GET" })

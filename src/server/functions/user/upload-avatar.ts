@@ -3,7 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 import { fileTypeFromBuffer } from "file-type";
-import z from "zod";
+import { instance } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
 import { r2 } from "@/lib/config/r2.config";
@@ -17,7 +17,7 @@ const MAX_SIZE = 5 * 1024 * 1024;
 
 export const uploadAvatar = createServerFn({ method: "POST" })
   .middleware([rateLimit({ key: "upload-avatar", limit: 5, window: 60 })])
-  .inputValidator(z.instanceof(FormData))
+  .inputValidator(instance(FormData))
   .handler(async ({ data }) => {
     const session = await auth.api.getSession({ headers: getRequestHeaders() });
 

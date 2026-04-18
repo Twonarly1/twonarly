@@ -1,50 +1,10 @@
 import { APIError, createAuthEndpoint, sessionMiddleware } from "better-auth/api";
+import { number, object, optional, string } from "valibot";
 import { getAddress, isAddress, verifyMessage } from "viem";
-import * as z from "zod";
 
 import type { BetterAuthPlugin } from "better-auth";
 
-/**
- * Parse a plain-text SIWE-style message to extract structured fields.
- *
- * Expected format (ERC-4361):
- *   {domain} wants you to sign in with your Ethereum account:
- *   {address}
- *
- *   {statement}
- *
- *   URI: {uri}
- *   Version: {version}
- *   Chain ID: {chainId}
- *   Nonce: {nonce}
- *   Issued At: {issuedAt}
- *   Expiration Time: {expirationTime}   (optional)
- */
-function parseSiweMessage(message: string) {
-  const lines = message.split("\n");
-
-  const domainMatch = lines[0]?.match(/^(.+?) wants you to sign in with your Ethereum account:$/);
-  const domain = domainMatch?.[1]?.trim();
-
-  const address = lines[1]?.trim();
-
-  const chainIdMatch = message.match(/Chain ID:\s*(\d+)/);
-  const chainId = chainIdMatch ? Number(chainIdMatch[1]) : undefined;
-
-  const nonceMatch = message.match(/Nonce:\s*(\S+)/);
-  const nonce = nonceMatch?.[1]?.trim();
-
-  const issuedAtMatch = message.match(/Issued At:\s*(.+)/);
-  const issuedAt = issuedAtMatch?.[1]?.trim();
-
-  const expirationMatch = message.match(/Expiration Time:\s*(.+)/);
-  const expirationTime = expirationMatch?.[1]?.trim();
-
-  return { domain, address, chainId, nonce, issuedAt, expirationTime };
-}
-
-/** How long a nonce is valid (5 minutes) */
-const NONCE_MAX_AGE_MS = 5 * 60 * 1000;
+const NONCE_MAX_AGE_MS = 5 * 60 * 1000; // 5 minutes
 
 export const linkWalletPlugin = (opts: { domain: string }) =>
   ({
@@ -55,11 +15,11 @@ export const linkWalletPlugin = (opts: { domain: string }) =>
         {
           method: "POST",
           use: [sessionMiddleware],
-          body: z.object({
-            message: z.string(),
-            signature: z.string(),
-            walletAddress: z.string(),
-            chainId: z.number().default(1),
+          body: object({
+            message: string(),
+            signature: string(),
+            walletAddress: string(),
+            chainId: optional(number(), 1),
           }),
         },
         async (ctx) => {
@@ -225,8 +185,8 @@ export const linkWalletPlugin = (opts: { domain: string }) =>
         {
           method: "POST",
           use: [sessionMiddleware],
-          body: z.object({
-            walletId: z.string(),
+          body: object({
+            walletId: string(),
           }),
         },
         async (ctx) => {
@@ -260,3 +220,26 @@ export const linkWalletPlugin = (opts: { domain: string }) =>
       ),
     },
   }) satisfies BetterAuthPlugin;
+
+function parseSiweMessage(message: string) {
+  const lines = message.split("\n");
+
+  const domainMatch = lines[0]?.match(/^(.+?) wants you to sign in with your Ethereum account:$/);
+  const domain = domainMatch?.[1]?.trim();
+
+  const address = lines[1]?.trim();
+
+  const chainIdMatch = message.match(/Chain ID:\s*(\d+)/);
+  const chainId = chainIdMatch ? Number(chainIdMatch[1]) : undefined;
+
+  const nonceMatch = message.match(/Nonce:\s*(\S+)/);
+  const nonce = nonceMatch?.[1]?.trim();
+
+  const issuedAtMatch = message.match(/Issued At:\s*(.+)/);
+  const issuedAt = issuedAtMatch?.[1]?.trim();
+
+  const expirationMatch = message.match(/Expiration Time:\s*(.+)/);
+  const expirationTime = expirationMatch?.[1]?.trim();
+
+  return { domain, address, chainId, nonce, issuedAt, expirationTime };
+}

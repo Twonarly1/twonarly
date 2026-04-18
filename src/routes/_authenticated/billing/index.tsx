@@ -3,7 +3,7 @@ import confetti from "canvas-confetti";
 import { Check } from "lucide-react";
 import { useEffect } from "react";
 import { match } from "ts-pattern";
-import { z } from "zod";
+import { boolean, object, optional } from "valibot";
 
 import InvoiceList from "@/components/invoice-list";
 import PageContainer from "@/components/page-container";
@@ -34,8 +34,8 @@ import { fetchPlans } from "@/server/functions/subscriptions/fetch-plans";
 
 export const Route = createFileRoute("/_authenticated/billing/")({
   component: BillingPage,
-  validateSearch: z.object({
-    upgraded: z.boolean().optional(),
+  validateSearch: object({
+    upgraded: optional(boolean()),
   }),
   loader: async () => {
     const [subscriptions, plans] = await Promise.all([fetchActiveSubscriptions(), fetchPlans()]);

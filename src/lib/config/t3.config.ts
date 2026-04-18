@@ -1,33 +1,36 @@
 import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
+import { minLength, pipe, string, url } from "valibot";
+
+const requiredString = () => pipe(string(), minLength(1));
+const requiredUrl = () => pipe(string(), url());
 
 export const env = createEnv({
   server: {
     // database
-    DATABASE_URL: z.url(),
+    DATABASE_URL: requiredUrl(),
 
     // auth
-    BETTER_AUTH_SECRET: z.string().min(1),
-    BETTER_AUTH_URL: z.url(),
+    BETTER_AUTH_SECRET: requiredString(),
+    BETTER_AUTH_URL: requiredUrl(),
 
     // oauth providers
-    GOOGLE_CLIENT_ID: z.string().min(1),
-    GOOGLE_CLIENT_SECRET: z.string().min(1),
-    GITHUB_CLIENT_ID: z.string().min(1),
-    GITHUB_CLIENT_SECRET: z.string().min(1),
+    GOOGLE_CLIENT_ID: requiredString(),
+    GOOGLE_CLIENT_SECRET: requiredString(),
+    GITHUB_CLIENT_ID: requiredString(),
+    GITHUB_CLIENT_SECRET: requiredString(),
 
     // Cloudflare R2 storage
-    R2_ACCOUNT_ID: z.string().min(1),
-    R2_ACCESS_KEY_ID: z.string().min(1),
-    R2_SECRET_ACCESS_KEY: z.string().min(1),
-    R2_BUCKET_NAME: z.string().min(1),
-    R2_PUBLIC_URL: z.url(),
-    R2_TOKEN_NAME: z.string().min(1),
-    R2_TOKEN_VALUE: z.string().min(1),
+    R2_ACCOUNT_ID: requiredString(),
+    R2_ACCESS_KEY_ID: requiredString(),
+    R2_SECRET_ACCESS_KEY: requiredString(),
+    R2_BUCKET_NAME: requiredString(),
+    R2_PUBLIC_URL: requiredUrl(),
+    R2_TOKEN_NAME: requiredString(),
+    R2_TOKEN_VALUE: requiredString(),
 
     // stripe
-    STRIPE_SECRET_KEY: z.string().min(1),
-    STRIPE_WEBHOOK_SECRET: z.string().min(1),
+    STRIPE_SECRET_KEY: requiredString(),
+    STRIPE_WEBHOOK_SECRET: requiredString(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
