@@ -14,8 +14,6 @@ const updateTaskInput = z.object({
   completed: z.boolean().optional(),
 });
 
-export type UpdateTaskInput = z.infer<typeof updateTaskInput>;
-
 export const updateTask = createServerFn({ method: "POST" })
   .inputValidator(updateTaskInput)
   .handler(async ({ data }) => {

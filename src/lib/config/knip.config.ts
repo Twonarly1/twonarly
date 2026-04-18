@@ -9,11 +9,9 @@ const knipConfig: KnipConfig = {
   project: ["src/**/*.{ts,tsx,css}"],
   ignore: [
     "src/generated/**",
-    "src/lib/config/**",
-    "src/components/ui/**",
+    // "src/lib/config/**",
+    // "src/components/ui/**",
     "src/server/server.ts",
-    "src/components/passkey-list.tsx",
-    "src/server/functions/user/get-passkeys.ts",
   ],
   tags: ["-knipignore"],
 };

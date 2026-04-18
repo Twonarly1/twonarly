@@ -13,8 +13,6 @@ const addTaskInput = z.object({
   completed: z.boolean().optional(),
 });
 
-export type AddTaskInput = z.infer<typeof addTaskInput>;
-
 export const addTask = createServerFn({ method: "POST" })
   .inputValidator(addTaskInput)
   .handler(async ({ data }) => {

@@ -120,7 +120,7 @@ function BillingPage() {
     <PageContainer>
       <div className="space-y-1">
         <h1 className="items-baseline font-medium text-4xl">Billing</h1>
-        <p className="text-muted-foreground text-sm">Manage your subscription and billing</p>
+        <p className="text-secondary-foreground text-sm">Manage your subscription and billing</p>
       </div>
 
       <ItemGroup className="rounded-lg border">
