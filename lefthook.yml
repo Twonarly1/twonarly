@@ -1,8 +1,8 @@
 pre-push:
   commands:
     typecheck:
-      run: tsc --noEmit
+      run: bunx tsc --noEmit
     lint:
-      run: biome check
+      run: bunx biome check
     knip:
-      run: knip-bun
+      run: bunx knip-bun
