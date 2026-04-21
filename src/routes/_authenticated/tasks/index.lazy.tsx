@@ -16,7 +16,6 @@ import TableActions from "@/components/table/table-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { useDebounce } from "@/lib/hooks/use-debounce";
-import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/utils/format";
 
 import type {
@@ -47,19 +46,28 @@ function TasksPage() {
   const columns: ColumnDef<Task>[] = useMemo(
     () => [
       {
-        accessorKey: "completed",
-        header: "",
+        id: "select",
+        header: ({ table }) => (
+          <div className="flex">
+            <Checkbox
+              className="mx-auto flex size-3.5 items-center justify-center"
+              checked={
+                table.getIsAllPageRowsSelected()
+                  ? true
+                  : table.getIsSomePageRowsSelected()
+                    ? "indeterminate"
+                    : false
+              }
+              onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+            />
+          </div>
+        ),
         enableSorting: false,
         size: 40,
         cell: ({ row }) => (
           <div className="flex">
             <Checkbox
-              tabIndex={-1}
-              className={cn(
-                "mx-auto flex size-3.5 items-center justify-center",
-                !row.getIsSelected() &&
-                  "hover:border hover:border-primary group-hover:opacity-100 sm:opacity-0",
-              )}
+              className="mx-auto flex size-3.5 items-center justify-center"
               checked={row.getIsSelected()}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
             />
@@ -123,6 +131,8 @@ function TasksPage() {
       rowSelection,
       sorting,
     },
+    manualPagination: true,
+    enableRowSelection: true,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection,
@@ -148,8 +158,8 @@ function TasksPage() {
   });
 
   useEffect(() => {
-    setColumnFilters([{ id: "name", value: debouncedSearch }]);
-  }, [debouncedSearch]);
+    table.getColumn("name")?.setFilterValue(debouncedSearch);
+  }, [debouncedSearch, table]);
 
   useEffect(() => {
     setData(tasks ?? []);
@@ -188,11 +198,10 @@ function TasksPage() {
   }, [table]);
 
   return (
-    <div className="grid min-h-0 grid-rows-[auto_1fr]">
-      <div className="container mx-auto max-w-4xl space-y-6 p-4">
-        <h1 className="items-baseline font-medium text-4xl">
-          Tasks {data?.length ? `(${data.length})` : ""}
-        </h1>
+    <div className="grid h-full min-h-0 grid-rows-[auto_1fr]">
+      <div className="container mx-auto max-w-4xl space-y-6 p-4 sm:relative">
+        <h1 className="items-baseline font-medium text-4xl">Tasks</h1>
+        <TableActions table={table} />
 
         <div className="flex items-center gap-2">
           <div className="group relative flex w-full gap-2">
@@ -213,8 +222,6 @@ function TasksPage() {
       </div>
 
       <DataTable table={table} />
-
-      <TableActions table={table} />
     </div>
   );
 }

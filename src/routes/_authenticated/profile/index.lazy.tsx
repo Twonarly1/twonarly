@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
 import PageContainer from "@/components/page-container";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -132,24 +132,20 @@ function ProfilePage() {
             {user.image ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Avatar
-                    role="button"
-                    className="group relative size-9 cursor-pointer rounded-full"
+                  <button
+                    type="button"
+                    tabIndex={0}
+                    className="group relative size-9 cursor-pointer"
                   >
-                    <AvatarImage
-                      src={user.image || undefined}
+                    <Avatar
+                      src={user.image}
                       alt={user.name || "User avatar"}
-                      className="rounded-lg"
+                      className="size-9 rounded-full"
                     />
-
                     <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
                       <Pen className="icon-sm" />
                     </div>
-
-                    <AvatarFallback className="size-9 rounded-full">
-                      {user.name?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
+                  </button>
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent align="end" className="min-w-48">
@@ -169,25 +165,22 @@ function ProfilePage() {
             ) : (
               <Tooltip delayDuration={400}>
                 <TooltipTrigger asChild>
-                  <Avatar
+                  <button
+                    type="button"
+                    tabIndex={0}
                     onClick={triggerFileUpload}
-                    role="button"
-                    className="group relative size-9 cursor-pointer rounded-full"
+                    onKeyDown={(e) => e.key === "Enter" && triggerFileUpload()}
+                    className="group relative size-9 cursor-pointer"
                   >
-                    <AvatarImage
-                      src={user.image || undefined}
+                    <Avatar
+                      src={user.image}
                       alt={user.name || "User avatar"}
-                      className="rounded-lg"
+                      className="size-9 rounded-full"
                     />
-
                     <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
                       <Pen className="icon-sm" />
                     </div>
-
-                    <AvatarFallback className="size-9 rounded-full">
-                      {user.name?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent side="left" sideOffset={8} className="text-xs">
                   Change avatar

@@ -40,7 +40,7 @@ export function DataTable({ table }: Props) {
     virtualRows.length > 0 ? totalSize - (virtualRows[virtualRows.length - 1]?.end || 0) : 0;
 
   return (
-    <div ref={tableContainerRef} className="min-h-0 flex-1 overflow-auto">
+    <div ref={tableContainerRef} className="min-h-full flex-1 overflow-auto">
       <Table>
         <TableHeader className="sticky top-0 z-0 bg-background">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -79,6 +79,7 @@ export function DataTable({ table }: Props) {
                   <td style={{ height: `${paddingTop}px` }} />
                 </tr>
               )}
+
               {virtualRows.map((virtualRow) => {
                 const row = rows[virtualRow.index];
                 return (
@@ -104,6 +105,7 @@ export function DataTable({ table }: Props) {
                   </TableRow>
                 );
               })}
+
               {paddingBottom > 0 && (
                 <tr>
                   <td style={{ height: `${paddingBottom}px` }} />

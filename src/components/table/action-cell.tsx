@@ -28,7 +28,7 @@ const ActionCell = ({ row, table }: Props) => {
   const toggleCompletedFn = useServerFn(toggleTaskComplete);
 
   const task = row.original;
-  const completed = row.getValue("completed") as boolean;
+  const completed = row.original.completed;
 
   const handleToggleComplete = useCallback(
     async (e: React.MouseEvent) => {
@@ -80,14 +80,15 @@ const ActionCell = ({ row, table }: Props) => {
 
   return (
     <DropdownMenu modal>
-      <DropdownMenuTrigger tabIndex={-1} asChild>
+      <DropdownMenuTrigger asChild>
         <Button
           onClick={(e) => {
             e.preventDefault();
           }}
           variant="ghost"
-          size="icon"
-          className="mx-auto group-hover:opacity-100 data-[state=open]:opacity-100 sm:opacity-0"
+          size="icon-sm"
+          className="mx-auto"
+          // className="mx-auto group-hover:opacity-100 data-[state=open]:opacity-100 sm:opacity-0"
         >
           <MoreHorizontal className="icon-sm" />
         </Button>

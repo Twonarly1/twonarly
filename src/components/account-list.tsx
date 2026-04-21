@@ -3,7 +3,7 @@ import { Repeat } from "lucide-react";
 
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -50,15 +50,11 @@ const AccountList = () => {
           <Item key={deviceSession.session.token} size="sm">
             <ItemContent>
               <div className="flex items-center gap-2">
-                <Avatar className="size-8 rounded-lg">
-                  <AvatarImage
-                    src={deviceSession.user.image || undefined}
-                    alt={deviceSession.user.name}
-                  />
-                  <AvatarFallback className="rounded-lg">
-                    {deviceSession.user.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
+                <Avatar
+                  src={deviceSession.user.image}
+                  alt={deviceSession.user.name}
+                  className="size-8 rounded-lg"
+                />
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="font-medium text-base text-foreground">

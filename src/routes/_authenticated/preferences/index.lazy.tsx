@@ -26,7 +26,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useIsPhone } from "@/lib/hooks/use-phone";
-import { cn } from "@/lib/utils";
 import { useAppearance } from "@/providers/appearance-provider";
 import { useLayout } from "@/providers/layout-provider";
 import { useTheme } from "@/providers/theme-provider";
@@ -35,10 +34,15 @@ import type { AppearanceSettings } from "@/providers/appearance-provider";
 import type { LayoutSettings } from "@/providers/layout-provider";
 
 const THEME_OPTIONS = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
-  { value: "system", label: "System", icon: Monitor },
-  { value: "custom", label: "Custom", icon: Droplet },
+  { value: "light", label: "Light", icon: Sun, className: "icon-xs" },
+  { value: "dark", label: "Dark", icon: Moon, className: "icon-xs" },
+  { value: "system", label: "System", icon: Monitor, className: "icon-xs" },
+  {
+    value: "custom",
+    label: "Custom",
+    icon: Droplet,
+    className: "icon-xs fill-primary text-primary",
+  },
 ];
 
 export const Route = createLazyFileRoute("/_authenticated/preferences/")({
@@ -119,14 +123,7 @@ function SettingsPage() {
                       <SelectItem
                         key={option.value}
                         value={option.value}
-                        icon={
-                          <option.icon
-                            className={cn(
-                              "icon-xs",
-                              option.value === "custom" ? "fill-primary text-primary" : "",
-                            )}
-                          />
-                        }
+                        icon={<option.icon className={option.className} />}
                       >
                         {option.label}
                       </SelectItem>

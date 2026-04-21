@@ -1,40 +1,26 @@
-import { Avatar as AvatarPrimitive } from "radix-ui";
+import fallbackAvatar from "/public/avatar-fallaback.jpg";
 
-import { cn } from "@/lib/utils";
+const FALLBACK_AVATAR = fallbackAvatar;
 
-import type * as React from "react";
-
-function Avatar({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Root>) {
-  return (
-    <AvatarPrimitive.Root
-      data-slot="avatar"
-      className={cn("relative flex shrink-0 overflow-hidden rounded-full", className)}
-      {...props}
-    />
-  );
-}
-
-function AvatarImage({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
-  return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
-      {...props}
-    />
-  );
-}
-
-function AvatarFallback({
+function Avatar({
+  src,
+  alt,
   className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+}: {
+  src?: string | null;
+  alt?: string;
+  className?: string;
+}) {
   return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
-      className={cn("flex size-full items-center justify-center rounded-full bg-muted", className)}
-      {...props}
+    <img
+      src={src || FALLBACK_AVATAR}
+      alt={alt || ""}
+      onError={(e) => {
+        e.currentTarget.src = FALLBACK_AVATAR;
+      }}
+      className={className}
     />
   );
 }
 
-export { Avatar, AvatarFallback, AvatarImage };
+export { Avatar };

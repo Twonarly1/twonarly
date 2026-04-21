@@ -111,11 +111,9 @@ function SidebarProvider({
           } as CSSProperties
         }
         className={cn(
-          "group/sidebar-wrapper min-h-svh w-full",
+          "group/sidebar-wrapper max-h-svh min-h-svh w-full",
           layout.sidebarVariant === "inset" ? "flex bg-sidebar" : "flex",
           layout.sidebarPosition === "right" && "flex-row-reverse",
-          layout.sidebarVariant === "inset" && "max-h-svh",
-
           className,
         )}
         {...props}
@@ -312,7 +310,7 @@ function SidebarInset({ className, children, ...props }: React.ComponentProps<"m
   const insetClass =
     layout.sidebarVariant === "inset"
       ? cn(
-          "rounded-lg border bg-background overflow-auto",
+          "rounded-lg border bg-background",
           layout.sidebarCollapsible === "offcanvas" && state === "collapsed"
             ? "m-2"
             : layout.sidebarPosition === "left"

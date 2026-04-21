@@ -14,10 +14,6 @@ body {
   transition: font-size 0.2s ease-out;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
-
 :root {
   --radius: 0.5rem;
   --font-size-base: 14px;
@@ -93,13 +89,11 @@ html[data-font-size="larger"] {
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
 
-  /* Radii */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  /* Font size */
   --text-2xs: calc(var(--font-size-base) * 0.625);
   --text-xs: calc(var(--font-size-base) * 0.75);
   --text-sm: calc(var(--font-size-base) * 0.875);
@@ -110,7 +104,6 @@ html[data-font-size="larger"] {
   --text-3xl: calc(var(--font-size-base) * 1.75);
   --text-4xl: calc(var(--font-size-base) * 2);
 
-  /* Easing */
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
@@ -125,7 +118,6 @@ html[data-font-size="larger"] {
   }
 }
 
-/* Typography & Icons */
 @layer utilities {
   .icon-xs {
     width: 1em;
@@ -168,11 +160,6 @@ html.pointer-cursor select,
 html.pointer-cursor select *,
 html.pointer-cursor summary,
 html.pointer-cursor summary *,
-html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"],
-html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"] * {
-  @apply !cursor-pointer;
-}
-
 html.pointer-cursor label:has(input[type="checkbox"]),
 html.pointer-cursor label:has(input[type="checkbox"]) *,
 html.pointer-cursor label:has(input[type="radio"]),
@@ -181,34 +168,9 @@ html.pointer-cursor label:has(input[type="file"]),
 html.pointer-cursor label:has(input[type="file"]) * {
   @apply !cursor-pointer;
 }
-
-/* Staggered list animation */
-[data-slot="item"].stagger {
-  opacity: 0;
-  transform: translateY(8px);
-  animation: fadeIn 300ms var(--ease-out-strong) forwards;
-}
-
-[data-slot="item"].stagger:nth-child(1) {
-  animation-delay: 0ms;
-}
-[data-slot="item"].stagger:nth-child(2) {
-  animation-delay: 50ms;
-}
-[data-slot="item"].stagger:nth-child(3) {
-  animation-delay: 100ms;
-}
-[data-slot="item"].stagger:nth-child(4) {
-  animation-delay: 150ms;
-}
-[data-slot="item"].stagger:nth-child(5) {
-  animation-delay: 200ms;
-}
-[data-slot="item"].stagger:nth-child(6) {
-  animation-delay: 250ms;
-}
-[data-slot="item"].stagger:nth-child(7) {
-  animation-delay: 300ms;
+html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"],
+html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"] * {
+  @apply !cursor-pointer;
 }
 
 @keyframes fadeIn {
@@ -219,7 +181,13 @@ html.pointer-cursor label:has(input[type="file"]) * {
 }
 
 @keyframes grow {
-  0% { transform: scaleX(0); }
-  80% { transform: scaleX(0.8); }
-  100% { transform: scaleX(0.95); }
+  0% {
+    transform: scaleX(0);
+  }
+  80% {
+    transform: scaleX(0.8);
+  }
+  100% {
+    transform: scaleX(0.95);
+  }
 }

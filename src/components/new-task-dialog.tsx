@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useHotkeys } from "react-hotkeys-hook";
+import { useEffect } from "react";
 import { maxLength, minLength, pipe, string } from "valibot";
 
 import { Button } from "@/components/ui/button";
@@ -50,18 +50,21 @@ const NewTaskDialog = () => {
     },
   });
 
-  useHotkeys(
-    "c",
-    (e) => {
-      e.preventDefault();
-      setIsCreateTaskOpen(true);
-    },
-    {
-      description: "Add new task",
-      enabled: !isCreateTaskOpen,
-    },
-    [isCreateTaskOpen],
-  );
+  // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to listen to changes in isCreateTaskOpen
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (isCreateTaskOpen) return;
+
+      if (e.key === "c") {
+        e.preventDefault();
+        setIsCreateTaskOpen(true);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isCreateTaskOpen]);
 
   return (
     <Tooltip delayDuration={400}>

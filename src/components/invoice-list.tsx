@@ -106,6 +106,9 @@ const InvoiceList = () => {
             style={
               shouldAnimate
                 ? {
+                    opacity: 0,
+                    transform: "translateY(8px)",
+                    animation: "fadeIn 300ms var(--ease-out-strong) forwards",
                     animationDelay: `${(i - animateFromIndex.current) * 80}ms`,
                   }
                 : undefined

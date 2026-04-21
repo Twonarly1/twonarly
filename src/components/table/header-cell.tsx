@@ -30,7 +30,7 @@ const HeaderCell = ({ header }: Props) => {
 
   if (!canSort) {
     return (
-      <TableCell className="pointer-events-none py-1" style={cellStyle}>
+      <TableCell className="py-1" style={cellStyle}>
         {flexRender(column.columnDef.header, getContext())}
       </TableCell>
     );

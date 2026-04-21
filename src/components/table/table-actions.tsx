@@ -1,6 +1,5 @@
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Check, Trash, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
@@ -107,26 +106,21 @@ const TableActions = ({ table }: Props) => {
   if (!selectedCount) return null;
 
   return (
-    <div className="pointer-events-none sticky bottom-20 flex justify-center sm:bottom-12">
-      <div className="pointer-events-auto flex items-center gap-1 rounded-lg border bg-background/95 p-1.5 shadow-lg backdrop-blur">
-        <span className="px-3 text-muted-foreground">{selectedCount}</span>
+    <div
+      // Touchy
+      className="absolute bottom-8 left-0 w-full p-4 sm:right-0 sm:left-auto sm:w-auto"
+    >
+      <div className="flex items-center gap-2">
+        <span className="select-none text-muted-foreground">
+          {selectedCount} selected <span className="pl-2">—</span>
+        </span>
 
-        <div className="h-6 w-px bg-border" />
-
-        <Button variant="ghost" size="sm" onClick={handleToggleComplete}>
-          <Check className="icon-sm" />
-          Complete
+        <Button variant="outline" size="sm" onClick={handleToggleComplete}>
+          Toggle
         </Button>
 
-        <Button variant="ghost" size="sm" onClick={handleDelete}>
-          <Trash className="icon-sm" />
+        <Button variant="outline" size="sm" onClick={handleDelete}>
           Delete
-        </Button>
-
-        <div className="h-6 w-px bg-border" />
-
-        <Button variant="ghost" size="icon-sm" onClick={() => table.resetRowSelection()}>
-          <X className="icon-xs" />
         </Button>
       </div>
     </div>

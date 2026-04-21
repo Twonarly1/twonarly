@@ -1,10 +1,11 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import clsx from "clsx";
 import { Check, ChevronDown } from "lucide-react";
-import { useHotkeys } from "react-hotkeys-hook";
+import { useEffect } from "react";
 
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,7 +33,6 @@ import {
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
 import { navLinks } from "@/lib/constants/nav-links";
-import { cn } from "@/lib/utils";
 import { useLayout } from "@/providers/layout-provider";
 import { Route } from "@/routes/_authenticated";
 
@@ -61,7 +61,19 @@ const AppSidebar = () => {
     }
   };
 
-  useHotkeys("b", toggleSidebar, { description: "Toggle sidebar" }, [toggleSidebar]);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.key === "b") {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [toggleSidebar]);
 
   return (
     <Sidebar>
@@ -71,21 +83,17 @@ const AppSidebar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
-                  className={cn(
+                  className={clsx(
                     "flex justify-start px-0!",
-                    layout.sidebarVariant === "inset" && "mt-2",
-                    layout.sidebarVariant === "classic" && "mt-2",
+                    (layout.sidebarVariant === "inset" || layout.sidebarVariant === "classic") &&
+                      "mt-2",
                   )}
                 >
-                  <Avatar className="size-7.5 overflow-hidden rounded">
-                    <AvatarImage
-                      src={user?.image || undefined}
-                      alt={user?.name || "User avatar"}
-                      className="rounded-lg"
-                    />
-                    <AvatarFallback className="rounded-lg">{user?.name?.charAt(0)}</AvatarFallback>
-                  </Avatar>
-
+                  <Avatar
+                    src={user?.image}
+                    alt={user?.name || "User avatar"}
+                    className="size-7.5 rounded-lg"
+                  />
                   <span className="truncate font-medium group-data-[collapsible=icon]:hidden">
                     {user?.name}
                   </span>
@@ -110,13 +118,11 @@ const AppSidebar = () => {
                               key={deviceSession.session.token}
                               onSelect={() => handleAccountSwitch(deviceSession.session.token)}
                             >
-                              <Avatar className="mr-0.5 size-6 rounded">
-                                <AvatarImage
-                                  src={deviceSession.user.image || undefined}
-                                  alt={deviceSession.user.name}
-                                />
-                                <AvatarFallback>{deviceSession.user.name.charAt(0)}</AvatarFallback>
-                              </Avatar>
+                              <Avatar
+                                src={deviceSession.user.image}
+                                alt={deviceSession.user.name}
+                                className="mr-0.5 size-6 rounded"
+                              />
                               <div className="flex flex-col">
                                 <p className="text-base">{deviceSession.user.name}</p>
                                 <p className="text-muted-foreground text-sm">
