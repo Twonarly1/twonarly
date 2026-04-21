@@ -1,7 +1,5 @@
 import { useId } from "react";
 
-import { cn } from "@/lib/utils";
-
 import type { ComponentProps } from "react";
 
 interface SwitchProps extends Omit<ComponentProps<"button">, "onChange"> {
@@ -10,14 +8,7 @@ interface SwitchProps extends Omit<ComponentProps<"button">, "onChange"> {
   disabled?: boolean;
 }
 
-function Switch({
-  checked = false,
-  onCheckedChange,
-  disabled = false,
-  className,
-  id,
-  ...props
-}: SwitchProps) {
+function Switch({ checked = false, onCheckedChange, disabled = false, id, ...props }: SwitchProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
 
@@ -30,14 +21,7 @@ function Switch({
       data-state={checked ? "checked" : "unchecked"}
       disabled={disabled}
       onClick={() => onCheckedChange?.(!checked)}
-      className={cn(
-        "group relative inline-flex h-5 w-7.5 shrink-0 items-center rounded-full",
-        "transition-colors duration-150 ease-out-strong",
-        "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-        "disabled:cursor-not-allowed disabled:opacity-50",
-        checked ? "bg-primary" : "bg-muted",
-        className,
-      )}
+      className="group relative inline-flex h-5 w-7.5 shrink-0 items-center rounded-full bg-muted transition-colors duration-150 ease-out-strong focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary"
       {...props}
     >
       <input
@@ -51,13 +35,8 @@ function Switch({
         aria-hidden
       />
 
-      <span
-        className={cn(
-          "pointer-events-none block size-3.5 rounded-full bg-background shadow-sm",
-          "transition-transform duration-150 ease-out-strong",
-          checked ? "translate-x-3.25" : "translate-x-0.75 group-hover:w-4",
-        )}
-      />
+      {/* TODO: fix animation */}
+      <span className="pointer-events-none block size-3.5 translate-x-0.75 rounded-full bg-background shadow-sm transition-transform duration-150 ease-out-strong group-hover:w-4 group-data-[state=checked]:translate-x-3.25 group-data-[state=checked]:group-hover:w-3.5" />
     </button>
   );
 }

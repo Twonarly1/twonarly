@@ -10,7 +10,7 @@ interface ConnectOptionListProps {
 
 const ConnectOptionList = ({ wallets, onConnect, disabled }: ConnectOptionListProps) => {
   return (
-    <div className="grid space-y-2">
+    <div className="grid max-h-52 gap-2 overflow-y-auto">
       {wallets.map((wallet) => (
         <Button
           key={wallet.info.uuid}

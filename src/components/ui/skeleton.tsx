@@ -11,3 +11,7 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 export { Skeleton };
+
+export function skeletonRows(count: number) {
+  return Array.from({ length: count }, (_, i) => i);
+}

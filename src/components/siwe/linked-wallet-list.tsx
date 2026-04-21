@@ -1,6 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 
-import { ConnectWalletDialog } from "@/components/connect-wallet-dialog";
+import { ConnectWalletDialog } from "@/components/siwe/connect-wallet-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Item,
@@ -15,8 +15,8 @@ import { AUTH_BASE } from "@/lib/auth/auth-client";
 import { cn } from "@/lib/utils";
 import { formatWalletAddress } from "@/lib/utils/format";
 import { Route } from "@/routes/_authenticated/accounts";
-import CopyButton from "./copy-to-clipboard";
-import { EtherscanIcon } from "./icons/etherscan";
+import CopyButton from "../copy-to-clipboard";
+import { EtherscanIcon } from "../icons/etherscan";
 
 import type { Wallet } from "@/lib/db/schema";
 
@@ -85,6 +85,7 @@ const LinkedWalletList = () => {
               </a>
 
               <CopyButton text={wallet.address} />
+
               <Button variant="ghost" size="sm" onClick={() => handleUnlink(wallet)}>
                 Unlink
               </Button>

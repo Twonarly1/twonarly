@@ -1,11 +1,11 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { FingerprintPattern } from "lucide-react";
 
-import { ConnectWalletDialog } from "@/components/connect-wallet-dialog";
 import Link from "@/components/core/link";
 import { EthereumIcon } from "@/components/icons/ethereum";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
+import { ConnectWalletDialog } from "@/components/siwe/connect-wallet-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn } from "@/lib/auth/auth-client";

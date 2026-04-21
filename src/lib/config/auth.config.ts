@@ -1,8 +1,8 @@
 import { passkey } from "@better-auth/passkey";
 import { stripe } from "@better-auth/stripe";
-import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { generateRandomString } from "better-auth/crypto";
+import { betterAuth } from "better-auth/minimal";
 import { multiSession, siwe } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { verifyMessage } from "viem";
@@ -31,6 +31,12 @@ export const auth = betterAuth({
       "/siwe/verify": { window: 60, max: 5 },
       "/siwe/unlink-wallet": { window: 60, max: 5 },
       "/sign-in/*": { window: 60, max: 10 },
+    },
+  },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // 5 minutes
     },
   },
   socialProviders: {

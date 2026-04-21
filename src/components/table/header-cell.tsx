@@ -1,10 +1,10 @@
 import { flexRender } from "@tanstack/react-table";
+import clsx from "clsx";
 import { ArrowDown, ArrowUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { TableCell, TableHead } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
 
 import type { Header } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";
@@ -54,7 +54,7 @@ const HeaderCell = ({ header }: Props) => {
           >
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
-              className={cn(
+              className={clsx(
                 "size-3 shrink-0",
                 showIcon ? "opacity-100" : "opacity-0 group-hover:opacity-100",
               )}

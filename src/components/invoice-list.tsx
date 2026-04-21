@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Fragment, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
 import Link from "@/components/core/link";
@@ -18,7 +18,7 @@ import { StatusErrorIcon } from "./icons/status-error";
 import { StatusInfoIcon } from "./icons/status-info";
 import { StatusSuccessIcon } from "./icons/status-success";
 import { StatusWarningIcon } from "./icons/status-warning";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton, skeletonRows } from "./ui/skeleton";
 
 import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 
@@ -64,21 +64,18 @@ const InvoiceList = () => {
   if (isLoading)
     return (
       <ItemGroup className="divide-none">
-        {Array.from({ length: 4 }).map((_, i) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: Okay
-          <Fragment key={i}>
-            <Item>
-              <Skeleton className="flex size-4 sm:hidden" />
-              <ItemContent>
-                <Skeleton className="h-4 w-48" />
-                <Skeleton className="h-3.5 w-28" />
-              </ItemContent>
-              <ItemActions className="hidden sm:flex">
-                <Skeleton className="h-6 w-16" />
-                <Skeleton className="h-6 w-16" />
-              </ItemActions>
-            </Item>
-          </Fragment>
+        {skeletonRows(4).map((i) => (
+          <Item key={i}>
+            <Skeleton className="flex size-4 sm:hidden" />
+            <ItemContent>
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-3.5 w-28" />
+            </ItemContent>
+            <ItemActions className="hidden sm:flex">
+              <Skeleton className="h-6 w-16" />
+              <Skeleton className="h-6 w-16" />
+            </ItemActions>
+          </Item>
         ))}
       </ItemGroup>
     );
