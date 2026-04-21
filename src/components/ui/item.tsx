@@ -1,7 +1,5 @@
 import { cva } from "class-variance-authority";
-import { Slot } from "radix-ui";
 
-import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
 import type { VariantProps } from "class-variance-authority";
@@ -12,17 +10,6 @@ function ItemGroup({ className, ...props }: React.ComponentProps<"ul">) {
     <ul
       data-slot="item-group"
       className={cn("group/item-group flex flex-col divide-y", className)}
-      {...props}
-    />
-  );
-}
-
-function ItemSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
-  return (
-    <Separator
-      data-slot="item-separator"
-      orientation="horizontal"
-      className={cn("my-0", className)}
       {...props}
     />
   );
@@ -54,12 +41,10 @@ function Item({
   className,
   variant = "default",
   size = "default",
-  asChild = false,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof itemVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "div";
+}: React.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
   return (
-    <Comp
+    <div
       data-slot="item"
       data-variant={variant}
       data-size={size}
@@ -176,6 +161,5 @@ export {
   ItemGroup,
   ItemHeader,
   ItemMedia,
-  ItemSeparator,
   ItemTitle,
 };

@@ -18,10 +18,10 @@ export function getRouter() {
     defaultErrorComponent: DefaultError,
     defaultNotFoundComponent: DefaultNotFound,
     defaultPendingComponent: DefaultPending,
-    defaultPreloadStaleTime: 0,
+    defaultPreloadStaleTime: 1000 * 30, // 30 seconds
     defaultPendingMs: 300,
     defaultPendingMinMs: 200,
-    defaultStaleTime: 1000 * 60 * 5,
+    defaultStaleTime: 1000 * 60 * 5, // 5 minutes
     scrollRestoration: true,
     Wrap: ({ children }: PropsWithChildren) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

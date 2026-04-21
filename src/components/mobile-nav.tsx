@@ -40,8 +40,10 @@ const MobileBottomNav = () => {
                 "flex flex-1 flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 transition-colors",
                 "text-muted-foreground hover:text-foreground",
                 "active:scale-95",
-                isActive && "text-foreground",
               )}
+              activeProps={{
+                className: "text-foreground",
+              }}
             >
               <item.icon className={cn("size-5 transition-colors", isActive && "text-primary")} />
               <span className={cn("font-medium text-xs leading-none", isActive && "text-primary")}>
@@ -74,24 +76,23 @@ const MobileBottomNav = () => {
             </DrawerHeader>
 
             <div className="p-4">
-              {moreLinks.map((item) => {
-                const isActive = item.to === pathname;
-                return (
-                  <Link
-                    key={item.to}
-                    to={item.to}
-                    onClick={() => setMoreOpen(false)}
-                    className={cn(
-                      "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-base transition-colors",
-                      "text-muted-foreground hover:bg-primary/10 hover:text-foreground",
-                      isActive && "bg-muted text-foreground",
-                    )}
-                  >
-                    <item.icon className="size-4 shrink-0" />
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                );
-              })}
+              {moreLinks.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={() => setMoreOpen(false)}
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-md px-2.5 py-2 text-base transition-colors",
+                    "text-muted-foreground hover:bg-primary/10 hover:text-foreground",
+                  )}
+                  activeProps={{
+                    className: "bg-primary text-primary-foreground",
+                  }}
+                >
+                  <item.icon className="size-4 shrink-0" />
+                  <span className="font-medium">{item.label}</span>
+                </Link>
+              ))}
             </div>
           </DrawerContent>
         </Drawer>

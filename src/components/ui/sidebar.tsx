@@ -1,7 +1,6 @@
 "use client";
 
 import { PanelLeft } from "lucide-react";
-import { Slot } from "radix-ui";
 import React from "react";
 import { match } from "ts-pattern";
 
@@ -17,6 +16,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { COOKIES } from "@/lib/constants/cookies";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { Slot } from "@/lib/utils/slot";
 import { useLayout } from "@/providers/layout-provider";
 
 import type { CSSProperties } from "react";
@@ -381,7 +381,7 @@ function SidebarGroupLabel({
   asChild = false,
   ...props
 }: React.ComponentProps<"div"> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "div";
+  const Comp = asChild ? Slot : "div";
 
   return (
     <Comp
@@ -436,7 +436,7 @@ function SidebarMenuButton({
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 }) {
-  const Comp = asChild ? Slot.Root : "button";
+  const Comp = asChild ? Slot : "button";
   const { isMobile, state } = useSidebar();
 
   const button = (

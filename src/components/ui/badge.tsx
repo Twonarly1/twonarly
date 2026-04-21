@@ -1,5 +1,4 @@
 import { cva } from "class-variance-authority";
-import { Slot } from "radix-ui";
 
 import { cn } from "@/lib/utils";
 
@@ -30,13 +29,10 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
-  asChild = false,
   ...props
-}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "span";
-
+}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants>) {
   return (
-    <Comp
+    <span
       data-slot="badge"
       data-variant={variant}
       className={cn(badgeVariants({ variant }), className)}

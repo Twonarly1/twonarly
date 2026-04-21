@@ -32,37 +32,53 @@ const AuthenticatedTasksIndexRoute = AuthenticatedTasksIndexRouteImport.update({
   id: '/tasks/',
   path: '/tasks/',
   getParentRoute: () => AuthenticatedRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_authenticated/tasks/index.lazy').then((d) => d.Route),
+)
 const AuthenticatedProfileIndexRoute =
   AuthenticatedProfileIndexRouteImport.update({
     id: '/profile/',
     path: '/profile/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/_authenticated/profile/index.lazy').then((d) => d.Route),
+  )
 const AuthenticatedPreferencesIndexRoute =
   AuthenticatedPreferencesIndexRouteImport.update({
     id: '/preferences/',
     path: '/preferences/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/_authenticated/preferences/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AuthenticatedIntegrationsIndexRoute =
   AuthenticatedIntegrationsIndexRouteImport.update({
     id: '/integrations/',
     path: '/integrations/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/_authenticated/integrations/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 const AuthenticatedBillingIndexRoute =
   AuthenticatedBillingIndexRouteImport.update({
     id: '/billing/',
     path: '/billing/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/_authenticated/billing/index.lazy').then((d) => d.Route),
+  )
 const AuthenticatedAccountsIndexRoute =
   AuthenticatedAccountsIndexRouteImport.update({
     id: '/accounts/',
     path: '/accounts/',
     getParentRoute: () => AuthenticatedRoute,
-  } as any)
+  } as any).lazy(() =>
+    import('./routes/_authenticated/accounts/index.lazy').then((d) => d.Route),
+  )
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',

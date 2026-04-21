@@ -1,19 +1,36 @@
-import { Collapsible as CollapsiblePrimitive } from "radix-ui";
+import { cn } from "@/lib/utils";
 
-function Collapsible({ ...props }: React.ComponentProps<typeof CollapsiblePrimitive.Root>) {
-  return <CollapsiblePrimitive.Root data-slot="collapsible" {...props} />;
-}
+import type { ComponentProps } from "react";
 
-function CollapsibleTrigger({
+/**
+ * Collapsible component using `interpolate-size: allow-keywords`
+ * to animate height from 0 to auto — the same technique Linear uses.
+ *
+ * Supported in Chrome/Edge 129+, ~70% of users.
+ * Degrades to an instant snap in Firefox/Safari — no layout breakage.
+ */
+function Collapsible({
+  open,
+  className,
+  children,
   ...props
-}: React.ComponentProps<typeof CollapsiblePrimitive.CollapsibleTrigger>) {
-  return <CollapsiblePrimitive.CollapsibleTrigger data-slot="collapsible-trigger" {...props} />;
+}: ComponentProps<"div"> & { open: boolean }) {
+  return (
+    <div
+      data-slot="collapsible"
+      data-open={open}
+      className={cn(
+        "overflow-hidden transition-[height,opacity] duration-200",
+        "ease-out-strong",
+        "[interpolate-size:allow-keywords]",
+        open ? "h-auto opacity-100" : "h-0 opacity-0",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  );
 }
 
-function CollapsibleContent({
-  ...props
-}: React.ComponentProps<typeof CollapsiblePrimitive.CollapsibleContent>) {
-  return <CollapsiblePrimitive.CollapsibleContent data-slot="collapsible-content" {...props} />;
-}
-
-export { Collapsible, CollapsibleContent, CollapsibleTrigger };
+export { Collapsible };

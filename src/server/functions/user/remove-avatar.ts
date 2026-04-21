@@ -1,10 +1,9 @@
-import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/config/auth.config";
-import { r2 } from "@/lib/config/r2.config";
+import { R2_ENDPOINT, r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import { user } from "@/lib/db/schema";
@@ -13,7 +12,9 @@ import { rateLimit } from "@/server/rate-limit";
 export const removeAvatar = createServerFn({ method: "POST" })
   .middleware([rateLimit({ key: "remove-avatar", limit: 5, window: 60 })])
   .handler(async () => {
-    const session = await auth.api.getSession({ headers: getRequestHeaders() });
+    const session = await auth.api.getSession({
+      headers: getRequestHeaders(),
+    });
 
     if (!session) {
       throw new Error("Unauthorized");
@@ -27,12 +28,9 @@ export const removeAvatar = createServerFn({ method: "POST" })
 
       if (currentUser?.image) {
         const key = currentUser.image.replace(`${env.R2_PUBLIC_URL}/`, "");
-        await r2.send(
-          new DeleteObjectCommand({
-            Bucket: env.R2_BUCKET_NAME,
-            Key: key,
-          }),
-        );
+        await r2.fetch(`${R2_ENDPOINT}/${env.R2_BUCKET_NAME}/${key}`, {
+          method: "DELETE",
+        });
       }
 
       await db

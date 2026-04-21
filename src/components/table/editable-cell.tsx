@@ -124,7 +124,7 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
       onChange={(e) => setValue(e.target.value)}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
-      className="placeholder: h-7 w-full bg-white px-2 font-medium focus-visible:border-border"
+      className="placeholder: h-7 w-full px-2 font-medium focus-visible:border-border"
       placeholder={column.id === "description" ? "Add task description..." : undefined}
     />
   );

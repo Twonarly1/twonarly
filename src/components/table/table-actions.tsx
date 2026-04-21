@@ -3,7 +3,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { Check, Trash, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/toast";
 import { deleteTask } from "@/server/functions/task/delete-task";
 import { toggleTaskComplete } from "@/server/functions/task/toggle-task-complete";
@@ -112,7 +111,7 @@ const TableActions = ({ table }: Props) => {
       <div className="pointer-events-auto flex items-center gap-1 rounded-lg border bg-background/95 p-1.5 shadow-lg backdrop-blur">
         <span className="px-3 text-muted-foreground">{selectedCount}</span>
 
-        <Separator orientation="vertical" className="h-6" />
+        <div className="h-6 w-px bg-border" />
 
         <Button variant="ghost" size="sm" onClick={handleToggleComplete}>
           <Check className="icon-sm" />
@@ -124,7 +123,7 @@ const TableActions = ({ table }: Props) => {
           Delete
         </Button>
 
-        <Separator orientation="vertical" className="h-6" />
+        <div className="h-6 w-px bg-border" />
 
         <Button variant="ghost" size="icon-sm" onClick={() => table.resetRowSelection()}>
           <X className="icon-xs" />

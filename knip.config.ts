@@ -1,7 +1,7 @@
 import type { KnipConfig } from "knip";
 
 const knipConfig: KnipConfig = {
-  ignoreDependencies: ["@radix-ui/react-*", "tailwindcss", "tw-animate-css"],
+  ignoreDependencies: ["tailwindcss", "tw-animate-css"],
   ignoreExportsUsedInFile: true,
   entry: ["src/**/*.{ts,tsx}"],
   project: ["src/**/*.{ts,tsx}"],
