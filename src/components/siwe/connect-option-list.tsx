@@ -15,7 +15,6 @@ const ConnectOptionList = ({ wallets, onConnect, disabled }: ConnectOptionListPr
         <Button
           key={wallet.info.uuid}
           variant="outline"
-          size="sm"
           onClick={() => onConnect(wallet)}
           disabled={disabled}
           className="h-10 items-center justify-start gap-3"

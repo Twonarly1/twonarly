@@ -154,6 +154,9 @@ function TasksPage() {
       deleteTask: (rowId: string) => {
         setData((old) => old.filter((row) => row.id !== rowId));
       },
+      restoreTask: (task: Task) => {
+        setData((old) => [...old, task]);
+      },
     },
   });
 

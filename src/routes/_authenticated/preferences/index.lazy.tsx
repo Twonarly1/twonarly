@@ -100,11 +100,7 @@ function SettingsPage() {
             <ItemActions className="px-4">
               <Select value={theme} onValueChange={setTheme}>
                 <SelectTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 transition-none"
-                  >
+                  <Button variant="outline" className="flex items-center gap-2 transition-none">
                     {match(theme)
                       .with("light", () => <Sun className="icon-xs" />)
                       .with("dark", () => <Moon className="icon-xs" />)
@@ -163,12 +159,7 @@ function SettingsPage() {
 
               {(backgroundHex || accentHex || borderHex) && (
                 <div className="flex justify-end pt-2 pb-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handleResetCustomTheme}
-                    className="mr-4"
-                  >
+                  <Button variant="outline" onClick={handleResetCustomTheme} className="mr-4">
                     Reset to Default
                   </Button>
                 </div>
@@ -189,7 +180,7 @@ function SettingsPage() {
                 }
               >
                 <SelectTrigger asChild>
-                  <Button variant="outline" size="sm" className="transition-none">
+                  <Button variant="outline" className="transition-none">
                     <SelectValue placeholder="Select font size" />
                     <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
                   </Button>
@@ -250,7 +241,7 @@ function SettingsPage() {
                   }
                 >
                   <SelectTrigger asChild>
-                    <Button variant="outline" size="sm" className="transition-none">
+                    <Button variant="outline" className="transition-none">
                       <SelectValue placeholder="Select sidebar position" />
                       <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
                     </Button>
@@ -280,7 +271,7 @@ function SettingsPage() {
                       }
                     >
                       <SelectTrigger asChild>
-                        <Button variant="outline" size="sm" className="transition-none">
+                        <Button variant="outline" className="transition-none">
                           <SelectValue placeholder="Select sidebar variant" />
                           <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
                         </Button>
@@ -311,7 +302,7 @@ function SettingsPage() {
                       }
                     >
                       <SelectTrigger asChild>
-                        <Button variant="outline" size="sm" className="transition-none">
+                        <Button variant="outline" className="transition-none">
                           <SelectValue placeholder="Select sidebar collapsible option" />
                           <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
                         </Button>

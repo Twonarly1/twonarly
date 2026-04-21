@@ -3,6 +3,10 @@ import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
 import Link from "@/components/core/link";
+import { StatusErrorIcon } from "@/components/icons/status-error";
+import { StatusInfoIcon } from "@/components/icons/status-info";
+import { StatusSuccessIcon } from "@/components/icons/status-success";
+import { StatusWarningIcon } from "@/components/icons/status-warning";
 import { Button } from "@/components/ui/button";
 import {
   Item,
@@ -12,13 +16,9 @@ import {
   ItemGroup,
   ItemTitle,
 } from "@/components/ui/item";
+import { Skeleton, skeletonRows } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/utils/format";
 import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
-import { StatusErrorIcon } from "./icons/status-error";
-import { StatusInfoIcon } from "./icons/status-info";
-import { StatusSuccessIcon } from "./icons/status-success";
-import { StatusWarningIcon } from "./icons/status-warning";
-import { Skeleton, skeletonRows } from "./ui/skeleton";
 
 import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 
@@ -123,7 +123,7 @@ const InvoiceList = () => {
                     ))}
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="space-y-1">
                   <ItemTitle className="flex items-center gap-2 font-normal">
                     {invoice.lines.map((line) => line.description).join(", ")}
                   </ItemTitle>
@@ -163,7 +163,7 @@ const InvoiceList = () => {
       {hasMore && (
         <Item>
           <ItemContent className="items-center">
-            <Button variant="ghost" size="sm" onClick={loadMore} disabled={loadingMore}>
+            <Button variant="ghost" onClick={loadMore} disabled={loadingMore}>
               {loadingMore ? "Loading…" : "Show past invoices"}
             </Button>
           </ItemContent>

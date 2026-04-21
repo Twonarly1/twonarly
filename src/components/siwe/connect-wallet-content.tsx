@@ -1,15 +1,13 @@
 import { useNavigate, useRouter } from "@tanstack/react-router";
-import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { match } from "ts-pattern";
 
+import { StatusErrorIcon } from "@/components/icons/status-error";
 import ConnectOptionList from "@/components/siwe/connect-option-list";
-import { Button } from "@/components/ui/button";
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { AUTH_BASE, authClient } from "@/lib/auth/auth-client";
 import { useInjectedWallets } from "@/lib/hooks/use-injected-wallets";
-import { StatusErrorIcon } from "../icons/status-error";
 
 import type { EIP6963Provider } from "@/lib/hooks/use-injected-wallets";
 
@@ -116,20 +114,10 @@ export function ConnectWalletContent({ mode }: Props) {
     }
   };
 
-  const handleReset = () => {
-    setStep("idle");
-    setActiveWallet(null);
-    setErrorMessage(null);
-  };
-
   if (isProcessing) {
     return (
-      <div className="flex flex-col items-center gap-6 py-4">
-        <Button variant="ghost" size="sm" onClick={handleReset} className="self-start">
-          <ArrowLeft className="icon-lg" />
-        </Button>
-
-        <div className="relative flex size-20 items-center justify-center">
+      <div className="mx-auto grid h-52 w-full items-center py-4">
+        <div className="relative mx-auto flex size-20 items-center justify-center">
           <div className="absolute inset-0 animate-spin rounded-full border-2 border-muted border-t-primary" />
           <div className="flex size-12 items-center justify-center rounded-xl">
             {activeWallet && (
@@ -138,7 +126,7 @@ export function ConnectWalletContent({ mode }: Props) {
           </div>
         </div>
 
-        <span className="text-muted-foreground">
+        <span className="text-center text-muted-foreground">
           {match(step)
             .with("connecting", () => "Click connect in your wallet popup")
             .with("signing", () => "Waiting for wallet confirmation…")
@@ -152,7 +140,7 @@ export function ConnectWalletContent({ mode }: Props) {
   return (
     <>
       {step === "error" && (
-        <Item variant="destructive" size="sm" className="rounded-lg">
+        <Item variant="destructive" className="rounded-lg">
           <ItemMedia>
             <StatusErrorIcon />
           </ItemMedia>
@@ -166,7 +154,7 @@ export function ConnectWalletContent({ mode }: Props) {
       {wallets.length > 0 ? (
         <ConnectOptionList wallets={wallets} onConnect={handleConnect} disabled={isProcessing} />
       ) : (
-        <Item variant="outline" size="sm" className="rounded-lg">
+        <Item variant="outline" className="rounded-lg">
           <ItemContent>
             <ItemDescription>
               No wallets detected. Install a browser wallet like MetaMask to continue.

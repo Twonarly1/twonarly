@@ -27,10 +27,11 @@ function safeHex(value: string | undefined): string {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   loader: async () => {
-    const theme = await getTheme();
-    const customColors = await getCustomColors();
-    const appearance = await getAppearance();
-
+    const [theme, customColors, appearance] = await Promise.all([
+      getTheme(),
+      getCustomColors(),
+      getAppearance(),
+    ]);
     return { theme, customColors, appearance };
   },
   head: () => ({

@@ -12,6 +12,7 @@ declare module "@tanstack/react-table" {
   interface TableMeta<TData extends RowData> {
     updateTask: (rowId: string, columnId: string, value: unknown) => void;
     deleteTask: (rowId: string) => void;
+    restoreTask: (task: TData) => void;
   }
 }
 

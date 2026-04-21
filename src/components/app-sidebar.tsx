@@ -45,7 +45,6 @@ const AppSidebar = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    await router.invalidate();
     await navigate({ to: "/" });
   };
 

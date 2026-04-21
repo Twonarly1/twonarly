@@ -112,6 +112,17 @@ function ProfilePage() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteUserFn({ data: { id: user.id } });
+      await signOut();
+      await navigate({ to: "/" });
+    } catch (error) {
+      console.error("Delete account error:", error);
+      toast.error({ title: "Failed to delete account" });
+    }
+  };
+
   useOnClickOutside(containerRef as RefObject<HTMLElement>, () => {
     if (name?.trim() && name !== user.name) {
       handleUpdateName();
@@ -238,15 +249,7 @@ function ProfilePage() {
                   <DialogClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DialogClose>
-                  <Button
-                    variant="destructive"
-                    onClick={async () => {
-                      await deleteUserFn({ data: { id: user.id } });
-                      await signOut();
-                      await router.invalidate();
-                      await navigate({ to: "/" });
-                    }}
-                  >
+                  <Button variant="destructive" onClick={handleDeleteAccount}>
                     Delete
                   </Button>
                 </DialogFooter>

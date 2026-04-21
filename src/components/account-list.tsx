@@ -23,8 +23,6 @@ const AccountList = () => {
   const router = useRouter();
   const navigate = useNavigate();
 
-  const { data: session } = authClient.useSession();
-
   const handleSignOut = async () => {
     await signOut();
     navigate({ to: "/" });
@@ -32,7 +30,7 @@ const AccountList = () => {
 
   const handleAccountSwitch = async (token: string) => {
     await authClient.multiSession.setActive({ sessionToken: token });
-    router.invalidate();
+    await router.invalidate();
   };
 
   const handleRemoveAccount = async (token: string) => {
@@ -43,11 +41,11 @@ const AccountList = () => {
   return (
     <ItemGroup className="rounded-lg border">
       {deviceSessions.map((deviceSession) => {
-        const isCurrent = deviceSession.user.id === session?.user.id;
+        const { isCurrent } = deviceSession;
         const provider = accounts.find((a) => a.userId === deviceSession.user.id)?.providerId;
 
         return (
-          <Item key={deviceSession.session.token} size="sm">
+          <Item key={deviceSession.session.token}>
             <ItemContent>
               <div className="flex items-center gap-2">
                 <Avatar
@@ -72,7 +70,7 @@ const AccountList = () => {
             </ItemContent>
             <ItemActions>
               {isCurrent ? (
-                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <Button variant="ghost" onClick={handleSignOut}>
                   Log out
                 </Button>
               ) : (
@@ -80,7 +78,6 @@ const AccountList = () => {
                   <div className="hidden items-center gap-2 sm:flex">
                     <Button
                       variant="outline"
-                      size="sm"
                       onClick={() => handleAccountSwitch(deviceSession.session.token!)}
                     >
                       <Repeat className="icon-xs" />
@@ -88,7 +85,6 @@ const AccountList = () => {
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
                       onClick={() => handleRemoveAccount(deviceSession.session.token!)}
                     >
                       Revoke
@@ -98,7 +94,7 @@ const AccountList = () => {
                   {/* mobile dropdown */}
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="sm:hidden">
+                      <Button variant="outline" className="sm:hidden">
                         Manage
                       </Button>
                     </DropdownMenuTrigger>
@@ -132,9 +128,7 @@ const AccountList = () => {
         <ItemActions>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm">
-                Add account
-              </Button>
+              <Button variant="ghost">Add account</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="space-y-0.5">
               <DropdownMenuItem onClick={() => signIn("google")}>

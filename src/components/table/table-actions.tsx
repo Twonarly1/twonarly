@@ -115,11 +115,11 @@ const TableActions = ({ table }: Props) => {
           {selectedCount} selected <span className="pl-2">—</span>
         </span>
 
-        <Button variant="outline" size="sm" onClick={handleToggleComplete}>
+        <Button variant="outline" onClick={handleToggleComplete}>
           Toggle
         </Button>
 
-        <Button variant="outline" size="sm" onClick={handleDelete}>
+        <Button variant="outline" onClick={handleDelete}>
           Delete
         </Button>
       </div>

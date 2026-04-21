@@ -12,13 +12,13 @@ import { getSession } from "@/server/functions/session/get-session";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async () => {
-    const session = await getSession();
-    if (!session) throw redirect({ to: "/" });
-
-    const [deviceSessions, layoutSettings] = await Promise.all([
+    const [session, deviceSessions, layoutSettings] = await Promise.all([
+      getSession(),
       getDeviceSessions(),
       fetchLayout(),
     ]);
+
+    if (!session) throw redirect({ to: "/" });
 
     return { user: session.user, deviceSessions, layoutSettings };
   },

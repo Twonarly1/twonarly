@@ -99,7 +99,7 @@ function BillingPage() {
             <ItemDescription>{planDescription}</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button size="sm" onClick={isActive ? openBillingPortal : handleUpgrade}>
+            <Button onClick={isActive ? openBillingPortal : handleUpgrade}>
               {isActive ? "Manage" : "Upgrade"}
             </Button>
           </ItemActions>
@@ -139,7 +139,6 @@ function BillingPage() {
                 <CardFooter>
                   <Button
                     variant="outline"
-                    size="sm"
                     className="w-full"
                     onClick={isActive ? openBillingPortal : handleUpgrade}
                   >

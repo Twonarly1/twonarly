@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 
+import { ConnectWalletSkeleton } from "@/components/siwe/connect-wallet-skeleton";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ConnectWalletSkeleton } from "./connect-wallet-skeleton";
 
 import type { ReactNode } from "react";
 
@@ -28,13 +28,17 @@ interface Props {
 
 export function ConnectWalletDialog({ trigger, mode }: Props) {
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => setMounted(true), []);
+  const [key, setKey] = useState(0);
 
   if (!mounted) return <>{trigger}</>;
 
   return (
-    <Dialog>
+    <Dialog
+      onOpenChange={(open) => {
+        if (!open) setKey((k) => k + 1);
+      }}
+    >
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -53,7 +57,7 @@ export function ConnectWalletDialog({ trigger, mode }: Props) {
         </DialogHeader>
 
         <Suspense fallback={<ConnectWalletSkeleton />}>
-          <ConnectWalletContent mode={mode} />
+          <ConnectWalletContent key={key} mode={mode} />
         </Suspense>
       </DialogContent>
     </Dialog>

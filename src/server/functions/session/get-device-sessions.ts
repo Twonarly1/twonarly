@@ -13,9 +13,14 @@ export const getDeviceSessions = createServerFn({ method: "POST" }).handler(asyn
 
   const currentUserId = currentSession?.user?.id;
 
-  return deviceSessions.sort((a, b) => {
-    if (a.user.id === currentUserId) return -1;
-    if (b.user.id === currentUserId) return 1;
-    return 0;
-  });
+  return deviceSessions
+    .map((ds) => ({
+      ...ds,
+      isCurrent: ds.user.id === currentUserId,
+    }))
+    .sort((a, b) => {
+      if (a.isCurrent) return -1;
+      if (b.isCurrent) return 1;
+      return 0;
+    });
 });

@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import { useCopyToClipboard } from "usehooks-ts";
 
+import { StatusSuccessIcon } from "@/components/icons/status-success";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { StatusSuccessIcon } from "./icons/status-success";
-import { Button } from "./ui/button";
 
 const hide = "opacity-0 blur-[2px]";
 const show = "opacity-100 blur-none";

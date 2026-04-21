@@ -40,7 +40,7 @@ const itemVariants = cva(
 function Item({
   className,
   variant = "default",
-  size = "default",
+  size = "sm",
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
   return (
@@ -114,7 +114,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
       data-slot="item-description"
       className={cn(
         "line-clamp-2 text-balance font-normal text-muted-foreground text-sm leading-normal",
-        "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
+        "[&>a:hover]:cursor-pointer [&>a:hover]:text-primary [&>a:hover]:underline",
         className,
       )}
       {...props}

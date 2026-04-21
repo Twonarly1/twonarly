@@ -6,9 +6,11 @@ import { fetchLinkedWallets } from "@/server/functions/wallet/fetch-linked-walle
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
   loader: async () => {
-    const accounts = await fetchAccounts();
-    const wallets = await fetchLinkedWallets();
-    const passkeys = await fetchUserPasskeys();
+    const [accounts, wallets, passkeys] = await Promise.all([
+      fetchAccounts(),
+      fetchLinkedWallets(),
+      fetchUserPasskeys(),
+    ]);
     return { accounts, wallets, passkeys };
   },
 });

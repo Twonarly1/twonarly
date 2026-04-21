@@ -1,119 +1,140 @@
 import { useRouter } from "@tanstack/react-router";
-import { Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Item, ItemActions, ItemContent, ItemDescription, ItemGroup } from "@/components/ui/item";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item";
+import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth/auth-client";
-import { app } from "@/lib/config/app.config";
 import { Route } from "@/routes/_authenticated/accounts";
-
-import type { Passkey } from "@better-auth/passkey/client";
 
 const PasskeyList = () => {
   const { passkeys } = Route.useLoaderData();
 
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [editName, setEditName] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
+  const [newName, setNewName] = useState("");
   const router = useRouter();
 
   const handleDeletePasskey = async (id: string) => {
-    await authClient.passkey.deletePasskey({ id });
-    router.invalidate();
-  };
+    const { error } = await authClient.passkey.deletePasskey({ id });
 
-  const handleRenamePasskey = async (id: string) => {
-    if (!editName.trim()) return;
+    if (error) {
+      toast.error({
+        title: "Failed to delete passkey",
+        description: getAuthErrorMessage(error),
+      });
+      return;
+    }
 
-    await authClient.passkey.updatePasskey({ id, name: editName.trim() });
-
-    setEditingId(null);
-    setEditName("");
     router.invalidate();
   };
 
   const handleAddPasskey = async () => {
+    if (!newName.trim()) return;
+
     const { error } = await authClient.passkey.addPasskey({
-      name: `${app.name} passkey`,
+      name: newName.trim(),
       authenticatorAttachment: "platform",
     });
 
-    if (!error) router.invalidate();
+    if (error) {
+      toast.error({
+        title: "Failed to add passkey",
+        description: getAuthErrorMessage(error),
+      });
+      return;
+    }
+
+    setIsAdding(false);
+    setNewName("");
+    router.invalidate();
   };
 
   return (
     <ItemGroup className="rounded-lg border">
-      {passkeys.map((pk: Passkey) => (
+      {passkeys.map((pk) => (
         <Item key={pk.id}>
           <ItemContent>
-            <div>
-              {editingId === pk.id ? (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    handleRenamePasskey(pk.id);
-                  }}
-                  className="flex items-center gap-2"
-                >
-                  <Input
-                    autoFocus
-                    value={editName}
-                    onChange={(e) => setEditName(e.target.value)}
-                    className="h-7 w-48"
-                  />
-                  <Button type="submit" size="sm" variant="ghost">
-                    Save
-                  </Button>
-                  <Button size="sm" variant="ghost" onClick={() => setEditingId(null)}>
-                    Cancel
-                  </Button>
-                </form>
-              ) : (
-                <div className="space-y-1">
-                  <p className="font-medium text-base text-foreground">
-                    {pk.name || "Unnamed passkey"}
-                  </p>
-                  <p className="text-muted-foreground text-sm">
-                    Added {new Date(pk.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-              )}
-            </div>
+            <ItemTitle>{pk.name || "Unnamed passkey"}</ItemTitle>
+            <ItemDescription>Added {new Date(pk.createdAt).toLocaleDateString()}</ItemDescription>
           </ItemContent>
 
-          {editingId !== pk.id && (
-            <ItemActions>
-              <Button
-                variant="outline"
-                size="icon-sm"
-                onClick={() => {
-                  setEditingId(pk.id);
-                  setEditName(pk.name || "");
-                }}
-              >
-                <Pencil className="icon-xs" />
-              </Button>
-              <Button variant="outline" size="icon-sm" onClick={() => handleDeletePasskey(pk.id)}>
-                <Trash className="icon-xs" />
-              </Button>
-            </ItemActions>
-          )}
+          <ItemActions>
+            <Button variant="ghost" onClick={() => handleDeletePasskey(pk.id)}>
+              Remove
+            </Button>
+          </ItemActions>
         </Item>
       ))}
 
       <Item>
         <ItemContent>
-          <ItemDescription>No passkeys yet</ItemDescription>
+          {isAdding ? (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddPasskey();
+              }}
+              className="flex items-center gap-2"
+            >
+              <Input
+                autoFocus
+                placeholder="e.g. Work laptop, iPhone"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                className="h-7 w-48"
+              />
+              <Button type="submit" variant="ghost">
+                Save
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setIsAdding(false);
+                  setNewName("");
+                }}
+              >
+                Cancel
+              </Button>
+            </form>
+          ) : (
+            <ItemDescription>
+              {passkeys.length === 0 ? "No passkeys yet" : "Add another passkey"}
+            </ItemDescription>
+          )}
         </ItemContent>
-        <ItemActions>
-          <Button variant="ghost" size="sm" onClick={handleAddPasskey}>
-            Add passkey
-          </Button>
-        </ItemActions>
+
+        {!isAdding && (
+          <ItemActions>
+            <Button variant="ghost" onClick={() => setIsAdding(true)}>
+              Add passkey
+            </Button>
+          </ItemActions>
+        )}
       </Item>
     </ItemGroup>
   );
 };
-
 export default PasskeyList;
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  SESSION_NOT_FRESH: "Please re-authenticate to manage your account.",
+  CREDENTIAL_NOT_FOUND: "Passkey not found. It may have already been removed.",
+  TOO_MANY_REQUESTS: "Too many attempts. Please wait a moment.",
+  // add codes as you encounter them
+};
+
+function getAuthErrorMessage(error: { code?: string; message?: string }): string {
+  if (error.code && error.code in AUTH_ERROR_MESSAGES) {
+    return AUTH_ERROR_MESSAGES[error.code];
+  }
+
+  return error.message || "Something went wrong. Please try again.";
+}

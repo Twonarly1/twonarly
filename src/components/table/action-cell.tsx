@@ -41,13 +41,12 @@ const ActionCell = ({ row, table }: Props) => {
 
       try {
         await toggleCompletedFn({ data: { id: task.id, completed: !completed } });
-        router.invalidate();
       } catch (err) {
         table.options.meta?.updateTask(task.id, "completed", completed);
         console.error("Failed to toggle completed", err);
       }
     },
-    [task.id, completed, table, toggleCompletedFn, router],
+    [task.id, completed, table, toggleCompletedFn],
   );
 
   const handleDelete = useCallback(
@@ -65,17 +64,16 @@ const ActionCell = ({ row, table }: Props) => {
           title: "Task deleted",
           description: `The task "${task.name}" has been deleted.`,
         });
-        router.invalidate();
       } catch (err) {
+        table.options.meta?.restoreTask?.(task);
         console.error("Failed to delete", err);
         toast.error({
           title: "Failed to delete",
           description: `Could not delete "${task.name}".`,
         });
-        router.invalidate();
       }
     },
-    [task.id, task.name, table, deleteTaskFn, router],
+    [task, table, deleteTaskFn],
   );
 
   return (
