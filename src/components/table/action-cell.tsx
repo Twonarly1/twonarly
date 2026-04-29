@@ -1,4 +1,3 @@
-import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Check, MoreHorizontal, Trash } from "lucide-react";
 import { useCallback } from "react";
@@ -23,7 +22,6 @@ interface Props {
 }
 
 const ActionCell = ({ row, table }: Props) => {
-  const router = useRouter();
   const deleteTaskFn = useServerFn(deleteTask);
   const toggleCompletedFn = useServerFn(toggleTaskComplete);
 

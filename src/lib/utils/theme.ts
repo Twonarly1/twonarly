@@ -12,11 +12,11 @@ export interface CustomTheme {
   };
 }
 
-export const clamp = (v: number) => Math.max(0, Math.min(100, v));
+const clamp = (v: number) => Math.max(0, Math.min(100, v));
 
 type ColorPalette = Record<string, [number, number, number]>;
 
-export function computePalette(theme: CustomTheme): ColorPalette {
+function computePalette(theme: CustomTheme): ColorPalette {
   const palette: ColorPalette = {};
 
   if (theme.base) {
