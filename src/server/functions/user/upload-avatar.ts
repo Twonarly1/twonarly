@@ -102,4 +102,9 @@ export const uploadAvatar = createServerFn({ method: "POST" })
       .update(user)
       .set({ image: imageUrl, updatedAt: new Date().toISOString() })
       .where(eq(user.id, session.user.id));
+
+    await auth.api.updateUser({
+      headers: getRequestHeaders(),
+      body: { image: imageUrl },
+    });
   });

@@ -29,6 +29,7 @@
     "better-auth": "^1.6.5",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "colord": "^2.9.3",
     "drizzle-orm": "^0.45.1",
     "knip": "^5.88.1",
     "lucide-react": "^1.7.0",

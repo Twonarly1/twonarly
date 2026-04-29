@@ -1,69 +1,15 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-import {
-  setCustomColors as setCustomColorsServerFn,
-  setTheme as setThemeServerFn,
-} from "@/server/functions/preferences/theme";
+import { applyCustomTheme, clearCustomTheme } from "@/lib/utils/theme";
+import { setThemePreferences } from "@/server/functions/preferences/theme";
 
 import type { PropsWithChildren } from "react";
-import type { CustomColors, Theme } from "@/server/functions/preferences/theme";
-
-function hexToRgb(hex: string) {
-  const clean = hex.replace("#", "");
-  return {
-    r: parseInt(clean.substring(0, 2), 16),
-    g: parseInt(clean.substring(2, 4), 16),
-    b: parseInt(clean.substring(4, 6), 16),
-  };
-}
-
-function getContrastingColor(hex: string): string {
-  if (!hex) return "#ffffff";
-  const { r, g, b } = hexToRgb(hex);
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128 ? "#000000" : "#ffffff";
-}
-
-function isColorDark(hex: string): boolean {
-  const { r, g, b } = hexToRgb(hex);
-  return (r * 299 + g * 587 + b * 114) / 1000 < 128;
-}
-
-function adjustColorLightness(hex: string, percentage: number): string {
-  const cleanHex = hex.replace("#", "");
-
-  let r = parseInt(cleanHex.substring(0, 2), 16);
-  let g = parseInt(cleanHex.substring(2, 4), 16);
-  let b = parseInt(cleanHex.substring(4, 6), 16);
-
-  if (percentage >= 0) {
-    // Blend toward white
-    r = Math.min(255, Math.floor(r + (255 - r) * (percentage / 100)));
-    g = Math.min(255, Math.floor(g + (255 - g) * (percentage / 100)));
-    b = Math.min(255, Math.floor(b + (255 - b) * (percentage / 100)));
-  } else {
-    // Blend toward black
-    const factor = Math.abs(percentage) / 100;
-    r = Math.max(0, Math.floor(r * (1 - factor)));
-    g = Math.max(0, Math.floor(g * (1 - factor)));
-    b = Math.max(0, Math.floor(b * (1 - factor)));
-  }
-
-  const toHex = (n: number) => n.toString(16).padStart(2, "0");
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
-}
-
-// function isColorDark(hex: string): boolean {
-//   const { r, g, b } = hexToRgba(hex);
-//   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
-// }
+import type { CustomTheme, Theme } from "@/server/functions/preferences/theme";
 
 interface ThemeContext {
   theme: Theme;
   setTheme: (value: Theme) => void;
-  customColors: CustomColors | null;
-  setCustomColors: (colors: CustomColors) => void;
-  clearCustomColors: () => void;
+  customTheme: CustomTheme | undefined;
 }
 
 const ThemeContext = createContext<ThemeContext | null>(null);
@@ -71,29 +17,23 @@ const ThemeContext = createContext<ThemeContext | null>(null);
 export function ThemeProvider({
   children,
   theme: initialTheme,
-  customColors: initialCustomColors,
+  customTheme: initialCustomTheme,
 }: PropsWithChildren<{
   theme: Theme;
-  customColors: CustomColors | null;
+  customTheme: CustomTheme | undefined;
 }>) {
   const [theme, setThemeState] = useState<Theme>(initialTheme);
-  const [customColors, setCustomColorsState] = useState<CustomColors | null>(initialCustomColors);
+  const [customTheme] = useState<CustomTheme | undefined>(initialCustomTheme);
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    setThemeState(newTheme);
-    setThemeServerFn({ data: newTheme });
-  }, []);
+  const setTheme = useCallback(
+    (newTheme: Theme) => {
+      setThemeState(newTheme);
+      setThemePreferences({ data: { theme: newTheme, customTheme } });
+    },
+    [customTheme],
+  );
 
-  const setCustomColors = useCallback((colors: CustomColors) => {
-    setCustomColorsState(colors);
-    setCustomColorsServerFn({ data: colors });
-  }, []);
-
-  const clearCustomColors = useCallback(() => {
-    setCustomColorsState(null);
-  }, []);
-
-  // system theme
+  // System theme
   useEffect(() => {
     const root = document.documentElement;
 
@@ -106,58 +46,28 @@ export function ThemeProvider({
       applySystemTheme();
       mediaQuery.addEventListener("change", applySystemTheme);
       return () => mediaQuery.removeEventListener("change", applySystemTheme);
-    } else if (theme === "custom") {
-      // Keep the current light/dark base class, just add custom overrides on top
-      // Don't change the class at all — the custom colors effect handles the rest
-    } else {
+    }
+
+    if (theme !== "custom") {
       root.classList.remove("dark", "light");
       root.classList.add(theme);
     }
   }, [theme]);
 
-  // custom theme
+  // Custom theme — apply on mount AND when theme/customTheme changes
   useEffect(() => {
     const root = document.documentElement;
 
-    if (theme === "custom" && customColors) {
-      if (customColors.background) {
-        const bg = customColors.background;
-        const bgColor = adjustColorLightness(bg, 0);
-        const insetColor = adjustColorLightness(bg, 80);
-        const dark = isColorDark(bg);
-        const sidebarAccent = dark ? adjustColorLightness(bg, 15) : adjustColorLightness(bg, -10);
-        const sidebarForeground = getContrastingColor(bg);
-
-        root.style.setProperty("--sidebar", bgColor);
-        root.style.setProperty("--background", insetColor);
-        root.style.setProperty("--sidebar-accent", sidebarAccent);
-        root.style.setProperty("--sidebar-foreground", sidebarForeground);
-      }
-
-      if (customColors.accent) {
-        root.style.setProperty("--primary", customColors.accent);
-      }
-
-      if (customColors.border) {
-        const borderColor = adjustColorLightness(customColors.border, 0);
-        root.style.setProperty("--border", borderColor);
-      }
+    if (theme === "custom" && customTheme) {
+      applyCustomTheme(root, customTheme);
     } else {
-      // Only remove properties when switching away from custom theme
-      root.style.removeProperty("--sidebar");
-      root.style.removeProperty("--background");
-      root.style.removeProperty("--sidebar-accent");
-      root.style.removeProperty("--sidebar-foreground");
-      root.style.removeProperty("--border");
-      root.style.removeProperty("--primary");
+      clearCustomTheme(root);
     }
-  }, [theme, customColors]);
 
-  return (
-    <ThemeContext value={{ theme, setTheme, customColors, setCustomColors, clearCustomColors }}>
-      {children}
-    </ThemeContext>
-  );
+    return () => clearCustomTheme(root);
+  }, [theme, customTheme]);
+
+  return <ThemeContext value={{ theme, setTheme, customTheme }}>{children}</ThemeContext>;
 }
 
 export const useTheme = () => {

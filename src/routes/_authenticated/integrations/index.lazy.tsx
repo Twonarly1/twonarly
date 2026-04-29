@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-import PageContainer from "@/components/page-container";
+import PageContainer from "@/components/layout/page-container";
 
 export const Route = createLazyFileRoute("/_authenticated/integrations/")({
   component: IntegrationsPage,

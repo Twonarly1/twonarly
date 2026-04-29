@@ -48,15 +48,16 @@ const HeaderCell = ({ header }: Props) => {
         <TooltipTrigger asChild>
           <Button
             variant="ghost"
-            size="xs"
             onClick={handleSort}
-            className="group flex w-fit justify-between px-2 text-sm"
+            className="group flex h-6 w-fit justify-between px-2 text-sm"
           >
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
               className={clsx(
                 "size-3 shrink-0",
-                showIcon ? "opacity-100" : "opacity-0 group-hover:opacity-100",
+                showIcon
+                  ? "opacity-100"
+                  : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100",
               )}
             />
           </Button>

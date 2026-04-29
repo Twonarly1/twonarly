@@ -1,33 +1,60 @@
 import { cva } from "class-variance-authority";
+import * as React from "react";
+import { createContext } from "react";
 
 import { cn } from "@/lib/utils";
 
 import type { VariantProps } from "class-variance-authority";
-import type * as React from "react";
 
-function ItemGroup({ className, ...props }: React.ComponentProps<"ul">) {
+const ItemGroupContext = createContext<"list" | "group">("group");
+
+function ItemGroup({
+  className,
+  variant = "group",
+  ref,
+  ...props
+}: Omit<React.HTMLAttributes<HTMLElement>, "ref"> & {
+  variant?: "list" | "group";
+  ref?: React.Ref<HTMLElement>;
+}) {
+  const classes = cn(
+    "group/item-group flex flex-col divide-y rounded-xl border bg-surface",
+    className,
+  );
+
   return (
-    <ul
-      data-slot="item-group"
-      className={cn("group/item-group flex flex-col divide-y", className)}
-      {...props}
-    />
+    <ItemGroupContext.Provider value={variant}>
+      {variant === "list" ? (
+        <ul
+          ref={ref as React.Ref<HTMLUListElement>}
+          data-slot="item-group"
+          className={classes}
+          {...props}
+        />
+      ) : (
+        <div
+          ref={ref as React.Ref<HTMLDivElement>}
+          data-slot="item-group"
+          className={classes}
+          {...props}
+        />
+      )}
+    </ItemGroupContext.Provider>
   );
 }
 
 const itemVariants = cva(
-  "group/item flex items-center transition-none [a]:hover:bg-muted/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-primary focus-visible:ring-primary/50",
+  "group/item flex items-center bg-surface transition-none [a]:hover:bg-muted/50 [a]:transition-colors duration-100 flex-wrap outline-none focus-visible:border-primary focus-visible:ring-primary/50",
   {
     variants: {
       variant: {
         default: "bg-transparent",
         outline: "border border-border",
-        muted: "bg-muted/50",
         destructive: "bg-destructive/5 border border-destructive/20",
       },
       size: {
         default: "p-4 gap-4 ",
-        sm: "py-3 px-4 gap-2.5",
+        sm: "py-3 min-h-14 px-4",
       },
     },
     defaultVariants: {
@@ -41,21 +68,38 @@ function Item({
   className,
   variant = "default",
   size = "sm",
+  ref,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof itemVariants>) {
-  return (
-    <div
+}: Omit<React.HTMLAttributes<HTMLElement>, "ref"> &
+  VariantProps<typeof itemVariants> & {
+    ref?: React.Ref<HTMLElement>;
+  }) {
+  const groupVariant = React.useContext(ItemGroupContext);
+  const classes = cn(itemVariants({ variant, size, className }));
+
+  return groupVariant === "list" ? (
+    <li
+      ref={ref as React.Ref<HTMLLIElement>}
       data-slot="item"
       data-variant={variant}
       data-size={size}
-      className={cn(itemVariants({ variant, size, className }))}
+      className={classes}
+      {...props}
+    />
+  ) : (
+    <div
+      ref={ref as React.Ref<HTMLDivElement>}
+      data-slot="item"
+      data-variant={variant}
+      data-size={size}
+      className={classes}
       {...props}
     />
   );
 }
 
 const itemMediaVariants = cva(
-  "flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:self-start [&_svg]:pointer-events-none group-has-data-[slot=item-description]/item:translate-y-0.5",
+  "flex shrink-0 items-center justify-center gap-2 group-has-data-[slot=item-description]/item:self-start [&_svg]:pointer-events-none ",
   {
     variants: {
       variant: {
@@ -89,7 +133,7 @@ function ItemContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="item-content"
-      className={cn("flex flex-1 flex-col gap-2 [&+[data-slot=item-content]]:flex-none", className)}
+      className={cn("flex flex-1 flex-col [&+[data-slot=item-content]]:flex-none", className)}
       {...props}
     />
   );
@@ -113,7 +157,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="item-description"
       className={cn(
-        "line-clamp-2 text-balance font-normal text-muted-foreground text-sm leading-normal",
+        "line-clamp-2 text-balance font-normal text-secondary-foreground text-sm leading-normal",
         "[&>a:hover]:cursor-pointer [&>a:hover]:text-primary [&>a:hover]:underline",
         className,
       )}

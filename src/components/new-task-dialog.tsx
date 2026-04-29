@@ -91,7 +91,7 @@ const NewTaskDialog = () => {
               e.preventDefault();
               form.handleSubmit();
             }}
-            className="space-y-2"
+            className="space-y-1"
           >
             <form.Field
               name="name"
@@ -108,6 +108,7 @@ const NewTaskDialog = () => {
                   autoFocus
                   aria-label="Name"
                   placeholder="Enter a task name..."
+                  className="border-transparent focus-visible:border-primary"
                   value={field.state.value}
                   onBlur={field.handleBlur}
                   onChange={(e) => {
@@ -126,11 +127,11 @@ const NewTaskDialog = () => {
               {(field) => (
                 <Textarea
                   aria-label="Description"
-                  placeholder="Enter a description..."
+                  placeholder="description..."
                   value={field.state.value ?? ""}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className="min-h-24"
+                  className="min-h-24 border-transparent focus-visible:border-primary"
                 />
               )}
             </form.Field>

@@ -1,7 +1,8 @@
-import { XIcon } from "lucide-react";
+import { X } from "lucide-react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
+import { Button } from "./button";
 
 import type * as React from "react";
 
@@ -51,7 +52,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg outline-none duration-0 data-[state=closed]:animate-out data-[state=open]:animate-in sm:max-w-lg",
+          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border bg-background p-6 shadow-lg outline-none duration-0 data-[state=closed]:animate-out data-[state=open]:animate-in sm:max-w-lg",
           className,
         )}
         {...props}
@@ -59,11 +60,18 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
+            asChild
             data-slot="dialog-close"
-            className="absolute top-3 right-3 rounded opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-primary/10 data-[state=open]:text-muted-foreground [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+            className="text-muted-foreground hover:text-foreground"
           >
-            <XIcon />
-            <span className="sr-only">Close</span>
+            <Button
+              variant="unstyled"
+              size="icon-xs"
+              className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+            >
+              <X className="icon-sm" />
+              <span className="sr-only">Close</span>
+            </Button>
           </DialogPrimitive.Close>
         )}
       </DialogPrimitive.Content>

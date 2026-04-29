@@ -47,6 +47,9 @@
           }
         }
       },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
       "style": {
         "noNonNullAssertion": "off",
         "useSingleVarDeclarator": "off",
@@ -55,6 +58,7 @@
           "options": { "style": "separatedType" }
         }
       },
+
       "suspicious": {
         "noArrayIndexKey": "warn",
         "noNonNullAssertedOptionalChain": "off",

@@ -89,13 +89,11 @@ const AppSidebar = () => {
                   )}
                 >
                   <Avatar
-                    src={user?.image}
-                    alt={user?.name || "User avatar"}
+                    src={user.image}
+                    alt={user.name || "User avatar"}
                     className="size-7.5 rounded-lg"
                   />
-                  <span className="truncate font-medium group-data-[collapsible=icon]:hidden">
-                    {user?.name}
-                  </span>
+                  <span className="font-medium text-base">{user?.name}</span>
                   <ChevronDown className="icon-sm mr-2 ml-auto group-data-[collapsible=icon]:hidden" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -174,10 +172,7 @@ const AppSidebar = () => {
                   tooltip={item.label}
                   asChild
                 >
-                  <Link
-                    to={item.to}
-                    className="rounded-lg group-data-[collapsible=icon]:[&>span]:hidden"
-                  >
+                  <Link to={item.to} className="rounded-lg">
                     <item.icon className="icon-sm" />
                     <span className="text-base">{item.label}</span>
                   </Link>

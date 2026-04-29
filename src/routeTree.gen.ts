@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks/index'
+import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
 import { Route as AuthenticatedProfileIndexRouteImport } from './routes/_authenticated/profile/index'
-import { Route as AuthenticatedPreferencesIndexRouteImport } from './routes/_authenticated/preferences/index'
 import { Route as AuthenticatedIntegrationsIndexRouteImport } from './routes/_authenticated/integrations/index'
 import { Route as AuthenticatedBillingIndexRouteImport } from './routes/_authenticated/billing/index'
 import { Route as AuthenticatedAccountsIndexRouteImport } from './routes/_authenticated/accounts/index'
@@ -35,6 +35,14 @@ const AuthenticatedTasksIndexRoute = AuthenticatedTasksIndexRouteImport.update({
 } as any).lazy(() =>
   import('./routes/_authenticated/tasks/index.lazy').then((d) => d.Route),
 )
+const AuthenticatedSettingsIndexRoute =
+  AuthenticatedSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any).lazy(() =>
+    import('./routes/_authenticated/settings/index.lazy').then((d) => d.Route),
+  )
 const AuthenticatedProfileIndexRoute =
   AuthenticatedProfileIndexRouteImport.update({
     id: '/profile/',
@@ -42,16 +50,6 @@ const AuthenticatedProfileIndexRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/profile/index.lazy').then((d) => d.Route),
-  )
-const AuthenticatedPreferencesIndexRoute =
-  AuthenticatedPreferencesIndexRouteImport.update({
-    id: '/preferences/',
-    path: '/preferences/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/preferences/index.lazy').then(
-      (d) => d.Route,
-    ),
   )
 const AuthenticatedIntegrationsIndexRoute =
   AuthenticatedIntegrationsIndexRouteImport.update({
@@ -91,8 +89,8 @@ export interface FileRoutesByFullPath {
   '/accounts/': typeof AuthenticatedAccountsIndexRoute
   '/billing/': typeof AuthenticatedBillingIndexRoute
   '/integrations/': typeof AuthenticatedIntegrationsIndexRoute
-  '/preferences/': typeof AuthenticatedPreferencesIndexRoute
   '/profile/': typeof AuthenticatedProfileIndexRoute
+  '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/tasks/': typeof AuthenticatedTasksIndexRoute
 }
 export interface FileRoutesByTo {
@@ -101,8 +99,8 @@ export interface FileRoutesByTo {
   '/accounts': typeof AuthenticatedAccountsIndexRoute
   '/billing': typeof AuthenticatedBillingIndexRoute
   '/integrations': typeof AuthenticatedIntegrationsIndexRoute
-  '/preferences': typeof AuthenticatedPreferencesIndexRoute
   '/profile': typeof AuthenticatedProfileIndexRoute
+  '/settings': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
 }
 export interface FileRoutesById {
@@ -113,8 +111,8 @@ export interface FileRoutesById {
   '/_authenticated/accounts/': typeof AuthenticatedAccountsIndexRoute
   '/_authenticated/billing/': typeof AuthenticatedBillingIndexRoute
   '/_authenticated/integrations/': typeof AuthenticatedIntegrationsIndexRoute
-  '/_authenticated/preferences/': typeof AuthenticatedPreferencesIndexRoute
   '/_authenticated/profile/': typeof AuthenticatedProfileIndexRoute
+  '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
 }
 export interface FileRouteTypes {
@@ -125,8 +123,8 @@ export interface FileRouteTypes {
     | '/accounts/'
     | '/billing/'
     | '/integrations/'
-    | '/preferences/'
     | '/profile/'
+    | '/settings/'
     | '/tasks/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -135,8 +133,8 @@ export interface FileRouteTypes {
     | '/accounts'
     | '/billing'
     | '/integrations'
-    | '/preferences'
     | '/profile'
+    | '/settings'
     | '/tasks'
   id:
     | '__root__'
@@ -146,8 +144,8 @@ export interface FileRouteTypes {
     | '/_authenticated/accounts/'
     | '/_authenticated/billing/'
     | '/_authenticated/integrations/'
-    | '/_authenticated/preferences/'
     | '/_authenticated/profile/'
+    | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
   fileRoutesById: FileRoutesById
 }
@@ -180,18 +178,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTasksIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/settings/': {
+      id: '/_authenticated/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof AuthenticatedSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/profile/': {
       id: '/_authenticated/profile/'
       path: '/profile'
       fullPath: '/profile/'
       preLoaderRoute: typeof AuthenticatedProfileIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/preferences/': {
-      id: '/_authenticated/preferences/'
-      path: '/preferences'
-      fullPath: '/preferences/'
-      preLoaderRoute: typeof AuthenticatedPreferencesIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/integrations/': {
@@ -229,8 +227,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAccountsIndexRoute: typeof AuthenticatedAccountsIndexRoute
   AuthenticatedBillingIndexRoute: typeof AuthenticatedBillingIndexRoute
   AuthenticatedIntegrationsIndexRoute: typeof AuthenticatedIntegrationsIndexRoute
-  AuthenticatedPreferencesIndexRoute: typeof AuthenticatedPreferencesIndexRoute
   AuthenticatedProfileIndexRoute: typeof AuthenticatedProfileIndexRoute
+  AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
 }
 
@@ -238,8 +236,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAccountsIndexRoute: AuthenticatedAccountsIndexRoute,
   AuthenticatedBillingIndexRoute: AuthenticatedBillingIndexRoute,
   AuthenticatedIntegrationsIndexRoute: AuthenticatedIntegrationsIndexRoute,
-  AuthenticatedPreferencesIndexRoute: AuthenticatedPreferencesIndexRoute,
   AuthenticatedProfileIndexRoute: AuthenticatedProfileIndexRoute,
+  AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
 }
 

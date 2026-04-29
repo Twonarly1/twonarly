@@ -19,6 +19,8 @@ body {
   --font-size-base: 14px;
 
   --background: oklch(1 0 0);
+  --content: oklch(1 0 0);
+  --surface: oklch(1 0 0);
   --muted: oklch(0.94 0.001 286.375);
   --border: oklch(0.92 0.004 286.32);
 
@@ -52,6 +54,8 @@ html[data-font-size="larger"] {
 
 .dark {
   --background: oklch(0.141 0.005 285.823);
+  --content: oklch(0.141 0.005 285.823);
+  --surface: oklch(0.18 0.005 285.823);
   --muted: oklch(0.274 0.006 286.033);
   --border: oklch(0.274 0.006 286.033);
 
@@ -72,6 +76,8 @@ html[data-font-size="larger"] {
 
 @theme inline {
   --color-background: var(--background);
+  --color-content: var(--content);
+  --color-surface: var(--surface);
   --color-muted: var(--muted);
   --color-border: var(--border);
 
@@ -112,6 +118,14 @@ html[data-font-size="larger"] {
 @layer base {
   * {
     @apply border-border cursor-default;
+    scrollbar-width: thin;
+    scrollbar-color: oklch(0.65 0.01 282) transparent;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  html.light {
+    color-scheme: light;
   }
   body {
     @apply bg-background text-foreground;
@@ -139,6 +153,7 @@ html[data-font-size="larger"] {
     width: 1.75em;
     height: 1.75em;
   }
+  
 }
 
 /* Cursor mode overrides */
@@ -190,4 +205,32 @@ html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"] * {
   100% {
     transform: scaleX(0.95);
   }
+}
+
+.color-picker-custom .react-colorful {
+  width: 100%;
+  height: 200px;
+}
+
+.color-picker-custom .react-colorful__saturation-pointer {
+  width: 12px;
+  height: 12px;
+}
+
+.color-picker-custom .react-colorful__saturation {
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.color-picker-custom .react-colorful__hue {
+  height: 12px;
+  border-radius: 4px;
+}
+
+.color-picker-custom .react-colorful__hue-pointer {
+  width: 4px;
+  height: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 0 0.5px var(--color-foreground);
+  transition: none;
 }

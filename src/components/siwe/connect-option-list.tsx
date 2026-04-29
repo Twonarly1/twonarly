@@ -17,7 +17,7 @@ const ConnectOptionList = ({ wallets, onConnect, disabled }: ConnectOptionListPr
           variant="outline"
           onClick={() => onConnect(wallet)}
           disabled={disabled}
-          className="h-10 items-center justify-start gap-3"
+          className="h-10 items-center justify-start gap-3 hover:bg-surface/80"
         >
           <img src={wallet.info.icon} alt={wallet.info.name} className="size-5" />
           {wallet.info.name}

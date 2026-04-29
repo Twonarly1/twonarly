@@ -1,7 +1,5 @@
 import fallbackAvatar from "/public/avatar-fallaback.jpg";
 
-const FALLBACK_AVATAR = fallbackAvatar;
-
 function Avatar({
   src,
   alt,
@@ -13,10 +11,10 @@ function Avatar({
 }) {
   return (
     <img
-      src={src || FALLBACK_AVATAR}
-      alt={alt || ""}
+      src={src || fallbackAvatar}
+      alt={alt}
       onError={(e) => {
-        e.currentTarget.src = FALLBACK_AVATAR;
+        e.currentTarget.src = fallbackAvatar;
       }}
       className={className}
     />

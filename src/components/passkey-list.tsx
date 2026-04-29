@@ -58,7 +58,7 @@ const PasskeyList = () => {
   };
 
   return (
-    <ItemGroup className="rounded-lg border">
+    <ItemGroup variant="list">
       {passkeys.map((pk) => (
         <Item key={pk.id}>
           <ItemContent>

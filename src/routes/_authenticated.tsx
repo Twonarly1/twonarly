@@ -40,8 +40,8 @@ function AuthenticatedLayout() {
 
 function PhoneLayout() {
   return (
-    <div className="flex min-h-svh w-full flex-col">
-      <div className="flex-1">
+    <div className="flex min-h-svh w-full flex-col overflow-auto bg-content">
+      <div className="flex-1 pb-24">
         <Outlet />
       </div>
       <MobileBottomNav />
@@ -54,10 +54,12 @@ function DesktopLayout() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="shrink-0 items-center gap-2">
-          <SidebarTrigger />
-        </header>
-        <Outlet />
+        <div className="overflow-y-auto pb-12">
+          <header className="shrink-0 items-center gap-2 px-2">
+            <SidebarTrigger />
+          </header>
+          <Outlet />
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

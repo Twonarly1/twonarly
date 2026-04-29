@@ -4,7 +4,8 @@ import { useEffect } from "react";
 import { match } from "ts-pattern";
 
 import InvoiceList from "@/components/invoice-list";
-import PageContainer from "@/components/page-container";
+import PageContainer from "@/components/layout/page-container";
+import Section from "@/components/layout/section";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,17 +16,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemGroup,
-  ItemTitle,
-} from "@/components/ui/item";
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { authClient } from "@/lib/auth/auth-client";
-import { cn } from "@/lib/utils";
 import { capitalizeFirstLetter, formatDate } from "@/lib/utils/format";
 
 export const Route = createLazyFileRoute("/_authenticated/billing/")({
@@ -79,13 +72,10 @@ function BillingPage() {
 
   return (
     <PageContainer>
-      <div className="space-y-1">
-        <h1 className="items-baseline font-medium text-4xl">Billing</h1>
-        <p className="text-secondary-foreground text-sm">Manage your subscription and billing</p>
-      </div>
+      <h1 className="items-baseline font-medium text-4xl">Billing</h1>
 
-      <ItemGroup className="rounded-lg border">
-        <Item>
+      <section>
+        <Item variant="outline" className="rounded-xl">
           <ItemContent>
             <ItemTitle className="flex items-center gap-2">
               {isActive ? `${capitalizeFirstLetter(subscription.plan)} plan` : "Free plan"}
@@ -104,16 +94,16 @@ function BillingPage() {
             </Button>
           </ItemActions>
         </Item>
-      </ItemGroup>
+      </section>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <section className="grid gap-4 sm:grid-cols-2">
         {plans.map((plan) => {
           const isCurrent = subscription
             ? plan.name.toLowerCase() === subscription.plan.toLowerCase()
             : plan.name === "Free";
 
           return (
-            <Card key={plan.name} className={cn("bg-background", isCurrent && "border-primary")}>
+            <Card key={plan.name}>
               <CardHeader className="mb-3">
                 <CardTitle>{plan.name}</CardTitle>
                 <CardDescription>
@@ -121,27 +111,18 @@ function BillingPage() {
                   {plan.interval}
                 </CardDescription>
               </CardHeader>
-              <CardContent
-                className={cn(
-                  "flex flex-col gap-1.5 border-t py-3",
-                  isCurrent && "border-t-primary",
-                )}
-              >
+              <CardContent className="flex flex-col gap-1.5 pb-4">
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
                     <Check className="icon-xs shrink-0 text-primary" />
-                    <span className="text-muted-foreground">{feature}</span>
+                    <span className="text-secondary-foreground">{feature}</span>
                   </div>
                 ))}
               </CardContent>
 
               {!isCurrent && plan.name !== "Free" && (
                 <CardFooter>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={isActive ? openBillingPortal : handleUpgrade}
-                  >
+                  <Button className="w-full" onClick={isActive ? openBillingPortal : handleUpgrade}>
                     Upgrade to {plan.name}
                   </Button>
                 </CardFooter>
@@ -149,16 +130,11 @@ function BillingPage() {
             </Card>
           );
         })}
-      </div>
-      <div className="space-y-4">
-        <Item>
-          <ItemContent>
-            <ItemTitle>Recent invoices</ItemTitle>
-          </ItemContent>
-        </Item>
+      </section>
 
+      <Section title="Invoices" description="Your billing history and receipts">
         <InvoiceList />
-      </div>
+      </Section>
     </PageContainer>
   );
 }

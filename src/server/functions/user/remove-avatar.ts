@@ -38,6 +38,11 @@ export const removeAvatar = createServerFn({ method: "POST" })
         .set({ image: null, updatedAt: new Date().toISOString() })
         .where(eq(user.id, session.user.id));
 
+      await auth.api.updateUser({
+        headers: getRequestHeaders(),
+        body: { image: null },
+      });
+
       return { success: true };
     } catch (error) {
       console.error("Failed to remove avatar:", error);

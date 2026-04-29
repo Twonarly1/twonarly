@@ -63,17 +63,26 @@ const InvoiceList = () => {
 
   if (isLoading)
     return (
-      <ItemGroup className="divide-none">
+      <ItemGroup variant="list">
         {skeletonRows(4).map((i) => (
           <Item key={i}>
-            <Skeleton className="flex size-4 sm:hidden" />
             <ItemContent>
-              <Skeleton className="h-4 w-48" />
-              <Skeleton className="h-3.5 w-28" />
+              <div className="flex items-center gap-2">
+                <div className="flex w-6 sm:hidden">
+                  <Skeleton className="size-4 rounded-full" />
+                </div>
+                <div className="space-y-1">
+                  <Skeleton className="h-4 w-48" />
+                  <Skeleton className="h-3.5 w-28" />
+                </div>
+              </div>
             </ItemContent>
-            <ItemActions className="hidden sm:flex">
-              <Skeleton className="h-6 w-16" />
-              <Skeleton className="h-6 w-16" />
+            <ItemActions className="space-x-2">
+              <span className="hidden items-center gap-2 sm:flex">
+                <Skeleton className="size-4 rounded-full" />
+                <Skeleton className="h-4 w-12" />
+              </span>
+              <Skeleton className="h-6 w-14" />
             </ItemActions>
           </Item>
         ))}
@@ -81,36 +90,13 @@ const InvoiceList = () => {
     );
 
   if (invoices.length === 0)
-    return (
-      <ItemGroup className="divide-none">
-        <Item>
-          <ItemContent>
-            <span className="text-muted-foreground">No invoices yet</span>
-          </ItemContent>
-        </Item>
-      </ItemGroup>
-    );
+    return <span className="px-4 text-muted-foreground">No invoices yet</span>;
 
   return (
-    <ItemGroup className="sm:divide-none">
-      {invoices.map((invoice, i) => {
-        const shouldAnimate = i >= animateFromIndex.current;
-
+    <ItemGroup variant="list">
+      {invoices.map((invoice) => {
         return (
-          <Item
-            key={invoice.id}
-            className={shouldAnimate ? "stagger" : undefined}
-            style={
-              shouldAnimate
-                ? {
-                    opacity: 0,
-                    transform: "translateY(8px)",
-                    animation: "fadeIn 300ms var(--ease-out-strong) forwards",
-                    animationDelay: `${(i - animateFromIndex.current) * 80}ms`,
-                  }
-                : undefined
-            }
-          >
+          <Item key={invoice.id}>
             <ItemContent>
               <div className="flex items-center gap-2">
                 <div className="flex w-6 sm:hidden">
@@ -151,9 +137,9 @@ const InvoiceList = () => {
                 to={invoice.hostedInvoiceUrl || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="hidden cursor-pointer sm:flex"
               >
-                &#8599;
-                <span className="hidden sm:flex">View</span>
+                View &#8599;
               </Link>
             </ItemActions>
           </Item>

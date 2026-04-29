@@ -39,7 +39,7 @@ const AccountList = () => {
   };
 
   return (
-    <ItemGroup className="rounded-lg border">
+    <ItemGroup variant="list">
       {deviceSessions.map((deviceSession) => {
         const { isCurrent } = deviceSession;
         const provider = accounts.find((a) => a.userId === deviceSession.user.id)?.providerId;

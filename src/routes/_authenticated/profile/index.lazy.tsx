@@ -4,7 +4,7 @@ import { Pen, Trash } from "lucide-react";
 import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
-import PageContainer from "@/components/page-container";
+import PageContainer from "@/components/layout/page-container";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -133,100 +133,102 @@ function ProfilePage() {
     <PageContainer ref={containerRef}>
       <h1 className="items-baseline font-medium text-4xl">Profile</h1>
 
-      <ItemGroup className="rounded-lg border">
-        <Item>
-          <ItemContent>
-            <ItemTitle>Profile picture</ItemTitle>
-          </ItemContent>
+      <section>
+        <ItemGroup>
+          <Item>
+            <ItemContent>
+              <ItemTitle>Profile picture</ItemTitle>
+            </ItemContent>
 
-          <ItemActions>
-            {user.image ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    tabIndex={0}
-                    className="group relative size-9 cursor-pointer"
-                  >
-                    <Avatar
-                      src={user.image}
-                      alt={user.name || "User avatar"}
-                      className="size-9 rounded-full"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                      <Pen className="icon-sm" />
-                    </div>
-                  </button>
-                </DropdownMenuTrigger>
+            <ItemActions>
+              {user.image ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button
+                      type="button"
+                      tabIndex={0}
+                      className="group relative size-9 cursor-pointer"
+                    >
+                      <Avatar
+                        src={user.image}
+                        alt={user.name || "User avatar"}
+                        className="size-9 rounded-full"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                        <Pen className="icon-sm" />
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="min-w-48">
-                  <DropdownMenuGroup className="space-y-0.5">
-                    <DropdownMenuItem onClick={triggerFileUpload}>
-                      <Pen className="icon-xs" />
-                      Change avatar
-                    </DropdownMenuItem>
+                  <DropdownMenuContent align="end" className="min-w-48">
+                    <DropdownMenuGroup className="space-y-0.5">
+                      <DropdownMenuItem onClick={triggerFileUpload}>
+                        <Pen className="icon-xs" />
+                        Change avatar
+                      </DropdownMenuItem>
 
-                    <DropdownMenuItem onClick={handleRemoveAvatar}>
-                      <Trash className="icon-xs" />
-                      Remove avatar
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <Tooltip delayDuration={400}>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    tabIndex={0}
-                    onClick={triggerFileUpload}
-                    onKeyDown={(e) => e.key === "Enter" && triggerFileUpload()}
-                    className="group relative size-9 cursor-pointer"
-                  >
-                    <Avatar
-                      src={user.image}
-                      alt={user.name || "User avatar"}
-                      className="size-9 rounded-full"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                      <Pen className="icon-sm" />
-                    </div>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="left" sideOffset={8} className="text-xs">
-                  Change avatar
-                </TooltipContent>
-              </Tooltip>
-            )}
-          </ItemActions>
-        </Item>
+                      <DropdownMenuItem onClick={handleRemoveAvatar}>
+                        <Trash className="icon-xs" />
+                        Remove avatar
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Tooltip delayDuration={400}>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      tabIndex={0}
+                      onClick={triggerFileUpload}
+                      onKeyDown={(e) => e.key === "Enter" && triggerFileUpload()}
+                      className="group relative size-9 cursor-pointer"
+                    >
+                      <Avatar
+                        src={user.image}
+                        alt={user.name || "User avatar"}
+                        className="size-9 rounded-full"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                        <Pen className="icon-sm" />
+                      </div>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="left" sideOffset={8} className="text-xs">
+                    Change avatar
+                  </TooltipContent>
+                </Tooltip>
+              )}
+            </ItemActions>
+          </Item>
 
-        <Item>
-          <ItemContent>
-            <ItemTitle>Email</ItemTitle>
-          </ItemContent>
-          <ItemActions>
-            <p className="py-1.5 text-secondary-foreground">{user.email}</p>
-          </ItemActions>
-        </Item>
+          <Item>
+            <ItemContent>
+              <ItemTitle>Email</ItemTitle>
+            </ItemContent>
+            <ItemActions>
+              <p className="py-1.5 text-secondary-foreground">{user.email}</p>
+            </ItemActions>
+          </Item>
 
-        <Item>
-          <ItemContent>
-            <ItemTitle>Username</ItemTitle>
-          </ItemContent>
-          <ItemActions>
-            <Input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              id="name"
-              required
-              className="shadow-none"
-            />
-          </ItemActions>
-        </Item>
-      </ItemGroup>
+          <Item>
+            <ItemContent>
+              <ItemTitle>Username</ItemTitle>
+            </ItemContent>
+            <ItemActions>
+              <Input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                id="name"
+                required
+                className="bg-surface shadow-none"
+              />
+            </ItemActions>
+          </Item>
+        </ItemGroup>
+      </section>
 
-      <ItemGroup className="rounded-lg border">
+      <ItemGroup>
         <Item>
           <ItemContent>
             <ItemTitle>Delete account</ItemTitle>
@@ -247,9 +249,9 @@ function ProfilePage() {
 
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
+                    <Button variant="ghost">Cancel</Button>
                   </DialogClose>
-                  <Button variant="destructive" onClick={handleDeleteAccount}>
+                  <Button variant="destructive-fill" onClick={handleDeleteAccount}>
                     Delete
                   </Button>
                 </DialogFooter>

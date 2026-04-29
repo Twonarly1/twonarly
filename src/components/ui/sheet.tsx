@@ -1,9 +1,10 @@
 "use client";
 
-import { XIcon } from "lucide-react";
+import { X } from "lucide-react";
 import { Dialog as SheetPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
+import { Button } from "./button";
 
 import type * as React from "react";
 
@@ -67,9 +68,15 @@ function SheetContent({
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="absolute top-4 right-4 rounded opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-          <XIcon className="size-4" />
-          <span className="sr-only">Close</span>
+        <SheetPrimitive.Close className="absolute top-4 right-4" asChild>
+          <Button
+            variant="unstyled"
+            size="icon-xs"
+            className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
+          >
+            <X className="icon-sm" />
+            <span className="sr-only">Close</span>
+          </Button>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>

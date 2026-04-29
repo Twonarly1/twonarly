@@ -14,21 +14,21 @@ const buttonVariants = cva(
         default:
           "bg-primary border-0 focus-visible:border-0 text-primary-foreground hover:bg-primary/80 focus-visible:ring focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         outline:
-          "border-border bg-background text-secondary-foreground hover:bg-muted hover:text-foreground dark:bg-border/30 dark:hover:bg-border/50 aria-expanded:bg-muted aria-expanded:text-foreground",
+          "border-border bg-surface text-secondary-foreground hover:bg-content hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground",
         ghost:
-          "text-secondary-foreground hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 aria-expanded:bg-muted aria-expanded:text-foreground",
+          "text-secondary-foreground hover:bg-content hover:text-foreground  aria-expanded:bg-muted aria-expanded:text-foreground",
         destructive:
-          "hover:bg-destructive/10 focus-visible:ring-destructive/10 bg-background text-destructive focus-visible:border-destructive/50",
+          "hover:bg-destructive/10 focus-visible:ring-destructive/10 bg-surface text-destructive focus-visible:border-destructive/50",
+        "destructive-fill":
+          "bg-destructive border-0 focus-visible:border-0 text-destructive-foreground hover:bg-destructive/80 focus-visible:ring focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         link: "underline-offset-4 hover:underline",
+        sidebar:
+          "transition-none group-data-[collapsible=icon]:[&>span]:hidden px-2.25! group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 [&>span:last-child]:truncate overflow-hidden justify-start peer/menu-button group/menu-button group/button text-sm select-none hover:bg-sidebar-accent/60 text-sidebar-foreground font-medium leading-snug w-full",
         unstyled: "",
       },
       size: {
-        default:
-          "h-8 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2",
-        xs: "h-6 gap-1 px-2.5 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5",
-        sm: "h-7 gap-1 px-2.5 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5",
-        lg: "h-9 gap-1.5 px-2.5 has-data-[icon=inline-end]:pr-3 has-data-[icon=inline-start]:pl-3 ",
-        xl: "h-10 gap-2 px-3 has-data-[icon=inline-end]:pr-4 has-data-[icon=inline-start]:pl-4",
+        sm: "h-7 gap-1 px-2.5",
+        lg: "h-9 gap-1.5",
         icon: "size-8",
         "icon-xs": "size-6",
         "icon-sm": "size-7",

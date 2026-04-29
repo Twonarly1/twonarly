@@ -115,11 +115,11 @@ const TableActions = ({ table }: Props) => {
           {selectedCount} selected <span className="pl-2">—</span>
         </span>
 
-        <Button variant="outline" onClick={handleToggleComplete}>
+        <Button variant="outline" onClick={handleToggleComplete} className="bg-inherit">
           Toggle
         </Button>
 
-        <Button variant="outline" onClick={handleDelete}>
+        <Button variant="outline" onClick={handleDelete} className="bg-inherit">
           Delete
         </Button>
       </div>

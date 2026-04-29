@@ -1,49 +1,55 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
-import { object, optional, parse, picklist, pipe, regex, string } from "valibot";
+import { number, object, optional, parse, picklist, record, string, tuple } from "valibot";
 
 import { COOKIES } from "@/lib/constants/cookies";
 
 import type { InferOutput } from "valibot";
 
 const themeValidator = picklist(["light", "dark", "system", "custom"]);
+const lchTuple = tuple([number(), number(), number()]);
 
-const hexColor = optional(
-  pipe(string(), regex(/^#[0-9a-fA-F]{6}$/, "Must be a valid hex color (e.g. #ff00aa)")),
-);
-
-const customColorsValidator = object({
-  background: hexColor,
-  accent: hexColor,
-  border: hexColor,
+const customThemeValidator = object({
+  base: optional(lchTuple),
+  accent: optional(lchTuple),
+  contrast: number(),
+  sidebar: optional(
+    object({
+      base: optional(lchTuple),
+      contrast: number(),
+    }),
+  ),
 });
 
-const storageKey = COOKIES.theme;
-const customColorsKey = COOKIES.themeCustom;
+const preferencesValidator = object({
+  theme: themeValidator,
+  customTheme: optional(customThemeValidator),
+  css: optional(record(string(), string())),
+});
 
 export type Theme = InferOutput<typeof themeValidator>;
-export type CustomColors = InferOutput<typeof customColorsValidator>;
+export type CustomTheme = InferOutput<typeof customThemeValidator>;
+export type ThemePreferences = InferOutput<typeof preferencesValidator>;
 
-export const getTheme = createServerFn().handler(
-  async () => (getCookie(storageKey) || "dark") as Theme,
-);
+const COOKIE_KEY = COOKIES.theme;
 
-export const getCustomColors = createServerFn().handler(async () => {
-  const colors = getCookie(customColorsKey);
-  if (!colors) return null;
+export const getThemePreferences = createServerFn().handler(async (): Promise<ThemePreferences> => {
+  const raw = getCookie(COOKIE_KEY);
+  if (!raw) return { theme: "dark" };
 
   try {
-    const parsed = parse(customColorsValidator, JSON.parse(colors));
-    return parsed;
+    return parse(preferencesValidator, JSON.parse(raw));
   } catch {
-    return null;
+    // Backwards compat: bare theme string
+    if (["light", "dark", "system", "custom"].includes(raw!)) {
+      return { theme: raw as Theme };
+    }
+    return { theme: "dark" };
   }
 });
 
-export const setTheme = createServerFn({ method: "POST" })
-  .inputValidator(themeValidator)
-  .handler(async ({ data }) => setCookie(storageKey, data));
-
-export const setCustomColors = createServerFn({ method: "POST" })
-  .inputValidator(customColorsValidator)
-  .handler(async ({ data }) => setCookie(customColorsKey, JSON.stringify(data)));
+export const setThemePreferences = createServerFn({ method: "POST" })
+  .inputValidator(preferencesValidator)
+  .handler(async ({ data }) => {
+    setCookie(COOKIE_KEY, JSON.stringify(data));
+  });

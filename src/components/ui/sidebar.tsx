@@ -111,7 +111,7 @@ function SidebarProvider({
           } as CSSProperties
         }
         className={cn(
-          "group/sidebar-wrapper max-h-svh min-h-svh w-full",
+          "group/sidebar-wrapper max-h-svh min-h-svh w-full overflow-hidden",
           layout.sidebarVariant === "inset" ? "flex bg-sidebar" : "flex",
           layout.sidebarPosition === "right" && "flex-row-reverse",
           className,
@@ -143,7 +143,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
-          <div className="z-50 flex h-full w-full flex-col rounded-lg bg-sidebar">
+          <div className="z-50 flex h-full w-full flex-col rounded-lg bg-background">
             {children}
             <Button variant="ghost" className="m-2" onClick={toggleSidebar}>
               Close
@@ -194,7 +194,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
         className={cn(
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) md:flex",
           "transition-[transform,opacity] duration-300 ease-out-strong",
-          "group-data-[collapsible=icon]:w-12",
+          "bg-content group-data-[collapsible=icon]:w-12",
           isLeft
             ? cn(
                 "left-0",
@@ -205,10 +205,10 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
             : cn(
                 "right-0 order-last",
                 isFloating
-                  ? "group-data-[collapsible=offcanvas]:translate-x-[calc(100%+0.5rem)]"
+                  ? "right-2 group-data-[collapsible=offcanvas]:translate-x-[calc(100%+1rem)]"
                   : "group-data-[collapsible=offcanvas]:translate-x-full",
               ),
-          isFloating && (isLeft ? "ml-2 py-2" : "mr-2 py-2"),
+          isFloating && (isLeft ? "ml-2 py-2" : "py-2"),
           className,
         )}
         {...props}
@@ -217,7 +217,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
           className={cn(
-            "flex h-full w-full flex-col bg-sidebar text-sidebar-foreground",
+            "flex h-full w-full flex-col bg-sidebar pb-16 text-sidebar-foreground",
             borderClass,
           )}
         >
@@ -248,7 +248,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
         className={cn(
           "z-10 flex transition-transform duration-150",
           layout.sidebarVariant === "inset" && "m-2",
-          layout.sidebarVariant === "classic" && "mt-4 ml-2",
+          layout.sidebarVariant === "classic" && "m-4",
           layout.sidebarVariant === "floating" && "m-4",
           className,
         )}
@@ -281,7 +281,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
         : "-left-6"
       : isLeft
         ? "right-0"
-        : "-left-4";
+        : "-left-0";
 
   return (
     <button
@@ -292,8 +292,8 @@ function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        "absolute inset-y-0 z-20 hidden w-4 cursor-ew-resize focus-visible:outline-none sm:flex",
-        "after:absolute after:inset-y-0 after:right-0 after:w-px hover:after:bg-primary/50",
+        "absolute inset-y-0 z-20 hidden w-px cursor-ew-resize focus-visible:outline-none sm:flex",
+        "after:absolute after:inset-y-0 after:right-0 after:w-px hover:after:bg-primary",
         layout.sidebarVariant === "inset" && "my-4",
         railPosition,
         className,
@@ -310,7 +310,7 @@ function SidebarInset({ className, children, ...props }: React.ComponentProps<"m
   const insetClass =
     layout.sidebarVariant === "inset"
       ? cn(
-          "rounded-lg border bg-background",
+          "rounded-lg border",
           layout.sidebarCollapsible === "offcanvas" && state === "collapsed"
             ? "m-2"
             : layout.sidebarPosition === "left"
@@ -323,7 +323,7 @@ function SidebarInset({ className, children, ...props }: React.ComponentProps<"m
     <main
       data-slot="sidebar-inset"
       className={cn(
-        "relative grid min-h-0 w-full flex-1 grid-rows-[auto_1fr] overflow-hidden",
+        "relative grid min-h-0 w-full flex-1 grid-rows-[auto_1fr] overflow-hidden bg-content",
         insetClass,
         isMobile && "m-0 rounded-none",
         className,
@@ -352,7 +352,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
         className,
       )}
       {...props}
@@ -443,14 +443,14 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-active={isActive}
       className={cn(
-        "peer/menu-button group/menu-button group/button",
-        "flex h-8 w-full select-none items-center gap-1.5 overflow-hidden px-2 py-2 outline-none",
+        "peer/menu-button group/menu-button group/button text-sm",
+        "flex h-8 w-full select-none items-center gap-1.5 overflow-hidden px-2 py-1.5 outline-none",
         "whitespace-nowrap font-medium text-sidebar-foreground/70 leading-snug",
         "rounded-lg border border-transparent",
         "hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:border focus-visible:border-primary",
         "disabled:pointer-events-none disabled:opacity-50",
         "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-foreground",
-        "transition-none group-data-[collapsible=icon]:size-8!",
+        "transition-none group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:[&>span]:hidden",
         "[&>span:last-child]:truncate [&_svg]:shrink-0",
 
         className,

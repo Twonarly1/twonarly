@@ -44,43 +44,45 @@ const LinkedWalletList = () => {
     }
   };
 
+  if (!wallets?.length) {
+    return (
+      <Item variant="outline" className="rounded-xl">
+        <ItemContent>
+          <ItemDescription>Connect a wallet to link it</ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <ConnectWalletDialog
+            mode="link"
+            trigger={<Button variant="ghost">Connect wallet</Button>}
+          />
+        </ItemActions>
+      </Item>
+    );
+  }
+
   return (
-    <ItemGroup className="rounded-lg border">
-      {wallets?.length === 0 ? (
-        <Item>
+    <ItemGroup variant="list">
+      {wallets.map((wallet) => (
+        <Item key={wallet.id}>
           <ItemContent>
-            <ItemDescription>Connect a wallet to link it</ItemDescription>
+            <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
+            <ItemDescription>
+              <a
+                href={`https://etherscan.io/address/${wallet.address}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View on etherscan &#8599;
+              </a>
+            </ItemDescription>
           </ItemContent>
-          <ItemActions className="p-0">
-            <ConnectWalletDialog
-              mode="link"
-              trigger={<Button variant="ghost">Connect wallet</Button>}
-            />
+          <ItemActions>
+            <Button variant="ghost" onClick={() => handleUnlink(wallet)}>
+              Remove
+            </Button>
           </ItemActions>
         </Item>
-      ) : (
-        wallets.map((wallet) => (
-          <Item key={wallet.id}>
-            <ItemContent>
-              <ItemTitle>{formatWalletAddress(wallet.address)}</ItemTitle>
-              <ItemDescription>
-                <a
-                  href={`https://etherscan.io/address/${wallet.address}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View on etherscan ↗
-                </a>
-              </ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              <Button variant="ghost" onClick={() => handleUnlink(wallet)}>
-                Remove
-              </Button>
-            </ItemActions>
-          </Item>
-        ))
-      )}
+      ))}
     </ItemGroup>
   );
 };

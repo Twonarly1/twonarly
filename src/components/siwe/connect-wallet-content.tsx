@@ -4,10 +4,18 @@ import { match } from "ts-pattern";
 
 import { StatusErrorIcon } from "@/components/icons/status-error";
 import ConnectOptionList from "@/components/siwe/connect-option-list";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { AUTH_BASE, authClient } from "@/lib/auth/auth-client";
 import { useInjectedWallets } from "@/lib/hooks/use-injected-wallets";
+import { buttonVariants } from "../ui/button";
 
 import type { EIP6963Provider } from "@/lib/hooks/use-injected-wallets";
 
@@ -137,31 +145,44 @@ export function ConnectWalletContent({ mode }: Props) {
     );
   }
 
+  if (wallets.length === 0) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyTitle>No wallets detected.</EmptyTitle>
+          <EmptyDescription>
+            No wallets found. Install a browser wallet like MetaMask to continue.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <a
+            href="https://metamask.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={buttonVariants({ className: "cursor-pointer" })}
+          >
+            Metamask &#8599;
+          </a>
+        </EmptyContent>
+      </Empty>
+    );
+  }
+
   return (
     <>
       {step === "error" && (
-        <Item variant="destructive" className="rounded-lg">
+        <Item variant="destructive" className="space-x-2 rounded-xl">
           <ItemMedia>
             <StatusErrorIcon />
           </ItemMedia>
-          <ItemContent>
+          <ItemContent className="-mt-0.5">
             <ItemTitle className="text-destructive">Connection failed</ItemTitle>
             <ItemDescription className="text-destructive/80">{errorMessage}</ItemDescription>
           </ItemContent>
         </Item>
       )}
 
-      {wallets.length > 0 ? (
-        <ConnectOptionList wallets={wallets} onConnect={handleConnect} disabled={isProcessing} />
-      ) : (
-        <Item variant="outline" className="rounded-lg">
-          <ItemContent>
-            <ItemDescription>
-              No wallets detected. Install a browser wallet like MetaMask to continue.
-            </ItemDescription>
-          </ItemContent>
-        </Item>
-      )}
+      <ConnectOptionList wallets={wallets} onConnect={handleConnect} disabled={isProcessing} />
     </>
   );
 }

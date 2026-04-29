@@ -1,10 +1,11 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { ChevronDown, Droplet, Monitor, Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
-import ColorPickerDialog from "@/components/color-picker";
-import PageContainer from "@/components/page-container";
+import PageContainer from "@/components/layout/page-container";
+import Section from "@/components/layout/section";
+import ThemeChanger from "@/components/theme-changer";
 import { Button } from "@/components/ui/button";
 import { Collapsible } from "@/components/ui/collapsible";
 import {
@@ -26,10 +27,13 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useIsPhone } from "@/lib/hooks/use-phone";
+import { applyCustomTheme, clearCustomTheme, computeColorsFromTheme } from "@/lib/utils/theme";
 import { useAppearance } from "@/providers/appearance-provider";
 import { useLayout } from "@/providers/layout-provider";
 import { useTheme } from "@/providers/theme-provider";
+import { setThemePreferences } from "@/server/functions/preferences/theme";
 
+import type { LchTuple } from "@/lib/utils/color";
 import type { AppearanceSettings } from "@/providers/appearance-provider";
 import type { LayoutSettings } from "@/providers/layout-provider";
 
@@ -45,59 +49,89 @@ const THEME_OPTIONS = [
   },
 ];
 
-export const Route = createLazyFileRoute("/_authenticated/preferences/")({
+interface CustomTheme {
+  base?: LchTuple;
+  accent?: LchTuple;
+  contrast: number;
+  sidebar?: {
+    base?: LchTuple;
+    accent?: LchTuple;
+    contrast: number;
+  };
+}
+
+const initialTheme: CustomTheme = {
+  contrast: 15,
+};
+
+export const Route = createLazyFileRoute("/_authenticated/settings/")({
   component: SettingsPage,
 });
 
 function SettingsPage() {
-  const { theme, setTheme, customColors, setCustomColors, clearCustomColors } = useTheme();
+  const { theme, setTheme, customTheme: savedTheme } = useTheme();
+  const [customTheme, setCustomTheme] = useState(savedTheme ?? initialTheme);
   const { appearance, updateAppearance } = useAppearance();
   const { layout, updateLayout } = useLayout();
   const isMobile = useIsMobile();
   const isPhone = useIsPhone();
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const [backgroundHex, setBackgroundHex] = useState(customColors?.background);
-  const [accentHex, setAccentHex] = useState(customColors?.accent);
-  const [borderHex, setBorderHex] = useState(customColors?.border);
+  const save = (next: CustomTheme) => {
+    setCustomTheme(next);
+    clearCustomTheme(document.documentElement); // wipe all overrides first
+    applyCustomTheme(document.documentElement, next); // re-apply only what's set
 
-  const handleResetCustomTheme = async () => {
-    setBackgroundHex("");
-    setAccentHex("");
-    setBorderHex("");
-    clearCustomColors();
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(() => {
+      const css = computeColorsFromTheme(next);
+      setThemePreferences({ data: { theme, customTheme: next, css } });
+    }, 300);
   };
 
-  useEffect(() => {
-    if (theme === "custom" && (backgroundHex || accentHex || borderHex)) {
-      setCustomColors({
-        background: backgroundHex,
-        accent: accentHex,
-        border: borderHex,
-      });
-    }
-  }, [backgroundHex, accentHex, borderHex, theme, setCustomColors]);
-
   return (
-    <PageContainer className="last:mb-24">
-      <h1 className="items-baseline font-medium text-4xl">Preferences</h1>
+    <PageContainer>
+      <h1 className="items-baseline px-4 font-medium text-4xl">Settings</h1>
 
-      <div className="space-y-4">
-        <Item>
+      <Section title="Appearance">
+        <Item variant="outline" className="rounded-xl">
           <ItemContent>
-            <ItemTitle>Appearance</ItemTitle>
-            <ItemDescription>
-              Customize the appearance and behavior of the application
-            </ItemDescription>
+            <ItemTitle>Font size</ItemTitle>
+            <ItemDescription>Adjust the font size</ItemDescription>
           </ItemContent>
+          <ItemActions>
+            <Select
+              value={appearance.fontSize}
+              onValueChange={(v) =>
+                updateAppearance({ fontSize: v as AppearanceSettings["fontSize"] })
+              }
+            >
+              <SelectTrigger asChild>
+                <Button variant="outline" className="transition-none">
+                  <SelectValue placeholder="Select font size" />
+                  <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                </Button>
+              </SelectTrigger>
+              <SelectContent align="end">
+                <SelectGroup>
+                  <SelectItem value="smaller">Smaller</SelectItem>
+                  <SelectItem value="small">Small</SelectItem>
+                  <SelectItem value="default">Default</SelectItem>
+                  <SelectItem value="large">Large</SelectItem>
+                  <SelectItem value="larger">Larger</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </ItemActions>
         </Item>
 
-        <ItemGroup className="rounded-lg border">
-          <Item className="px-0 pb-0">
-            <ItemContent className="px-4">
+        <div className="rounded-xl border bg-surface">
+          <Item>
+            <ItemContent>
               <ItemTitle>Interface theme</ItemTitle>
-              <ItemDescription>Choose your theme</ItemDescription>
+              <ItemDescription>Customize your theme</ItemDescription>
             </ItemContent>
-            <ItemActions className="px-4">
+            <ItemActions>
               <Select value={theme} onValueChange={setTheme}>
                 <SelectTrigger asChild>
                   <Button variant="outline" className="flex items-center gap-2 transition-none">
@@ -110,7 +144,7 @@ function SettingsPage() {
                       ))
                       .exhaustive()}
                     <SelectValue placeholder="Select a theme" />
-                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                    <ChevronDown className="icon-xs ml-2" />
                   </Button>
                 </SelectTrigger>
                 <SelectContent align="end">
@@ -128,106 +162,20 @@ function SettingsPage() {
                 </SelectContent>
               </Select>
             </ItemActions>
-
-            <Collapsible open={theme === "custom"} className="w-full">
-              <Item>
-                <ItemContent>
-                  <ItemTitle>Background</ItemTitle>
-                </ItemContent>
-                <ItemActions>
-                  <ColorPickerDialog value={backgroundHex} onChange={setBackgroundHex} />
-                </ItemActions>
-              </Item>
-
-              <Item>
-                <ItemContent>
-                  <ItemTitle>Accent</ItemTitle>
-                </ItemContent>
-                <ItemActions>
-                  <ColorPickerDialog value={accentHex} onChange={setAccentHex} />
-                </ItemActions>
-              </Item>
-
-              <Item>
-                <ItemContent>
-                  <ItemTitle>Wireframe</ItemTitle>
-                </ItemContent>
-                <ItemActions>
-                  <ColorPickerDialog value={borderHex} onChange={setBorderHex} />
-                </ItemActions>
-              </Item>
-
-              {(backgroundHex || accentHex || borderHex) && (
-                <div className="flex justify-end pt-2 pb-4">
-                  <Button variant="outline" onClick={handleResetCustomTheme} className="mr-4">
-                    Reset to Default
-                  </Button>
-                </div>
-              )}
-            </Collapsible>
           </Item>
 
-          <Item>
-            <ItemContent>
-              <ItemTitle>Font size</ItemTitle>
-              <ItemDescription>Adjust the font size to your preference</ItemDescription>
-            </ItemContent>
-            <ItemActions>
-              <Select
-                value={appearance.fontSize}
-                onValueChange={(v) =>
-                  updateAppearance({ fontSize: v as AppearanceSettings["fontSize"] })
-                }
-              >
-                <SelectTrigger asChild>
-                  <Button variant="outline" className="transition-none">
-                    <SelectValue placeholder="Select font size" />
-                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
-                  </Button>
-                </SelectTrigger>
-                <SelectContent align="end">
-                  <SelectGroup>
-                    <SelectItem value="smaller">Smaller</SelectItem>
-                    <SelectItem value="small">Small</SelectItem>
-                    <SelectItem value="default">Default</SelectItem>
-                    <SelectItem value="large">Large</SelectItem>
-                    <SelectItem value="larger">Larger</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </ItemActions>
-          </Item>
-
-          {!isMobile && (
-            <Item>
-              <ItemContent>
-                <ItemTitle>Use pointer cursors</ItemTitle>
-                <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Switch
-                  id="switch-pointer-cursor"
-                  checked={appearance.usePointerCursor}
-                  onCheckedChange={(v) => updateAppearance({ usePointerCursor: v })}
-                />
-              </ItemActions>
-            </Item>
-          )}
-        </ItemGroup>
-      </div>
+          <Collapsible
+            open={theme === "custom"}
+            className="w-full space-y-4 rounded-xl border-none"
+          >
+            <ThemeChanger theme={customTheme} onChange={save} />
+          </Collapsible>
+        </div>
+      </Section>
 
       {!isPhone && (
-        <div className="space-y-4">
-          <Item>
-            <ItemContent>
-              <ItemTitle>Sidebar customization</ItemTitle>
-              <ItemDescription>
-                Customize the appearance and behavior of the sidebar and app layout
-              </ItemDescription>
-            </ItemContent>
-          </Item>
-
-          <ItemGroup className="rounded-lg border">
+        <Section title="Layout">
+          <ItemGroup className="divide-none">
             <Item>
               <ItemContent>
                 <ItemTitle>Sidebar position</ItemTitle>
@@ -243,7 +191,7 @@ function SettingsPage() {
                   <SelectTrigger asChild>
                     <Button variant="outline" className="transition-none">
                       <SelectValue placeholder="Select sidebar position" />
-                      <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                      <ChevronDown className="icon-xs ml-2" />
                     </Button>
                   </SelectTrigger>
                   <SelectContent align="end">
@@ -273,7 +221,7 @@ function SettingsPage() {
                       <SelectTrigger asChild>
                         <Button variant="outline" className="transition-none">
                           <SelectValue placeholder="Select sidebar variant" />
-                          <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                          <ChevronDown className="icon-xs ml-2" />
                         </Button>
                       </SelectTrigger>
                       <SelectContent align="end">
@@ -304,7 +252,7 @@ function SettingsPage() {
                       <SelectTrigger asChild>
                         <Button variant="outline" className="transition-none">
                           <SelectValue placeholder="Select sidebar collapsible option" />
-                          <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                          <ChevronDown className="icon-xs ml-2" />
                         </Button>
                       </SelectTrigger>
                       <SelectContent align="end">
@@ -317,10 +265,24 @@ function SettingsPage() {
                     </Select>
                   </ItemActions>
                 </Item>
+
+                <Item>
+                  <ItemContent>
+                    <ItemTitle>Use pointer cursors</ItemTitle>
+                    <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
+                  </ItemContent>
+                  <ItemActions>
+                    <Switch
+                      id="switch-pointer-cursor"
+                      checked={appearance.usePointerCursor}
+                      onCheckedChange={(v) => updateAppearance({ usePointerCursor: v })}
+                    />
+                  </ItemActions>
+                </Item>
               </>
             )}
           </ItemGroup>
-        </div>
+        </Section>
       )}
     </PageContainer>
   );
