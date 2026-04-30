@@ -99,7 +99,7 @@ const AccountList = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                      <DropdownMenuGroup className="space-y-0.5">
+                      <DropdownMenuGroup>
                         <DropdownMenuItem
                           onSelect={() => handleAccountSwitch(deviceSession.session.token!)}
                         >
@@ -130,15 +130,17 @@ const AccountList = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost">Add account</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="space-y-0.5">
-              <DropdownMenuItem onClick={() => signIn("google")}>
-                <GoogleIcon className="size-4" />
-                Google
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => signIn("github")}>
-                <GitHubIcon className="size-4" />
-                GitHub
-              </DropdownMenuItem>
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => signIn("google")}>
+                  <GoogleIcon className="size-4" />
+                  Google
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signIn("github")}>
+                  <GitHubIcon className="size-4" />
+                  GitHub
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </ItemActions>

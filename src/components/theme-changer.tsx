@@ -12,6 +12,8 @@ import { Item, ItemActions, ItemContent, ItemTitle } from "./ui/item";
 
 import type { CustomTheme } from "@/lib/utils/theme";
 
+// todo: 1. make sure max depth is reached, create toggle to hide theme changer color picker, active border matches focus state,
+
 type ZoneId = "sidebar" | "content" | "accent";
 
 interface Props {

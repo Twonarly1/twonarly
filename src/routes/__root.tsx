@@ -72,7 +72,7 @@ function RootDocument({ children }: PropsWithChildren) {
     ) : null;
 
   return (
-    <html lang="en" className={htmlClass} {...fontSizeAttr}>
+    <html lang="en" className={htmlClass} {...fontSizeAttr} suppressHydrationWarning>
       <head>
         <HeadContent />
         {themeScript}

@@ -91,18 +91,22 @@ const PasskeyList = () => {
                 onChange={(e) => setNewName(e.target.value)}
                 className="h-7 w-48"
               />
-              <Button type="submit" variant="ghost">
-                Save
-              </Button>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setIsAdding(false);
-                  setNewName("");
-                }}
-              >
-                Cancel
-              </Button>
+
+              <div className="flex items-center">
+                <Button type="submit" variant="ghost">
+                  Save
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setIsAdding(false);
+                    setNewName("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div>
             </form>
           ) : (
             <ItemDescription>

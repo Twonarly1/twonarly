@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { ArrowDown, ArrowUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { TableCell, TableHead } from "@/components/ui/table";
+import { TableHead } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import type { Header } from "@tanstack/react-table";
@@ -30,9 +30,9 @@ const HeaderCell = ({ header }: Props) => {
 
   if (!canSort) {
     return (
-      <TableCell className="py-1" style={cellStyle}>
+      <TableHead className="py-1" style={cellStyle}>
         {flexRender(column.columnDef.header, getContext())}
-      </TableCell>
+      </TableHead>
     );
   }
 
@@ -49,7 +49,7 @@ const HeaderCell = ({ header }: Props) => {
           <Button
             variant="ghost"
             onClick={handleSort}
-            className="group flex h-6 w-fit justify-between px-2 text-sm"
+            className="group flex h-6 w-fit justify-between px-2 text-sm hover:bg-surface"
           >
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
@@ -62,7 +62,7 @@ const HeaderCell = ({ header }: Props) => {
             />
           </Button>
         </TooltipTrigger>
-        <TooltipContent sideOffset={4} className="text-xs">
+        <TooltipContent sideOffset={4} className="bg-surface">
           Order by {header.id}
         </TooltipContent>
       </Tooltip>

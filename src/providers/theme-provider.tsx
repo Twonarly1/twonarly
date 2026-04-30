@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { applyCustomTheme, clearCustomTheme } from "@/lib/utils/theme";
 import { setThemePreferences } from "@/server/functions/preferences/theme";
@@ -67,11 +67,20 @@ export function ThemeProvider({
     return () => clearCustomTheme(root);
   }, [theme, customTheme]);
 
-  return <ThemeContext value={{ theme, setTheme, customTheme }}>{children}</ThemeContext>;
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+  }, [theme]);
+
+  const contextValue = useMemo(
+    () => ({ theme, setTheme, customTheme }),
+    [theme, setTheme, customTheme],
+  );
+
+  return <ThemeContext value={contextValue}>{children}</ThemeContext>;
 }
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error("`useTheme` called outside of `<ThemeProvider />`");
+  if (!context) throw new Error("`useTheme` must be used within a ThemeProvider.");
   return context;
 };

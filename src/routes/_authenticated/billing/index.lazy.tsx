@@ -89,7 +89,10 @@ function BillingPage() {
             <ItemDescription>{planDescription}</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button onClick={isActive ? openBillingPortal : handleUpgrade}>
+            <Button
+              onClick={isActive ? openBillingPortal : handleUpgrade}
+              className="cursor-pointer"
+            >
               {isActive ? "Manage" : "Upgrade"}
             </Button>
           </ItemActions>
@@ -122,7 +125,10 @@ function BillingPage() {
 
               {!isCurrent && plan.name !== "Free" && (
                 <CardFooter>
-                  <Button className="w-full" onClick={isActive ? openBillingPortal : handleUpgrade}>
+                  <Button
+                    className="w-full cursor-pointer"
+                    onClick={isActive ? openBillingPortal : handleUpgrade}
+                  >
                     Upgrade to {plan.name}
                   </Button>
                 </CardFooter>

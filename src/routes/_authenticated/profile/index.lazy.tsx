@@ -1,6 +1,6 @@
 import { createLazyFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { Pen, Trash } from "lucide-react";
+import { Camera, Pen, Trash } from "lucide-react";
 import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
@@ -155,7 +155,7 @@ function ProfilePage() {
                         className="size-9 rounded-full"
                       />
                       <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity group-hover:opacity-100">
-                        <Pen className="icon-sm" />
+                        <Camera className="icon-sm" />
                       </div>
                     </button>
                   </DropdownMenuTrigger>

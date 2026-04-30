@@ -21,7 +21,7 @@ function Switch({ checked = false, onCheckedChange, disabled = false, id, ...pro
       data-state={checked ? "checked" : "unchecked"}
       disabled={disabled}
       onClick={() => onCheckedChange?.(!checked)}
-      className="group relative inline-flex h-5 w-7.5 shrink-0 items-center rounded-full bg-muted transition-colors duration-150 ease-out-strong focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-inherit disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary"
+      className="group custom:bg- relative inline-flex h-5 w-7.5 shrink-0 items-center rounded-full bg-muted transition-colors duration-150 ease-out-strong focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-inherit disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary"
       {...props}
     >
       <input

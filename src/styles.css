@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant custom (&:is([data-theme=custom] *));
 
 body {
   @apply m-0;

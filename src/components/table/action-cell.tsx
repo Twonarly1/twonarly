@@ -83,18 +83,17 @@ const ActionCell = ({ row, table }: Props) => {
           }}
           variant="ghost"
           size="icon-sm"
-          className="mx-auto"
-          // className="mx-auto group-hover:opacity-100 data-[state=open]:opacity-100 sm:opacity-0"
+          className="mx-auto custom:hover:bg-surface"
         >
           <MoreHorizontal className="icon-sm" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="space-y-0.5">
-        <DropdownMenuItem onClick={handleToggleComplete}>
+        <DropdownMenuItem onClick={handleToggleComplete} className="">
           <Check className="icon-xs" />
           <span>Completed</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleDelete}>
+        <DropdownMenuItem variant="destructive" onClick={handleDelete}>
           <Trash className="icon-xs" />
           <span>Delete</span>
         </DropdownMenuItem>

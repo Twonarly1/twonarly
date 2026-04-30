@@ -104,7 +104,7 @@ const AppSidebar = () => {
                 side="bottom"
                 sideOffset={4}
               >
-                <DropdownMenuGroup className="space-y-0.5">
+                <DropdownMenuGroup>
                   {!isMobile && (
                     <DropdownMenuSub>
                       <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
@@ -138,6 +138,7 @@ const AppSidebar = () => {
                             <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
                             <DropdownMenuPortal>
                               <DropdownMenuSubContent>
+                                {/* <DropdownMenuGroup> */}
                                 <DropdownMenuItem onSelect={() => signIn("google")}>
                                   <GoogleIcon className="size-4" />
                                   Google
@@ -146,6 +147,7 @@ const AppSidebar = () => {
                                   <GitHubIcon className="size-4" />
                                   GitHub
                                 </DropdownMenuItem>
+                                {/* </DropdownMenuGroup> */}
                               </DropdownMenuSubContent>
                             </DropdownMenuPortal>
                           </DropdownMenuSub>

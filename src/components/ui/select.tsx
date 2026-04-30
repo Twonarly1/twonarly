@@ -10,7 +10,7 @@ function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>)
 }
 
 function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
-  return <SelectPrimitive.Group data-slot="select-group" {...props} />;
+  return <SelectPrimitive.Group data-slot="select-group" className="space-y-0.5" {...props} />;
 }
 
 function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.Value>) {
@@ -18,13 +18,7 @@ function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.V
 }
 
 function SelectTrigger({ ...props }: React.ComponentProps<typeof SelectPrimitive.Trigger>) {
-  return (
-    <SelectPrimitive.Trigger
-      data-slot="select-trigger"
-      className="bg-surface text-base"
-      {...props}
-    />
-  );
+  return <SelectPrimitive.Trigger data-slot="select-trigger" {...props} />;
 }
 
 function SelectContent({
@@ -86,7 +80,8 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex h-7 w-full select-none items-center gap-2 rounded-lg px-2 outline-hidden focus:bg-surface focus:text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none",
+        "relative flex h-7 w-full select-none items-center gap-2 rounded-lg px-2 outline-hidden focus:text-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none",
+        "custom:hover:bg-surface hover:bg-muted custom:focus:bg-surface focus:bg-muted",
         className,
       )}
       {...props}

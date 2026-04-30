@@ -71,9 +71,7 @@ const NewTaskDialog = () => {
       <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
         <TooltipTrigger asChild>
           <DialogTrigger asChild>
-            <Button className="flex pointer-hover:scale-[1.04] gap-2 active:scale-[0.97]">
-              New Task
-            </Button>
+            <Button className="flex gap-2 active:scale-[0.97]">New Task</Button>
           </DialogTrigger>
         </TooltipTrigger>
         <DialogContent className="p-3">
