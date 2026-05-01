@@ -43,10 +43,10 @@ const HeaderCell = ({ header }: Props) => {
   const SortIcon = sortDirection === "asc" ? ArrowUp : ArrowDown;
 
   return (
-    <TableHead className="text-muted-foreground" colSpan={header.colSpan} style={cellStyle}>
+    <TableHead colSpan={header.colSpan} style={cellStyle}>
       <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
-          <Button variant="ghost" onClick={handleSort} className="group text-sm">
+          <Button variant="ghost" onClick={handleSort} className="group w-fit text-sm">
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
               className={clsx(

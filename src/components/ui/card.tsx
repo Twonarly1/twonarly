@@ -43,7 +43,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card-description"
       className={cn(
-        "line-clamp-2 text-balance font-normal text-muted-foreground text-sm leading-normal",
+        "line-clamp-2 text-balance font-normal text-secondary-foreground text-sm leading-normal",
         "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
         className,
       )}

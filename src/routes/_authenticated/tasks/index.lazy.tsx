@@ -10,7 +10,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import PageContainer from "@/components/layout/page-container";
 import NewTaskDialog from "@/components/new-task-dialog";
-import ActionCell from "@/components/table/action-cell";
 import { DataTable } from "@/components/table/data-table";
 import EditableCell from "@/components/table/editable-cell";
 import TableActions from "@/components/table/table-actions";
@@ -75,7 +74,8 @@ function TasksPage() {
           </div>
         ),
         enableSorting: false,
-        size: 40,
+        size: 16,
+        maxSize: 16,
         cell: ({ row }) => (
           <div className="flex">
             <Checkbox
@@ -89,29 +89,19 @@ function TasksPage() {
       {
         accessorKey: "name",
         header: "Name",
-        size: 300,
         sortingFn: "alphanumeric",
       },
       {
         accessorKey: "createdAt",
         id: "created at",
         header: "Created",
-        size: 32,
+        size: 28,
+        maxSize: 28,
         sortingFn: "datetime",
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
-          return (
-            <span className="px-2 font-medium text-muted-foreground text-sm">
-              {formatDate(createdAt)}
-            </span>
-          );
+          return <div className="ml-4 text-muted-foreground text-sm">{formatDate(createdAt)}</div>;
         },
-      },
-      {
-        id: "actions",
-        enableSorting: false,
-        size: 32,
-        cell: ({ row, table }) => <ActionCell row={row} table={table} />,
       },
     ],
     [],
@@ -125,7 +115,6 @@ function TasksPage() {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    columnResizeMode: "onChange",
     manualSorting: false,
     state: {
       columnVisibility,
@@ -170,89 +159,59 @@ function TasksPage() {
     setData(tasks ?? []);
   }, [tasks]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== "x" && e.key !== "X") return;
-
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-        return;
-      }
-
-      e.preventDefault();
-
-      const focusedRow = document.activeElement?.closest("tr[data-row-id]") as HTMLElement;
-      const hoveredRow = document.querySelector("tr[data-row-id]:hover") as HTMLElement;
-
-      const targetRow = focusedRow || hoveredRow;
-      if (!targetRow) return;
-
-      const rowId = targetRow.getAttribute("data-row-id");
-      if (!rowId) return;
-
-      const row = table.getRowModel().rows.find((r) => r.id === rowId);
-      if (row) {
-        row.toggleSelected();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [table]);
-
   return (
     <PageContainer>
       <h1 className="items-baseline px-4 font-medium text-4xl">Tasks</h1>
 
-      <div className="flex items-center gap-2">
-        <div className="relative flex w-full gap-2">
-          <Search
-            strokeWidth={2.5}
-            className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground"
-          />
-          <Input
-            placeholder="Search tasks..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="max-w-sm pl-8"
-          />
-
-          <Select
-            defaultValue="active"
-            value={archived ? "archived" : "active"}
-            onValueChange={(v) =>
-              navigate({
-                to: ".",
-                search: (prev) => ({ ...prev, archived: v === "archived" ? true : undefined }),
-              })
-            }
-          >
-            <SelectTrigger asChild>
-              <Button variant="outline" className="h-8 transition-none custom:hover:bg-surface">
-                <SelectValue placeholder="Select view" />
-                <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
-              </Button>
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectGroup>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="archived">Archived</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <NewTaskDialog />
-      </div>
-
-      <div className="-mt-8">
-        <div className="h-10">
+      <div className="-mt-10">
+        <div className="h-10 min-h-10">
           <TableActions table={table} />
         </div>
 
-        <DataTable table={table} />
+        <div className="flex flex-col rounded-xl border bg-surface">
+          <div className="flex items-center gap-2 p-4">
+            <div className="relative flex w-full gap-2">
+              <Search
+                strokeWidth={2.5}
+                className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground"
+              />
+              <Input
+                placeholder="Search tasks..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="max-w-[233px] pl-8"
+              />
+
+              <Select
+                defaultValue="active"
+                value={archived ? "archived" : "active"}
+                onValueChange={(v) =>
+                  navigate({
+                    to: ".",
+                    search: (prev) => ({ ...prev, archived: v === "archived" ? true : undefined }),
+                  })
+                }
+              >
+                <SelectTrigger asChild>
+                  <Button variant="outline" className="h-8 transition-none">
+                    <SelectValue placeholder="Select view" />
+                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                  </Button>
+                </SelectTrigger>
+                <SelectContent align="end">
+                  <SelectGroup>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="archived">Archived</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <NewTaskDialog />
+          </div>
+
+          <DataTable table={table} />
+        </div>
       </div>
     </PageContainer>
   );

@@ -89,8 +89,7 @@ const InvoiceList = () => {
       </ItemGroup>
     );
 
-  if (invoices.length === 0)
-    return <span className="px-4 text-muted-foreground">No invoices yet</span>;
+  if (invoices.length > 0) return <span className="px-4">No invoices yet</span>;
 
   return (
     <ItemGroup variant="list">

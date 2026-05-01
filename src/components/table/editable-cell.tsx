@@ -17,7 +17,6 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
   const updateTaskFn = useServerFn(updateTask);
 
   const isNameColumn = column.id === "name";
-  const isDescriptionColumn = column.id === "description";
 
   // Sync external updates when not editing
   useEffect(() => {
@@ -92,15 +91,9 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
         type="button"
         tabIndex={-1}
         onClick={() => setIsEditing(true)}
-        className="group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium leading-7 focus-visible:border-border"
+        className="group flex h-7 w-full flex-1 items-center truncate rounded border border-transparent px-2 font-medium text-secondary-foreground leading-7 focus-visible:border-border"
       >
-        {initialValue ? (
-          <span className="text-secondary-foreground">{initialValue}</span>
-        ) : (
-          <span className="text-faded-foreground opacity-100 hover:text-muted-foreground group-hover:opacity-100 sm:opacity-0">
-            {isDescriptionColumn ? "Add task description" : undefined}
-          </span>
-        )}
+        {initialValue}
       </button>
     );
   }

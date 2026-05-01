@@ -14,6 +14,7 @@ interface Props {
   table: TableProps<Task>;
 }
 
+// TODO: Need inspiration
 const TableActions = ({ table }: Props) => {
   const router = useRouter();
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
@@ -83,8 +84,8 @@ const TableActions = ({ table }: Props) => {
   if (!selectedCount) return null;
 
   return (
-    <div className="flex h-10 items-center">
-      <span className="select-none text-muted-foreground">
+    <div className="flex h-10 items-center justify-end">
+      <span className="select-none text-secondary-foreground">
         {selectedCount} selected <span className="pl-1">—</span>
       </span>
 

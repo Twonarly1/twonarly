@@ -171,7 +171,7 @@ export function ConnectWalletContent({ mode }: Props) {
   return (
     <>
       {step === "error" && (
-        <Item variant="destructive" className="space-x-2 rounded-xl">
+        <Item variant="destructive" className="space-x-2 rounded-xl custom:bg-surface">
           <ItemMedia>
             <StatusErrorIcon />
           </ItemMedia>

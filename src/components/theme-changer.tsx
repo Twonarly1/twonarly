@@ -90,9 +90,9 @@ export default function ThemeChanger({ theme, onChange }: Props) {
     .otherwise(() => null);
 
   return (
-    <div className="flex w-full flex-col gap-3 p-4">
+    <div className="flex w-full flex-col gap-6 p-4 sm:gap-3">
       {/* ── Layout map ── */}
-      <div className="mx-auto flex w-full max-w-100 flex-col items-center gap-2 p-2">
+      <div className="mx-auto flex w-full flex-col items-center gap-2 sm:max-w-100 sm:p-2">
         <div className="grid w-full grid-cols-[100px_1fr] gap-x-2 overflow-hidden">
           <Button
             variant="unstyled"
@@ -135,8 +135,8 @@ export default function ThemeChanger({ theme, onChange }: Props) {
         </div>
       </div>
 
-      <Collapsible open={activeZone !== null} className="mx-auto w-full max-w-md">
-        <div className="mx-auto flex w-full flex-col gap-2 px-8 py-4">
+      <Collapsible open={activeZone !== null} className="mx-auto w-full sm:max-w-md">
+        <div className="mx-auto flex w-full flex-col gap-2 py-4 sm:px-8">
           <div className="flex w-full items-center justify-between gap-2">
             <span className="font-medium text-base first-letter:uppercase">{activeZone}</span>
 
@@ -154,7 +154,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
 
           {contrastConfig && (
             <Item className="p-0">
-              <ItemContent className="mr-8 flex-none">
+              <ItemContent className="mr-4 flex-none sm:mr-8">
                 <ItemTitle>
                   {match(activeZone)
                     .with("content", () => "Surface Contrast")
