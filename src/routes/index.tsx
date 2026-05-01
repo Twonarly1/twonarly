@@ -26,9 +26,8 @@ function App() {
 
   const handlePasskeySignIn = async () => {
     const { error } = await authClient.signIn.passkey({
-      // autoFill: true,
       fetchOptions: {
-        onSuccess: () => navigate({ to: "/tasks" }),
+        onSuccess: () => navigate({ to: "/tasks", search: { archived: undefined } }),
       },
     });
 
@@ -43,7 +42,9 @@ function App() {
   return (
     <div className="flex h-dvh w-full items-center justify-center">
       {session ? (
-        <Link to="/tasks">Get Started</Link>
+        <Link to="/tasks" search={{ archived: undefined }}>
+          Get Started
+        </Link>
       ) : (
         <div className="rounded-lg border p-8">
           <h1 className="text-center font-semibold text-3xl text-primary">Log in to {app.name}</h1>

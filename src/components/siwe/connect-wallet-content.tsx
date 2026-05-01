@@ -113,7 +113,7 @@ export function ConnectWalletContent({ mode }: Props) {
         if (error || !data)
           throw new Error("This wallet isn't linked to an account. Link it in settings first.");
 
-        navigate({ to: "/tasks" });
+        navigate({ to: "/tasks", search: { archived: undefined } });
       }
     } catch (error) {
       setStep("error");
