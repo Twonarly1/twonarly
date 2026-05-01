@@ -84,8 +84,8 @@ export function clearCustomTheme(root: HTMLElement) {
   const allKeys = computePalette({
     base: [0, 0, 0],
     accent: [0, 0, 0],
-    contrast: 15,
-    sidebar: { base: [0, 0, 0], contrast: 30 },
+    contrast: 100,
+    sidebar: { base: [0, 0, 0], contrast: 50 },
   });
 
   for (const key of Object.keys(allKeys)) {

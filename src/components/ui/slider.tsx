@@ -13,7 +13,7 @@ export function SliderControl({ value, onChange }: Props) {
         step={1}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full bg-muted accent-primary"
+        className="w-full accent-primary"
       />
       <span className="w-8 text-right font-medium text-base tabular-nums">{value}</span>
     </div>

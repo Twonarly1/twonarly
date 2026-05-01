@@ -1,20 +1,30 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import PageContainer from "@/components/layout/page-container";
 import NewTaskDialog from "@/components/new-task-dialog";
 import ActionCell from "@/components/table/action-cell";
 import { DataTable } from "@/components/table/data-table";
 import EditableCell from "@/components/table/editable-cell";
 import TableActions from "@/components/table/table-actions";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useDebounce } from "@/lib/hooks/use-debounce";
 import { formatDate } from "@/lib/utils/format";
 
@@ -33,12 +43,14 @@ export const Route = createLazyFileRoute("/_authenticated/tasks/")({
 
 function TasksPage() {
   const { tasks } = Route.useLoaderData();
+  const { archived } = Route.useSearch();
 
   const [data, setData] = useState(tasks ?? []);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
+  const navigate = useNavigate();
 
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearch = useDebounce(searchInput, 300);
@@ -77,20 +89,14 @@ function TasksPage() {
       {
         accessorKey: "name",
         header: "Name",
-        size: 200,
-        sortingFn: "alphanumeric",
-      },
-      {
-        accessorKey: "description",
-        header: "Description",
-        size: 200,
+        size: 300,
         sortingFn: "alphanumeric",
       },
       {
         accessorKey: "createdAt",
         id: "created at",
         header: "Created",
-        size: 56,
+        size: 32,
         sortingFn: "datetime",
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
@@ -104,12 +110,8 @@ function TasksPage() {
       {
         id: "actions",
         enableSorting: false,
-        size: 56,
-        cell: ({ row, table }) => (
-          <div className="flex">
-            <ActionCell row={row} table={table} />
-          </div>
-        ),
+        size: 32,
+        cell: ({ row, table }) => <ActionCell row={row} table={table} />,
       },
     ],
     [],
@@ -201,30 +203,57 @@ function TasksPage() {
   }, [table]);
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[auto_1fr]">
-      <div className="container mx-auto max-w-4xl space-y-6 p-4 sm:relative">
-        <h1 className="items-baseline font-medium text-4xl">Tasks</h1>
-        <TableActions table={table} />
+    <PageContainer>
+      <h1 className="items-baseline px-4 font-medium text-4xl">Tasks</h1>
 
-        <div className="flex items-center gap-2">
-          <div className="group relative flex w-full gap-2">
-            <Search
-              strokeWidth={2.5}
-              className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground"
-            />
-            <Input
-              placeholder="Search tasks..."
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="max-w-sm pl-8"
-            />
-          </div>
+      <div className="flex items-center gap-2">
+        <div className="relative flex w-full gap-2">
+          <Search
+            strokeWidth={2.5}
+            className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground"
+          />
+          <Input
+            placeholder="Search tasks..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="max-w-sm pl-8"
+          />
 
-          <NewTaskDialog />
+          <Select
+            defaultValue="active"
+            value={archived ? "archived" : "active"}
+            onValueChange={(v) =>
+              navigate({
+                to: ".",
+                search: (prev) => ({ ...prev, archived: v === "archived" ? true : undefined }),
+              })
+            }
+          >
+            <SelectTrigger asChild>
+              <Button variant="outline" className="h-8 transition-none custom:hover:bg-surface">
+                <SelectValue placeholder="Select view" />
+                <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+              </Button>
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectGroup>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="archived">Archived</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
+
+        <NewTaskDialog />
       </div>
 
-      <DataTable table={table} />
-    </div>
+      <div className="-mt-8">
+        <div className="h-10">
+          <TableActions table={table} />
+        </div>
+
+        <DataTable table={table} />
+      </div>
+    </PageContainer>
   );
 }

@@ -1,6 +1,8 @@
 import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 
+import Link from "@/components/core/link";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -10,10 +12,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { navLinks } from "@/lib/constants/nav-links";
-import Link from "./core/link";
-import { Button } from "./ui/button";
 
-// First 2 are pinned, rest go in the "More" menu
+// First 3 are pinned, rest go in the "More" menu
 const PINNED_COUNT = 3;
 const pinnedLinks = navLinks.slice(0, PINNED_COUNT);
 const moreLinks = navLinks.slice(PINNED_COUNT);

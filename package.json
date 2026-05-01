@@ -8,9 +8,9 @@
     "start": "bun run --bun vite preview",
     "knip": "knip-bun",
     "prepare": "lefthook install",
-    "db:generate": "bun run --env-file .env.local drizzle-kit generate",
-    "db:migrate": "bun run --env-file .env.local drizzle-kit migrate",
-    "db:studio": "bun run --env-file .env.local drizzle-kit studio"
+    "generate": "bun run --env-file .env.local drizzle-kit generate",
+    "migrate": "bun run --env-file .env.local drizzle-kit migrate",
+    "studio": "bun run --env-file .env.local drizzle-kit studio"
   },
   "dependencies": {
     "@better-auth/core": "^1.6.5",
@@ -44,6 +44,7 @@
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.2.2",
     "ts-pattern": "^5.9.0",
+    "use-debounce": "^10.1.1",
     "usehooks-ts": "^3.1.1",
     "valibot": "^1.3.1",
     "vaul": "^1.1.2",

@@ -78,6 +78,20 @@
       "when": 1776370562196,
       "tag": "0010_useful_vapor",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1777562100217,
+      "tag": "0011_tough_earthquake",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1777562217802,
+      "tag": "0012_steady_spitfire",
+      "breakpoints": true
     }
   ]
 }

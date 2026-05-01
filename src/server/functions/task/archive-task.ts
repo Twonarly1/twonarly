@@ -1,17 +1,16 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { and, eq } from "drizzle-orm";
-import { boolean, minLength, object, pipe, string } from "valibot";
+import { minLength, object, pipe, string } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { tasks } from "@/lib/db/schema";
 
-export const toggleTaskComplete = createServerFn({ method: "POST" })
+export const archiveTask = createServerFn({ method: "POST" })
   .inputValidator(
     object({
       id: pipe(string(), minLength(1)),
-      completed: boolean(),
     }),
   )
   .handler(async ({ data }) => {
@@ -23,6 +22,6 @@ export const toggleTaskComplete = createServerFn({ method: "POST" })
 
     await db
       .update(tasks)
-      .set({ completed: data.completed })
+      .set({ archivedAt: new Date() })
       .where(and(eq(tasks.id, data.id), eq(tasks.userId, session.user.id)));
   });

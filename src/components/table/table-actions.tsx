@@ -1,10 +1,11 @@
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { Archive, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
+import { archiveTask } from "@/server/functions/task/archive-task";
 import { deleteTask } from "@/server/functions/task/delete-task";
-import { toggleTaskComplete } from "@/server/functions/task/toggle-task-complete";
 
 import type { Table as TableProps } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";
@@ -17,57 +18,33 @@ const TableActions = ({ table }: Props) => {
   const router = useRouter();
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
   const deleteTaskFn = useServerFn(deleteTask);
-  const toggleCompletedFn = useServerFn(toggleTaskComplete);
+  const archiveTaskFn = useServerFn(archiveTask);
 
-  const handleToggleComplete = async () => {
+  const handleArchive = async () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows;
-
-    // Count how many are being marked complete vs incomplete
-    const markingComplete = selectedRows.filter((row) => !row.original.completed).length;
-    const markingIncomplete = selectedRows.filter((row) => row.original.completed).length;
 
     for (const row of selectedRows) {
       if (!row.original.id) continue;
-      table.options.meta?.updateTask(row.original.id, "completed", !row.original.completed);
+      table.options.meta?.deleteTask(row.original.id); // optimistically remove
     }
 
     try {
       for (const row of selectedRows) {
         if (!row.original.id) continue;
-        await toggleCompletedFn({
-          data: { id: row.original.id, completed: !row.original.completed },
-        });
+        await archiveTaskFn({ data: { id: row.original.id } });
       }
-
-      // Build dynamic message based on what's being toggled
-      let title = "Tasks updated";
-      let description = "";
-
-      if (markingComplete > 0 && markingIncomplete > 0) {
-        description = `Marked ${markingComplete} ${markingComplete === 1 ? "task" : "tasks"} as complete and ${markingIncomplete} ${markingIncomplete === 1 ? "task" : "tasks"} as incomplete.`;
-      } else if (markingComplete > 0) {
-        title = `${markingComplete === 1 ? "Task marked as complete" : "Tasks marked as complete"}`;
-        description = `${markingComplete} ${markingComplete === 1 ? "task has" : "tasks have"} been completed.`;
-      } else {
-        title = `${markingIncomplete === 1 ? "Task marked as incomplete" : "Tasks marked as incomplete"}`;
-        description = `${markingIncomplete} ${markingIncomplete === 1 ? "task has" : "tasks have"} been marked as incomplete.`;
-      }
-
       toast.success({
-        title,
-        description,
+        title: "Tasks archived",
+        description: `${selectedCount} ${selectedCount === 1 ? "task has" : "tasks have"} been archived.`,
       });
       router.invalidate();
     } catch (err) {
-      for (const row of selectedRows) {
-        if (!row.original.id) continue;
-        table.options.meta?.updateTask(row.original.id, "completed", row.original.completed);
-      }
+      console.error("Failed to archive", err);
       toast.error({
-        title: "Failed to update tasks",
-        description: `Could not update ${selectedCount} ${selectedCount === 1 ? "task" : "tasks"}.`,
+        title: "Failed to archive",
+        description: `Could not archive ${selectedCount} ${selectedCount === 1 ? "task" : "tasks"}.`,
       });
-      console.error("Failed to toggle completed", err);
+      router.invalidate();
     }
 
     table.resetRowSelection();
@@ -106,23 +83,20 @@ const TableActions = ({ table }: Props) => {
   if (!selectedCount) return null;
 
   return (
-    <div
-      // Touchy
-      className="absolute bottom-8 left-0 w-full p-4 sm:right-0 sm:left-auto sm:w-auto"
-    >
-      <div className="flex items-center gap-2">
-        <span className="select-none text-muted-foreground">
-          {selectedCount} selected <span className="pl-2">—</span>
-        </span>
+    <div className="flex h-10 items-center">
+      <span className="select-none text-muted-foreground">
+        {selectedCount} selected <span className="pl-1">—</span>
+      </span>
 
-        <Button variant="outline" onClick={handleToggleComplete} className="bg-inherit">
-          Toggle
-        </Button>
+      <Button variant="outline" onClick={handleArchive} className="ml-2 custom:bg-surface">
+        <Archive className="icon-sm" />
+        Archive
+      </Button>
 
-        <Button variant="outline" onClick={handleDelete} className="bg-inherit">
-          Delete
-        </Button>
-      </div>
+      <Button variant="outline" onClick={handleDelete} className="ml-1 custom:bg-surface">
+        <Trash className="icon-sm" />
+        Delete
+      </Button>
     </div>
   );
 };

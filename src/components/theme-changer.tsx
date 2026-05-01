@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import { match } from "ts-pattern";
+import { useDebouncedCallback } from "use-debounce";
 
 import { Button } from "@/components/ui/button";
+import { Collapsible } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
+import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item";
 import { SliderControl } from "@/components/ui/slider";
-import { hexToLch } from "@/lib/utils/color";
+import { hexToLch, lchToHex } from "@/lib/utils/color";
 import { computeColorsFromTheme } from "@/lib/utils/theme";
-import { Collapsible } from "./ui/collapsible";
-import { Item, ItemActions, ItemContent, ItemTitle } from "./ui/item";
 
 import type { CustomTheme } from "@/lib/utils/theme";
-
-// todo: 1. make sure max depth is reached, create toggle to hide theme changer color picker, active border matches focus state,
 
 type ZoneId = "sidebar" | "content" | "accent";
 
@@ -26,35 +25,27 @@ export default function ThemeChanger({ theme, onChange }: Props) {
   const [inputValue, setInputValue] = useState("");
 
   const palette = computeColorsFromTheme(theme);
-  const hasContent = !!theme.base;
   const hasSidebarOverride = !!theme.sidebar?.base;
 
-  const activeColor = match(activeZone)
-    .with("sidebar", () => palette.sidebar)
-    .with("content", () => palette.content)
-    .with("accent", () => palette.primary)
-    .otherwise(() => undefined);
-
-  const canClear = match(activeZone)
-    .with("sidebar", () => hasSidebarOverride)
-    .with("content", () => hasContent)
-    .with("accent", () => !!theme.accent)
-    .otherwise(() => false);
+  const debouncedOnChange = useDebouncedCallback((next: CustomTheme) => {
+    onChange(next);
+  }, 50);
 
   const handleZoneClick = (zoneId: ZoneId) => {
     if (zoneId === activeZone) {
       setActiveZone(null);
       return;
     }
-
     setActiveZone(zoneId);
-    setInputValue(
-      match(zoneId)
-        .with("sidebar", () => palette.sidebar)
-        .with("content", () => palette.content)
-        .with("accent", () => palette.primary)
-        .otherwise(() => undefined) ?? "",
-    );
+
+    const rawHex = match(zoneId)
+      .with("sidebar", () => (theme.sidebar?.base ? lchToHex(theme.sidebar.base) : palette.sidebar))
+      .with("content", () => (theme.base ? lchToHex(theme.base) : palette.content))
+      .with("accent", () => (theme.accent ? lchToHex(theme.accent) : palette.primary))
+      .otherwise(() => "");
+
+    setInputValue(rawHex);
+    if (!rawHex) return;
   };
 
   const handleColorChange = (hex: string) => {
@@ -63,34 +54,18 @@ export default function ThemeChanger({ theme, onChange }: Props) {
 
     match(activeZone)
       .with("sidebar", () =>
-        onChange({
+        debouncedOnChange({
           ...theme,
           sidebar: { contrast: theme.sidebar?.contrast ?? 30, ...theme.sidebar, base: lch },
         }),
       )
-      .with("content", () => onChange({ ...theme, base: lch }))
-      .with("accent", () => onChange({ ...theme, accent: lch }))
-      .otherwise(() => {});
-  };
-
-  const handleClear = () => {
-    match(activeZone)
-      .with("sidebar", () => {
-        const { sidebar: _, ...rest } = theme;
-        onChange(rest as CustomTheme);
-      })
-      .with("content", () => {
-        const { base: _, ...rest } = theme;
-        onChange(rest as CustomTheme);
-      })
-      .with("accent", () => {
-        const { accent: _, ...rest } = theme;
-        onChange(rest as CustomTheme);
-      })
+      .with("content", () => debouncedOnChange({ ...theme, base: lch }))
+      .with("accent", () => debouncedOnChange({ ...theme, accent: lch }))
       .otherwise(() => {});
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const val = e.target.value;
     setInputValue(val);
     if (/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(val)) {
@@ -101,14 +76,14 @@ export default function ThemeChanger({ theme, onChange }: Props) {
   const contrastConfig = match(activeZone)
     .with("content", () => ({
       value: theme.contrast,
-      onChange: (v: number) => onChange({ ...theme, contrast: v }),
+      onChange: (v: number) => debouncedOnChange({ ...theme, contrast: v }),
     }))
     .with("sidebar", () =>
       hasSidebarOverride && theme.sidebar
         ? {
             value: theme.sidebar.contrast,
             onChange: (v: number) =>
-              onChange({ ...theme, sidebar: { ...theme.sidebar!, contrast: v } }),
+              debouncedOnChange({ ...theme, sidebar: { ...theme.sidebar!, contrast: v } }),
           }
         : null,
     )
@@ -127,16 +102,16 @@ export default function ThemeChanger({ theme, onChange }: Props) {
             <span className="mx-auto flex">Sidebar</span>
 
             {/* Mock nav items showing sidebar-accent contrast */}
-            <div className="mt-4 flex w-full flex-col justify-start gap-1">
-              <div className="h-4 rounded-md bg-sidebar-accent" />
-              <div className="h-4 w-full rounded-md bg-sidebar-accent/60" />
-              <div className="h-4 w-full rounded-md bg-sidebar-accent/60" />
+            <div className="mt-4 flex w-full cursor-crosshair flex-col justify-start gap-1">
+              <div className="h-4 cursor-crosshair rounded-md bg-sidebar-accent" />
+              <div className="h-4 w-full cursor-crosshair rounded-md bg-sidebar-accent/60" />
+              <div className="h-4 w-full cursor-crosshair rounded-md bg-sidebar-accent/60" />
             </div>
           </Button>
 
           <Button
             variant="unstyled"
-            onClick={() => handleZoneClick("content")}
+            onMouseDown={() => handleZoneClick("content")}
             className="z-10 flex h-60 cursor-crosshair! items-start justify-center rounded-xl border-border border-dashed bg-content p-2 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99]"
           >
             Content
@@ -160,35 +135,26 @@ export default function ThemeChanger({ theme, onChange }: Props) {
         </div>
       </div>
 
-      <Collapsible open={activeZone !== null} className="">
+      <Collapsible open={activeZone !== null} className="mx-auto w-full max-w-md">
         <div className="mx-auto flex w-full flex-col gap-2 px-8 py-4">
-          {/* Header */}
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center justify-between gap-2">
             <span className="font-medium text-base first-letter:uppercase">{activeZone}</span>
 
-            <div className="ml-auto flex items-center gap-1.5">
-              {canClear && (
-                <Button variant="ghost" onClick={handleClear}>
-                  Reset
-                </Button>
-              )}
-
-              <Input
-                value={inputValue}
-                onChange={handleInputChange}
-                placeholder="#000000"
-                className="h-7"
-              />
-            </div>
+            <Input
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="#000000"
+              className="h-7 w-fit"
+            />
           </div>
 
-          <div className="color-picker-custom">
-            <HexColorPicker color={activeColor ?? "#000000"} onChange={handleColorChange} />
+          <div className="color-picker-custom cursor-crosshair!">
+            <HexColorPicker color={inputValue || "#000000"} onChange={handleColorChange} />
           </div>
 
           {contrastConfig && (
             <Item className="p-0">
-              <ItemContent>
+              <ItemContent className="mr-8 flex-none">
                 <ItemTitle>
                   {match(activeZone)
                     .with("content", () => "Surface Contrast")

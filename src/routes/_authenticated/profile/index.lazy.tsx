@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
 import PageContainer from "@/components/layout/page-container";
-import { Avatar } from "@/components/ui/avatar";
+import Avatar from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,6 +36,7 @@ import {
 import { toast } from "@/components/ui/toast";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { authClient, signOut } from "@/lib/auth/auth-client";
+import { clearCustomTheme } from "@/lib/utils/theme";
 import { deleteUser } from "@/server/functions/user/delete-user";
 import { removeAvatar } from "@/server/functions/user/remove-avatar";
 import { updateUser } from "@/server/functions/user/update-user";
@@ -116,6 +117,8 @@ function ProfilePage() {
     try {
       await deleteUserFn({ data: { id: user.id } });
       await signOut();
+      clearCustomTheme(document.documentElement);
+      document.documentElement.removeAttribute("data-theme");
       await navigate({ to: "/" });
     } catch (error) {
       console.error("Delete account error:", error);

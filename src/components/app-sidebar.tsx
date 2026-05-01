@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { Avatar } from "@/components/ui/avatar";
+import Avatar from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,

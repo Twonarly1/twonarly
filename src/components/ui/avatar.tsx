@@ -1,5 +1,3 @@
-import fallbackAvatar from "/public/avatar-fallaback.jpg";
-
 function Avatar({
   src,
   alt,
@@ -11,14 +9,14 @@ function Avatar({
 }) {
   return (
     <img
-      src={src || fallbackAvatar}
+      src={src || "/avatar-fallback.jpg"}
       alt={alt}
       onError={(e) => {
-        e.currentTarget.src = fallbackAvatar;
+        e.currentTarget.src = "/avatar-fallback.jpg";
       }}
       className={className}
     />
   );
 }
 
-export { Avatar };
+export default Avatar;

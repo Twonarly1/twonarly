@@ -26,7 +26,7 @@ export const tasks = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     name: text().notNull(),
     description: text().notNull(),
-    completed: boolean().notNull().default(false),
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
     createdAt: generateDefaultDate(),
     updatedAt: generateDefaultDate(),
   },

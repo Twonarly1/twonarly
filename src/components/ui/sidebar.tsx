@@ -244,7 +244,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
         variant="ghost"
         size="icon"
         className={cn(
-          "z-10 flex transition-transform duration-150",
+          "z-10 flex transition-transform duration-150 custom:hover:bg-surface",
           layout.sidebarVariant === "inset" && "m-2",
           layout.sidebarVariant === "classic" && "m-4",
           layout.sidebarVariant === "floating" && "m-4",

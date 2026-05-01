@@ -2,7 +2,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import { updateTask } from "@/server/functions/task/update-task";
 
 import type { CellContext } from "@tanstack/react-table";
@@ -17,7 +16,6 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
   const didCancelRef = useRef(false);
   const updateTaskFn = useServerFn(updateTask);
 
-  const isCompleted = row.original.completed;
   const isNameColumn = column.id === "name";
   const isDescriptionColumn = column.id === "description";
 
@@ -94,19 +92,10 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
         type="button"
         tabIndex={-1}
         onClick={() => setIsEditing(true)}
-        className={cn(
-          "group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium leading-7 focus-visible:border-border",
-          isCompleted && "pointer-events-none",
-        )}
+        className="group flex h-7 w-full items-center truncate rounded border border-transparent px-2 font-medium leading-7 focus-visible:border-border"
       >
         {initialValue ? (
-          <span
-            className={cn(
-              isCompleted ? "text-muted-foreground line-through" : "text-secondary-foreground",
-            )}
-          >
-            {initialValue}
-          </span>
+          <span className="text-secondary-foreground">{initialValue}</span>
         ) : (
           <span className="text-faded-foreground opacity-100 hover:text-muted-foreground group-hover:opacity-100 sm:opacity-0">
             {isDescriptionColumn ? "Add task description" : undefined}
@@ -124,7 +113,7 @@ const EditableCell = ({ getValue, row, column, table }: CellContext<Task, unknow
       onChange={(e) => setValue(e.target.value)}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
-      className="placeholder: h-7 w-full bg-background px-2 font-medium transition-opacity duration-150 focus-visible:border-border"
+      className="h-8 w-full bg-transparent px-2 font-medium transition-opacity duration-150 focus-visible:border-border"
       placeholder={column.id === "description" ? "Add task description..." : undefined}
     />
   );

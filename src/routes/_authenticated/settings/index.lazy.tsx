@@ -1,5 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { ChevronDown, Droplet, Monitor, Moon, Sun } from "lucide-react";
+import {
+  ArrowDownToLine,
+  ArrowUpToLine,
+  ChevronDown,
+  Droplet,
+  Monitor,
+  Moon,
+  Sun,
+} from "lucide-react";
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
@@ -27,7 +35,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useIsPhone } from "@/lib/hooks/use-phone";
-import { applyCustomTheme, clearCustomTheme, computeColorsFromTheme } from "@/lib/utils/theme";
+import { applyCustomTheme, computeColorsFromTheme } from "@/lib/utils/theme";
 import { useAppearance } from "@/providers/appearance-provider";
 import { useLayout } from "@/providers/layout-provider";
 import { useTheme } from "@/providers/theme-provider";
@@ -61,7 +69,10 @@ interface CustomTheme {
 }
 
 const initialTheme: CustomTheme = {
-  contrast: 15,
+  contrast: 100,
+  sidebar: {
+    contrast: 50,
+  },
 };
 
 export const Route = createLazyFileRoute("/_authenticated/settings/")({
@@ -69,7 +80,7 @@ export const Route = createLazyFileRoute("/_authenticated/settings/")({
 });
 
 function SettingsPage() {
-  const { theme, setTheme, customTheme: savedTheme } = useTheme();
+  const { theme, setTheme, customTheme: savedTheme, setCustomTheme: setProviderTheme } = useTheme();
   const [customTheme, setCustomTheme] = useState(savedTheme ?? initialTheme);
   const { appearance, updateAppearance } = useAppearance();
   const { layout, updateLayout } = useLayout();
@@ -77,15 +88,34 @@ function SettingsPage() {
   const isPhone = useIsPhone();
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const [isThemeChangerOpen, setIsThemeChangerOpen] = useState(theme === "custom");
+
+  const handleThemeChange = (v: string) => {
+    const newTheme = v as typeof theme;
+    if (newTheme === "custom") {
+      setIsThemeChangerOpen(true);
+      if (customTheme?.base) {
+        setTheme(newTheme);
+      }
+      return;
+    }
+    setTheme(newTheme);
+    setIsThemeChangerOpen(false);
+  };
+
   const save = (next: CustomTheme) => {
-    setCustomTheme(next);
-    clearCustomTheme(document.documentElement); // wipe all overrides first
-    applyCustomTheme(document.documentElement, next); // re-apply only what's set
+    applyCustomTheme(document.documentElement, next);
+    setCustomTheme(next); // local state
+    setProviderTheme(next); // provider state so the effect has the right value
+
+    if (next.base && theme !== "custom") {
+      setTheme("custom");
+    }
 
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
     saveTimeout.current = setTimeout(() => {
       const css = computeColorsFromTheme(next);
-      setThemePreferences({ data: { theme, customTheme: next, css } });
+      setThemePreferences({ data: { theme: "custom", customTheme: next, css } });
     }, 300);
   };
 
@@ -132,7 +162,22 @@ function SettingsPage() {
               <ItemDescription>Customize your theme</ItemDescription>
             </ItemContent>
             <ItemActions>
-              <Select value={theme} onValueChange={setTheme}>
+              {theme === "custom" && (
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  className="transition-none"
+                  onClick={() => setIsThemeChangerOpen(!isThemeChangerOpen)}
+                >
+                  {isThemeChangerOpen ? (
+                    <ArrowUpToLine className="icon-sm" />
+                  ) : (
+                    <ArrowDownToLine className="icon-sm" />
+                  )}
+                </Button>
+              )}
+
+              <Select value={theme} onValueChange={handleThemeChange}>
                 <SelectTrigger asChild>
                   <Button variant="outline" className="flex items-center gap-2 transition-none">
                     {match(theme)
@@ -164,12 +209,14 @@ function SettingsPage() {
             </ItemActions>
           </Item>
 
-          <Collapsible
-            open={theme === "custom"}
-            className="w-full space-y-4 rounded-xl border-none"
-          >
-            <ThemeChanger theme={customTheme} onChange={save} />
-          </Collapsible>
+          <div className="relative z-50">
+            <Collapsible
+              open={isThemeChangerOpen}
+              className="w-full space-y-4 rounded-xl border-none"
+            >
+              <ThemeChanger theme={customTheme} onChange={save} />
+            </Collapsible>
+          </div>
         </div>
       </Section>
 

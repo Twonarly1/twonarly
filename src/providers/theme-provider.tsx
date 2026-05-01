@@ -10,6 +10,7 @@ interface ThemeContext {
   theme: Theme;
   setTheme: (value: Theme) => void;
   customTheme: CustomTheme | undefined;
+  setCustomTheme: (theme: CustomTheme) => void;
 }
 
 const ThemeContext = createContext<ThemeContext | null>(null);
@@ -23,7 +24,7 @@ export function ThemeProvider({
   customTheme: CustomTheme | undefined;
 }>) {
   const [theme, setThemeState] = useState<Theme>(initialTheme);
-  const [customTheme] = useState<CustomTheme | undefined>(initialCustomTheme);
+  const [customTheme, setCustomTheme] = useState<CustomTheme | undefined>(initialCustomTheme);
 
   const setTheme = useCallback(
     (newTheme: Theme) => {
@@ -58,13 +59,11 @@ export function ThemeProvider({
   useEffect(() => {
     const root = document.documentElement;
 
-    if (theme === "custom" && customTheme) {
+    if (theme === "custom" && customTheme?.base) {
       applyCustomTheme(root, customTheme);
     } else {
       clearCustomTheme(root);
     }
-
-    return () => clearCustomTheme(root);
   }, [theme, customTheme]);
 
   useEffect(() => {
@@ -72,7 +71,7 @@ export function ThemeProvider({
   }, [theme]);
 
   const contextValue = useMemo(
-    () => ({ theme, setTheme, customTheme }),
+    () => ({ theme, setTheme, customTheme, setCustomTheme }),
     [theme, setTheme, customTheme],
   );
 

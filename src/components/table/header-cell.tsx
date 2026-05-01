@@ -44,13 +44,9 @@ const HeaderCell = ({ header }: Props) => {
 
   return (
     <TableHead className="text-muted-foreground" colSpan={header.colSpan} style={cellStyle}>
-      <Tooltip delayDuration={700}>
+      <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            onClick={handleSort}
-            className="group flex h-6 w-fit justify-between px-2 text-sm hover:bg-surface"
-          >
+          <Button variant="ghost" onClick={handleSort} className="group text-sm">
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
               className={clsx(

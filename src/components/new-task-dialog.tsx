@@ -13,7 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Kbd } from "@/components/ui/kbd";
 import { Textarea } from "@/components/ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -31,15 +30,11 @@ const NewTaskDialog = () => {
   const form = useForm({
     defaultValues: {
       name: "",
-      description: "",
-      completed: false,
     },
     onSubmit: async ({ value }) => {
       await addTaskFn({
         data: {
           name: value.name,
-          description: value.description,
-          completed: value.completed,
         },
       });
 
@@ -67,11 +62,11 @@ const NewTaskDialog = () => {
   }, [isCreateTaskOpen]);
 
   return (
-    <Tooltip delayDuration={400}>
+    <Tooltip delayDuration={700}>
       <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
         <TooltipTrigger asChild>
           <DialogTrigger asChild>
-            <Button className="flex gap-2 active:scale-[0.97]">New Task</Button>
+            <Button className="flex h-8 gap-2 active:scale-[0.97]">New Task</Button>
           </DialogTrigger>
         </TooltipTrigger>
         <DialogContent className="p-3">
@@ -102,34 +97,13 @@ const NewTaskDialog = () => {
               }}
             >
               {(field) => (
-                <Input
-                  autoFocus
-                  aria-label="Name"
-                  placeholder="Enter a task name..."
-                  className="border-transparent focus-visible:border-primary"
-                  value={field.state.value}
-                  onBlur={field.handleBlur}
-                  onChange={(e) => {
-                    field.handleChange(e.target.value);
-                  }}
-                />
-              )}
-            </form.Field>
-
-            <form.Field
-              name="description"
-              validators={{
-                onSubmit: pipe(string(), maxLength(4096, "Description is too long")),
-              }}
-            >
-              {(field) => (
                 <Textarea
-                  aria-label="Description"
-                  placeholder="description..."
+                  aria-label="Task description"
+                  placeholder="What needs to be done?"
                   value={field.state.value ?? ""}
                   onBlur={field.handleBlur}
                   onChange={(e) => field.handleChange(e.target.value)}
-                  className="min-h-24 border-transparent focus-visible:border-primary"
+                  className="min-h-24 cursor-text border-transparent focus-visible:border-primary"
                 />
               )}
             </form.Field>
@@ -151,8 +125,13 @@ const NewTaskDialog = () => {
         </DialogContent>
       </Dialog>
 
-      <TooltipContent side="left" sideOffset={8} className="flex items-center gap-2 text-sm">
-        Create new task <Kbd className="ml-2">c</Kbd>
+      <TooltipContent
+        side="top"
+        sideOffset={8}
+        align="end"
+        className="flex items-center gap-2 text-sm"
+      >
+        Create new task <Kbd className="ml-2">C</Kbd>
       </TooltipContent>
     </Tooltip>
   );

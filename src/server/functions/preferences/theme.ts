@@ -35,7 +35,7 @@ const COOKIE_KEY = COOKIES.theme;
 
 export const getThemePreferences = createServerFn().handler(async (): Promise<ThemePreferences> => {
   const raw = getCookie(COOKIE_KEY);
-  if (!raw) return { theme: "dark" };
+  if (!raw) return { theme: "system" };
 
   try {
     return parse(preferencesValidator, JSON.parse(raw));
@@ -44,7 +44,7 @@ export const getThemePreferences = createServerFn().handler(async (): Promise<Th
     if (["light", "dark", "system", "custom"].includes(raw!)) {
       return { theme: raw as Theme };
     }
-    return { theme: "dark" };
+    return { theme: "system" };
   }
 });
 
