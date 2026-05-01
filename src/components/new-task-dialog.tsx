@@ -1,5 +1,5 @@
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "@tanstack/react-router";
+import { useNavigate, useRouter, useSearch } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect } from "react";
 import { maxLength, minLength, pipe, string } from "valibot";
@@ -19,8 +19,10 @@ import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 import { addTask } from "@/server/functions/task/add-task";
 
 const NewTaskDialog = () => {
+  const { newTask } = useSearch({ from: "/_authenticated/tasks/" });
   const addTaskFn = useServerFn(addTask);
   const router = useRouter();
+  const navigate = useNavigate();
 
   const { isOpen: isCreateTaskOpen, setIsOpen: setIsCreateTaskOpen } = useDialogStore({
     type: DialogType.CreateTask,
@@ -61,7 +63,19 @@ const NewTaskDialog = () => {
   }, [isCreateTaskOpen]);
 
   return (
-    <Dialog open={isCreateTaskOpen} onOpenChange={setIsCreateTaskOpen}>
+    <Dialog
+      open={isCreateTaskOpen}
+      onOpenChange={(open) => {
+        setIsCreateTaskOpen(open);
+        if (!open && newTask) {
+          navigate({
+            to: ".",
+            search: (prev) => ({ ...prev, newTask: undefined }),
+            replace: true,
+          });
+        }
+      }}
+    >
       <DialogTrigger asChild>
         {/* TODO: add kdd variants when more come up */}
         <Button variant="ghost" className="flex h-8 gap-2 border-border active:scale-[0.97]">

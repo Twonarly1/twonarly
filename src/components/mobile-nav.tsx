@@ -1,148 +1,103 @@
-import { Ellipsis } from "lucide-react";
+import { MoreHorizontal, Plus, X } from "lucide-react";
 import { useState } from "react";
 
 import Link from "@/components/core/link";
 import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Collapsible } from "@/components/ui/collapsible";
 import { navLinks } from "@/lib/constants/nav-links";
 
-// First 3 are pinned, rest go in the "More" menu
-const PINNED_COUNT = 3;
+const PINNED_COUNT = 2;
 const pinnedLinks = navLinks.slice(0, PINNED_COUNT);
-const moreLinks = navLinks.slice(PINNED_COUNT);
 
 const MobileBottomNav = () => {
-  const [moreOpen, setMoreOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 overflow-x-auto border-t bg-sidebar md:hidden">
-      <div className="flex h-14 items-center justify-around bg-sidebar px-2">
-        {pinnedLinks.map((item) => {
-          return (
-            <Link
-              key={item.to}
-              to={item.to}
-              variant="outline"
-              className="h-auto flex-col"
-              activeProps={{ className: "text-sidebar-foreground" }}
-            >
-              <item.icon className="size-5 transition-colors" />
-              <span className="font-medium text-xs leading-none">{item.label}</span>
-            </Link>
-          );
-        })}
-        <Drawer open={moreOpen} onOpenChange={setMoreOpen}>
-          <DrawerTrigger asChild>
-            <Button variant="outline" className="h-auto flex-col">
-              <Ellipsis className="size-5 transition-colors" />
-              <span className="font-medium text-xs leading-none">More</span>
-            </Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader className="sr-only">
-              <DrawerTitle className="hidden" />
-              <DrawerDescription className="hidden" />
-            </DrawerHeader>
+    <>
+      <button
+        type="button"
+        tabIndex={-1}
+        className="fixed inset-0 z-40 bg-black/30 md:hidden"
+        style={{
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? "auto" : "none",
+          transition: "opacity 0.3s var(--ease-in-out-strong)",
+        }}
+        onClick={() => setOpen(false)}
+        aria-label="Close navigation menu"
+      />
 
-            <div className="p-4">
-              {moreLinks.map((item) => (
+      <nav className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 md:hidden">
+        <div className="flex flex-col overflow-hidden rounded-2xl border bg-content shadow-lg">
+          <Collapsible open={open}>
+            <div className="flex flex-col gap-0.5 p-2">
+              {navLinks.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
-                  onClick={() => setMoreOpen(false)}
-                  className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-base text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground"
-                  activeProps={{ className: "bg-muted text-foreground" }}
+                  onClick={() => setOpen(false)}
+                  variant="ghost"
+                  className="h-9 justify-start"
+                  activeProps={{
+                    className: "text-foreground bg-muted custom:bg-surface border-border",
+                  }}
                 >
                   <item.icon className="size-4 shrink-0" />
-                  <span className="font-medium">{item.label}</span>
+                  {item.label}
                 </Link>
               ))}
             </div>
-          </DrawerContent>
-        </Drawer>
-      </div>
-    </nav>
+          </Collapsible>
+
+          <div className="flex w-full items-center justify-between px-3 py-2">
+            {open ? (
+              <>
+                <Link
+                  to="/tasks"
+                  search={{ newTask: true, archived: undefined }}
+                  variant="ghost"
+                  className="size-10 rounded-full"
+                  onClick={() => setOpen(false)}
+                >
+                  <Plus className="size-4" />
+                </Link>
+
+                <Button
+                  variant="ghost"
+                  className="size-10 rounded-full bg-muted custom:bg-surface transition-colors duration-150 ease-out-strong"
+                  onClick={() => setOpen((v) => !v)}
+                >
+                  <X className="size-4" />
+                </Button>
+              </>
+            ) : (
+              <>
+                {pinnedLinks.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    variant="ghost"
+                    className="size-10 rounded-full"
+                    activeProps={{ className: "text-foreground bg-muted custom:bg-surface" }}
+                  >
+                    <item.icon className="size-4" />
+                  </Link>
+                ))}
+
+                <Button
+                  variant="ghost"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong"
+                  onClick={() => setOpen((v) => !v)}
+                >
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+      </nav>
+    </>
   );
 };
 
 export default MobileBottomNav;
-
-// import { Link } from "@tanstack/react-router";
-// import { Ellipsis } from "lucide-react";
-// import { useState } from "react";
-
-// import {
-//   Drawer,
-//   DrawerContent,
-//   DrawerDescription,
-//   DrawerHeader,
-//   DrawerTitle,
-//   DrawerTrigger,
-// } from "@/components/ui/drawer";
-// import { navLinks } from "@/lib/constants/nav-links";
-
-// // First 2 are pinned, rest go in the "More" menu
-// const PINNED_COUNT = 2;
-// const pinnedLinks = navLinks.slice(0, PINNED_COUNT);
-// const moreLinks = navLinks.slice(PINNED_COUNT);
-
-// const MobileBottomNav = () => {
-//   const [moreOpen, setMoreOpen] = useState(false);
-
-//   return (
-//     <nav className="fixed inset-x-0 bottom-0 z-50 border-t md:hidden">
-//       <div className="flex h-14 items-center justify-around bg-sidebar px-2">
-//         {pinnedLinks.map((item) => {
-//           return (
-//             <Link
-//               key={item.to}
-//               to={item.to}
-//               className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 text-sidebar-foreground/70 transition-colors hover:text-foreground active:scale-95"
-//               activeProps={{ className: "text-sidebar-foreground" }}
-//             >
-//               <item.icon className="size-5 transition-colors" />
-//               <span className="font-medium text-xs leading-none">{item.label}</span>
-//             </Link>
-//           );
-//         })}
-
-//         <Drawer open={moreOpen} onOpenChange={setMoreOpen}>
-//           <DrawerTrigger className="flex flex-1 flex-col items-center justify-center gap-0.5 rounded-lg py-1.5 text-muted-foreground transition-colors hover:text-foreground active:scale-95">
-//             <Ellipsis className="size-5 transition-colors" />
-//             <span className="font-medium text-xs leading-none">More</span>
-//           </DrawerTrigger>
-//           <DrawerContent>
-//             <DrawerHeader className="sr-only">
-//               <DrawerTitle className="hidden" />
-//               <DrawerDescription className="hidden" />
-//             </DrawerHeader>
-
-//             <div className="p-4">
-//               {moreLinks.map((item) => (
-//                 <Link
-//                   key={item.to}
-//                   to={item.to}
-//                   onClick={() => setMoreOpen(false)}
-//                   className="flex items-center gap-2.5 rounded-md px-2.5 py-2 text-base text-muted-foreground transition-colors hover:bg-primary/10 hover:text-foreground"
-//                   activeProps={{ className: "bg-muted text-foreground" }}
-//                 >
-//                   <item.icon className="size-4 shrink-0" />
-//                   <span className="font-medium">{item.label}</span>
-//                 </Link>
-//               ))}
-//             </div>
-//           </DrawerContent>
-//         </Drawer>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default MobileBottomNav;

@@ -97,7 +97,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
           <Button
             variant="unstyled"
             onClick={() => handleZoneClick("sidebar")}
-            className="row-span-2 flex h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-sidebar pt-2 text-sidebar-foreground transition-transform hover:bg-sidebar/80 hover:text-sidebar-foreground active:scale-[0.99]"
+            className="row-span-2 hidden h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-sidebar pt-2 text-sidebar-foreground transition-transform hover:bg-sidebar/80 hover:text-sidebar-foreground active:scale-[0.99] sm:flex"
           >
             <span className="mx-auto flex">Sidebar</span>
 
@@ -112,7 +112,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
           <Button
             variant="unstyled"
             onMouseDown={() => handleZoneClick("content")}
-            className="z-10 flex h-60 cursor-crosshair! items-start justify-center rounded-xl border-border border-dashed bg-content p-2 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99]"
+            className="z-10 col-span-2 flex h-60 cursor-crosshair! items-start justify-center rounded-xl border-border border-dashed bg-content p-2 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99] sm:col-span-1"
           >
             Content
           </Button>
@@ -120,7 +120,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
           <Button
             variant="unstyled"
             onClick={() => handleZoneClick("content")}
-            className="z-20 mx-8 -mt-48.25 flex h-48 cursor-crosshair! items-center justify-center rounded-xl rounded-b-none border-border border-b-0 border-dashed bg-surface transition-none transition-transform active:scale-[0.99]"
+            className="z-20 col-span-2 mx-8 -mt-48.25 flex h-48 cursor-crosshair! items-center justify-center rounded-xl rounded-b-none border-border border-b-0 border-dashed bg-surface transition-none transition-transform active:scale-[0.99] sm:col-span-1 sm:mx-8"
           >
             Surface
           </Button>

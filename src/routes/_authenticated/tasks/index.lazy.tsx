@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useDebounce } from "@/lib/hooks/use-debounce";
+import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 import { formatDate } from "@/lib/utils/format";
 
 import type {
@@ -42,7 +43,7 @@ export const Route = createLazyFileRoute("/_authenticated/tasks/")({
 
 function TasksPage() {
   const { tasks } = Route.useLoaderData();
-  const { archived } = Route.useSearch();
+  const { archived, newTask } = Route.useSearch();
 
   const [data, setData] = useState(tasks ?? []);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -53,6 +54,8 @@ function TasksPage() {
 
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearch = useDebounce(searchInput, 300);
+
+  const { setIsOpen } = useDialogStore({ type: DialogType.CreateTask });
 
   const columns: ColumnDef<Task>[] = useMemo(
     () => [
@@ -74,8 +77,9 @@ function TasksPage() {
           </div>
         ),
         enableSorting: false,
-        size: 16,
-        maxSize: 16,
+        size: 24,
+        minSize: 24,
+        maxSize: 24,
         cell: ({ row }) => (
           <div className="flex">
             <Checkbox
@@ -95,8 +99,9 @@ function TasksPage() {
         accessorKey: "createdAt",
         id: "created at",
         header: "Created",
-        size: 28,
-        maxSize: 28,
+        size: 60,
+        minSize: 60,
+        maxSize: 60,
         sortingFn: "datetime",
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
@@ -159,6 +164,11 @@ function TasksPage() {
     setData(tasks ?? []);
   }, [tasks]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Allow disabling exhaustive deps for newTask since we only want to open the dialog when it changes from false to true, not on every change
+  useEffect(() => {
+    if (newTask) setIsOpen(true);
+  }, [newTask]);
+
   return (
     <PageContainer>
       <h1 className="items-baseline px-4 font-medium text-4xl">Tasks</h1>
@@ -169,18 +179,26 @@ function TasksPage() {
         </div>
 
         <div className="flex flex-col rounded-xl border bg-surface">
-          <div className="flex items-center gap-2 p-4">
-            <div className="relative flex w-full gap-2">
-              <Search
-                strokeWidth={2.5}
-                className="absolute top-2.25 left-2.25 size-3.5 text-muted-foreground"
-              />
-              <Input
-                placeholder="Search tasks..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="max-w-[233px] pl-8"
-              />
+          <div className="flex items-center justify-between gap-2 p-2 sm:p-4">
+            <div className="flex items-center gap-2">
+              {/* Desktop: full search input */}
+              <div className="relative hidden items-center sm:flex">
+                <Search
+                  strokeWidth={2.5}
+                  className="absolute left-2.5 size-3.5 text-muted-foreground"
+                />
+                <Input
+                  placeholder="Search tasks..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="max-w-[233px] pl-8"
+                />
+              </div>
+
+              {/* Mobile: icon only */}
+              <Button variant="outline" size="icon-sm" className="h-8 w-8 sm:hidden">
+                <Search className="size-3.5" />
+              </Button>
 
               <Select
                 defaultValue="active"
@@ -195,10 +213,10 @@ function TasksPage() {
                 <SelectTrigger asChild>
                   <Button variant="outline" className="h-8 transition-none">
                     <SelectValue placeholder="Select view" />
-                    <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                    <ChevronDown className="icon-xs ml-1 text-muted-foreground" />
                   </Button>
                 </SelectTrigger>
-                <SelectContent align="end">
+                <SelectContent align="start">
                   <SelectGroup>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="archived">Archived</SelectItem>
