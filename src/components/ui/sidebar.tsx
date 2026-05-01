@@ -263,44 +263,6 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
   );
 }
 
-function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
-  const { toggleSidebar, state } = useSidebar();
-  const { layout } = useLayout();
-
-  if (layout.sidebarCollapsible === "none") return null;
-  if (layout.sidebarVariant === "floating") return null;
-
-  const isLeft = layout.sidebarPosition === "left";
-
-  const railPosition =
-    layout.sidebarCollapsible === "offcanvas" && state === "collapsed"
-      ? isLeft
-        ? "-right-2"
-        : "-left-6"
-      : isLeft
-        ? "right-0"
-        : "-left-0";
-
-  return (
-    <button
-      data-sidebar="rail"
-      data-slot="sidebar-rail"
-      aria-label="Toggle Sidebar"
-      tabIndex={-1}
-      onClick={toggleSidebar}
-      title="Toggle Sidebar"
-      className={cn(
-        "absolute inset-y-0 z-20 hidden w-px cursor-ew-resize focus-visible:outline-none sm:flex",
-        "after:absolute after:inset-y-0 after:right-0 after:w-px hover:after:bg-primary",
-        layout.sidebarVariant === "inset" && "my-4",
-        railPosition,
-        className,
-      )}
-      {...props}
-    />
-  );
-}
-
 function SidebarInset({ className, children, ...props }: React.ComponentProps<"main">) {
   const { layout } = useLayout();
   const { state, isMobile } = useSidebar();
@@ -486,7 +448,6 @@ export {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarRail,
   SidebarTrigger,
   useSidebar,
 };
