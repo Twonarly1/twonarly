@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import PageContainer from "@/components/layout/page-container";
 import NewTaskDialog from "@/components/new-task-dialog";
+import SearchTaskDialog from "@/components/search-task-dialog";
 import { DataTable } from "@/components/table/data-table";
 import EditableCell from "@/components/table/editable-cell";
 import TableActions from "@/components/table/table-actions";
@@ -55,14 +56,15 @@ function TasksPage() {
   const [searchInput, setSearchInput] = useState("");
   const debouncedSearch = useDebounce(searchInput, 300);
 
-  const { setIsOpen } = useDialogStore({ type: DialogType.CreateTask });
+  const { setIsOpen: setIsCreateTaskOpen } = useDialogStore({ type: DialogType.CreateTask });
+  const { setIsOpen: setIsSearchTaskOpen } = useDialogStore({ type: DialogType.SearchTask });
 
   const columns: ColumnDef<Task>[] = useMemo(
     () => [
       {
         id: "select",
         header: ({ table }) => (
-          <div className="flex">
+          <div className="ml-2 flex">
             <Checkbox
               className="mx-auto flex size-3.5 items-center justify-center"
               checked={
@@ -77,11 +79,11 @@ function TasksPage() {
           </div>
         ),
         enableSorting: false,
-        size: 24,
-        minSize: 24,
-        maxSize: 24,
+        size: 32,
+        minSize: 32,
+        maxSize: 32,
         cell: ({ row }) => (
-          <div className="flex">
+          <div className="ml-2 flex">
             <Checkbox
               className="mx-auto flex size-3.5 items-center justify-center"
               checked={row.getIsSelected()}
@@ -98,15 +100,17 @@ function TasksPage() {
       {
         accessorKey: "createdAt",
         id: "created at",
-        header: "Created",
-        size: 60,
-        minSize: 60,
-        maxSize: 60,
         sortingFn: "datetime",
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
-          return <div className="ml-4 text-muted-foreground text-sm">{formatDate(createdAt)}</div>;
+          return (
+            <div className="ml-4 hidden text-muted-foreground text-sm sm:block">
+              {formatDate(createdAt)}
+            </div>
+          );
         },
+        // also hide the header:
+        header: () => <span className="hidden sm:block">Created</span>,
       },
     ],
     [],
@@ -166,14 +170,14 @@ function TasksPage() {
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Allow disabling exhaustive deps for newTask since we only want to open the dialog when it changes from false to true, not on every change
   useEffect(() => {
-    if (newTask) setIsOpen(true);
+    if (newTask) setIsCreateTaskOpen(true);
   }, [newTask]);
 
   return (
     <PageContainer>
       <h1 className="items-baseline px-4 font-medium text-4xl">Tasks</h1>
 
-      <div className="-mt-10">
+      <div className="-mt-6 sm:-mt-10">
         <div className="h-10 min-h-10">
           <TableActions table={table} />
         </div>
@@ -196,7 +200,12 @@ function TasksPage() {
               </div>
 
               {/* Mobile: icon only */}
-              <Button variant="outline" size="icon-sm" className="h-8 w-8 sm:hidden">
+              <Button
+                variant="outline"
+                size="icon-sm"
+                className="h-8 w-8 sm:hidden"
+                onClick={() => setIsSearchTaskOpen(true)}
+              >
                 <Search className="size-3.5" />
               </Button>
 
@@ -231,6 +240,8 @@ function TasksPage() {
           <DataTable table={table} />
         </div>
       </div>
+
+      <SearchTaskDialog table={table} />
     </PageContainer>
   );
 }

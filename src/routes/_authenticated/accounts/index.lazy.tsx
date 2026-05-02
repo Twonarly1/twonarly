@@ -13,7 +13,7 @@ export const Route = createLazyFileRoute("/_authenticated/accounts/")({
 function AccountsPage() {
   return (
     <PageContainer>
-      <h1 className="items-baseline px-4 font-medium text-4xl">Security & Access</h1>
+      <h1 className="items-baseline px-4 font-medium text-4xl">Account & Security</h1>
 
       <Section title="Accounts" description="Accounts you've signed into on this device">
         <AccountList />

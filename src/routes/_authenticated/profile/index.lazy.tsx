@@ -231,38 +231,36 @@ function ProfilePage() {
         </ItemGroup>
       </section>
 
-      <ItemGroup>
-        <Item>
-          <ItemContent>
-            <ItemTitle>Delete account</ItemTitle>
-            <ItemDescription>All your data will be permanently deleted.</ItemDescription>
-          </ItemContent>
-          <ItemActions>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="destructive">Delete</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-sm">
-                <DialogHeader>
-                  <DialogTitle>Delete account</DialogTitle>
-                  <DialogDescription>
-                    Are you sure you want to delete your account? This action cannot be undone.
-                  </DialogDescription>
-                </DialogHeader>
+      <Item variant="outline">
+        <ItemContent>
+          <ItemTitle>Delete account</ItemTitle>
+          <ItemDescription>All your data will be permanently deleted.</ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="destructive">Delete</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Delete account</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete your account? This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
 
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="ghost">Cancel</Button>
-                  </DialogClose>
-                  <Button variant="destructive-fill" onClick={handleDeleteAccount}>
-                    Delete
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </ItemActions>
-        </Item>
-      </ItemGroup>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="ghost">Cancel</Button>
+                </DialogClose>
+                <Button variant="destructive-fill" onClick={handleDeleteAccount}>
+                  Delete
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </ItemActions>
+      </Item>
 
       {/* Hidden file input for avatar upload */}
       <input

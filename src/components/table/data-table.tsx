@@ -27,7 +27,7 @@ export function DataTable({ table }: Props) {
 
   return (
     <div ref={tableContainerRef} className="min-h-full flex-1 overflow-auto">
-      <Table style={{ tableLayout: "auto", width: "100%" }}>
+      <Table style={{ tableLayout: "auto", width: "100%", height: "100%" }}>
         <TableHeader className="sticky top-0 z-0">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">

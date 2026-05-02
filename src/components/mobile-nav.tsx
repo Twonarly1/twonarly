@@ -1,23 +1,31 @@
-import { MoreHorizontal, Plus, X } from "lucide-react";
+import { useMatchRoute } from "@tanstack/react-router";
+import { MoreHorizontal, Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 
 import Link from "@/components/core/link";
 import { Button } from "@/components/ui/button";
 import { Collapsible } from "@/components/ui/collapsible";
 import { navLinks } from "@/lib/constants/nav-links";
+import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 
 const PINNED_COUNT = 2;
 const pinnedLinks = navLinks.slice(0, PINNED_COUNT);
 
 const MobileBottomNav = () => {
   const [open, setOpen] = useState(false);
+  const matchRoute = useMatchRoute();
+  const isTasksPage = !!matchRoute({ to: "/tasks" });
+
+  const { setIsOpen: setIsSearchTaskOpen } = useDialogStore({
+    type: DialogType.SearchTask,
+  });
 
   return (
     <>
       <button
         type="button"
         tabIndex={-1}
-        className="fixed inset-0 z-40 bg-black/30 md:hidden"
+        className="fixed inset-0 z-50 bg-black/50 md:hidden"
         style={{
           opacity: open ? 1 : 0,
           pointerEvents: open ? "auto" : "none",
@@ -37,7 +45,7 @@ const MobileBottomNav = () => {
                   to={item.to}
                   onClick={() => setOpen(false)}
                   variant="ghost"
-                  className="h-9 justify-start"
+                  className="h-9 justify-start custom:hover:bg-surface"
                   activeProps={{
                     className: "text-foreground bg-muted custom:bg-surface border-border",
                   }}
@@ -65,9 +73,36 @@ const MobileBottomNav = () => {
                 <Button
                   variant="ghost"
                   className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
-                  onClick={() => setOpen((v) => !v)}
+                  onClick={() => setOpen(false)}
                 >
                   <X className="size-4" />
+                </Button>
+              </>
+            ) : isTasksPage ? (
+              <>
+                <Button
+                  variant="ghost"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
+                  onClick={() => setIsSearchTaskOpen(true)}
+                >
+                  <Search className="size-4" />
+                </Button>
+
+                <Link
+                  to="/tasks"
+                  search={{ newTask: true, archived: undefined }}
+                  variant="ghost"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
+                >
+                  <Plus className="size-4" />
+                </Link>
+
+                <Button
+                  variant="ghost"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
+                  onClick={() => setOpen((v) => !v)}
+                >
+                  <MoreHorizontal className="size-4" />
                 </Button>
               </>
             ) : (

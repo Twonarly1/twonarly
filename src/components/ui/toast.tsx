@@ -30,7 +30,7 @@ interface ToastData {
 
 function toast(intent: Intent, data: ToastData) {
   return toastPrimitive.custom((id) => (
-    <div className="relative flex items-center gap-3 rounded-lg bg-background px-3 py-2 shadow-lg ring-1 ring-black/5 sm:min-w-sm">
+    <div className="relative flex items-center gap-3 rounded-lg bg-surface px-3 py-2 shadow-lg ring-1 ring-black/5 sm:min-w-sm">
       <Button
         variant="unstyled"
         size="icon-xs"

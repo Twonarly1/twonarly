@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -77,18 +76,12 @@ const NewTaskDialog = () => {
       }}
     >
       <DialogTrigger asChild>
-        {/* TODO: add kdd variants when more come up */}
         <Button variant="ghost" className="flex h-8 gap-2 border-border active:scale-[0.97]">
           New Task
           <Kbd>C</Kbd>
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-3">
-        <DialogHeader className="sr-only">
-          <DialogTitle className="hidden" />
-          <DialogDescription className="hidden" />
-        </DialogHeader>
-
+      <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle className="text-foreground text-lg">New Task</DialogTitle>
         </DialogHeader>
