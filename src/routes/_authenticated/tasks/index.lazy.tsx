@@ -164,11 +164,6 @@ function TasksPage() {
     },
   });
 
-  const viewOptions = [
-    { value: "active", label: "Active", count: counts.active, show: !!archived },
-    { value: "archived", label: "Archived", count: counts.archived, show: !archived },
-  ];
-
   useEffect(() => {
     table.getColumn("name")?.setFilterValue(debouncedSearch);
   }, [debouncedSearch, table]);
