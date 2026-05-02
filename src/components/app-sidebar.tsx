@@ -72,7 +72,6 @@ const AppSidebar = () => {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent
-              className="min-w-52"
               align={layout.sidebarPosition === "left" ? "start" : "end"}
               side="bottom"
               sideOffset={4}
@@ -81,7 +80,7 @@ const AppSidebar = () => {
                 <DropdownMenuSub>
                   <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
                   <DropdownMenuPortal>
-                    <DropdownMenuSubContent className="space-y-0.5">
+                    <DropdownMenuSubContent>
                       {deviceSessions?.map((deviceSession) => (
                         <DropdownMenuItem
                           key={deviceSession.session.token}
@@ -110,16 +109,16 @@ const AppSidebar = () => {
                         <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
                         <DropdownMenuPortal>
                           <DropdownMenuSubContent>
-                            {/* <DropdownMenuGroup> */}
-                            <DropdownMenuItem onSelect={() => signIn("google")}>
-                              <GoogleIcon className="size-4" />
-                              Google
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onSelect={() => signIn("github")}>
-                              <GitHubIcon className="size-4" />
-                              GitHub
-                            </DropdownMenuItem>
-                            {/* </DropdownMenuGroup> */}
+                            <DropdownMenuGroup>
+                              <DropdownMenuItem onSelect={() => signIn("google")}>
+                                <GoogleIcon />
+                                Google
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onSelect={() => signIn("github")}>
+                                <GitHubIcon />
+                                GitHub
+                              </DropdownMenuItem>
+                            </DropdownMenuGroup>
                           </DropdownMenuSubContent>
                         </DropdownMenuPortal>
                       </DropdownMenuSub>

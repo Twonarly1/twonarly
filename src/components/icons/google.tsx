@@ -1,6 +1,6 @@
 // https://simpleicons.org/?q=google
-export const GoogleIcon = ({ className }: { className?: string }) => (
-  <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
+export const GoogleIcon = () => (
+  <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="icon-sm">
     <title>Google</title>
     <path
       fill="currentColor"

@@ -58,8 +58,8 @@ const AccountList = () => {
                     <p className="font-medium text-base text-foreground">
                       {deviceSession.user.name}
                     </p>
-                    {provider === "google" && <GoogleIcon className="size-3" />}
-                    {provider === "github" && <GitHubIcon className="size-3" />}
+                    {provider === "google" && <GoogleIcon />}
+                    {provider === "github" && <GitHubIcon />}
                     {isCurrent && (
                       <span className="font-medium text-green-600 text-sm">Active</span>
                     )}
@@ -133,11 +133,11 @@ const AccountList = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => signIn("google")}>
-                  <GoogleIcon className="size-4" />
+                  <GoogleIcon />
                   Google
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => signIn("github")}>
-                  <GitHubIcon className="size-4" />
+                  <GitHubIcon />
                   GitHub
                 </DropdownMenuItem>
               </DropdownMenuGroup>

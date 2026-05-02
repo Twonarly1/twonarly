@@ -77,14 +77,10 @@ function BillingPage() {
       <section>
         <Item variant="outline" className="rounded-xl">
           <ItemContent>
-            <ItemTitle className="flex items-center gap-2">
+            <ItemTitle>
               {isActive ? `${capitalizeFirstLetter(subscription.plan)} plan` : "Free plan"}
 
-              {isCanceling && (
-                <Badge variant="outline" className="text-xs">
-                  Canceling
-                </Badge>
-              )}
+              {isCanceling && <Badge>Canceling</Badge>}
             </ItemTitle>
             <ItemDescription>{planDescription}</ItemDescription>
           </ItemContent>
@@ -107,14 +103,14 @@ function BillingPage() {
 
           return (
             <Card key={plan.name}>
-              <CardHeader className="mb-3">
+              <CardHeader>
                 <CardTitle>{plan.name}</CardTitle>
                 <CardDescription>
                   <span className="font-medium text-foreground">${plan.price}</span> /{" "}
                   {plan.interval}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col gap-1.5 pb-4">
+              <CardContent>
                 {plan.features.map((feature) => (
                   <div key={feature} className="flex items-center gap-2">
                     <Check className="icon-xs shrink-0 text-primary" />

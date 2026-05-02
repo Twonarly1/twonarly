@@ -1,9 +1,8 @@
 import { useRouter } from "@tanstack/react-router";
-import { ArrowLeft, RefreshCw } from "lucide-react";
+import { ArrowLeft, RefreshCw, TriangleAlert } from "lucide-react";
 
 import Link from "@/components/core/link";
 import { Button } from "@/components/ui/button";
-import { StatusErrorIcon } from "../icons/status-error";
 
 import type { ErrorComponentProps } from "@tanstack/react-router";
 
@@ -14,7 +13,7 @@ const DefaultError = ({ error }: ErrorComponentProps) => {
   return (
     <div className="mx-auto flex min-h-full w-full max-w-lg flex-col items-center justify-center gap-8 text-center">
       {/* Icon badge */}
-      <StatusErrorIcon className="size-12! shrink-0 grow-0" />
+      <TriangleAlert className="size-16 rounded-full bg-red-100 p-2 text-red-600" />
 
       <div className="space-y-2">
         <h1 className="font-medium text-2xl">Something went wrong</h1>

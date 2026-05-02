@@ -7,12 +7,12 @@ import { multiSession, siwe } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { verifyMessage } from "viem";
 
+import { linkWalletPlugin } from "@/lib/auth/link-wallet-plugin";
 import { app } from "@/lib/config/app.config";
+import { stripeClient } from "@/lib/config/stripe.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import * as schema from "@/lib/db/schema";
-import { linkWalletPlugin } from "../auth/link-wallet-plugin";
-import { stripeClient } from "./stripe.config";
 
 const SIWE_DOMAIN = new URL(env.BETTER_AUTH_URL ?? app.url).host;
 

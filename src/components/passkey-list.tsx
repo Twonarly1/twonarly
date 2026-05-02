@@ -89,7 +89,6 @@ const PasskeyList = () => {
                 placeholder="Enter name..."
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="h-7 w-full sm:w-48"
               />
 
               <div className="flex items-center">

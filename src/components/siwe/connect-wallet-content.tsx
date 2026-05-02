@@ -4,6 +4,7 @@ import { match } from "ts-pattern";
 
 import { StatusErrorIcon } from "@/components/icons/status-error";
 import ConnectOptionList from "@/components/siwe/connect-option-list";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Empty,
   EmptyContent,
@@ -11,11 +12,10 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { Item, ItemContent, ItemDescription, ItemMedia, ItemTitle } from "@/components/ui/item";
+import { Item, ItemContent, ItemDescription, ItemTitle } from "@/components/ui/item";
 import { toast } from "@/components/ui/toast";
 import { AUTH_BASE, authClient } from "@/lib/auth/auth-client";
 import { useInjectedWallets } from "@/lib/hooks/use-injected-wallets";
-import { buttonVariants } from "../ui/button";
 
 import type { EIP6963Provider } from "@/lib/hooks/use-injected-wallets";
 
@@ -172,12 +172,10 @@ export function ConnectWalletContent({ mode }: Props) {
     <>
       {step === "error" && (
         <Item variant="destructive" className="space-x-2 rounded-xl custom:bg-surface">
-          <ItemMedia>
-            <StatusErrorIcon />
-          </ItemMedia>
-          <ItemContent className="-mt-0.5">
-            <ItemTitle className="text-destructive">Connection failed</ItemTitle>
-            <ItemDescription className="text-destructive/80">{errorMessage}</ItemDescription>
+          <StatusErrorIcon />
+          <ItemContent>
+            <ItemTitle>Connection failed</ItemTitle>
+            <ItemDescription>{errorMessage}</ItemDescription>
           </ItemContent>
         </Item>
       )}

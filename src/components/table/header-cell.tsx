@@ -30,9 +30,7 @@ const HeaderCell = ({ header }: Props) => {
 
   if (!canSort) {
     return (
-      <TableHead className="py-1" style={cellStyle}>
-        {flexRender(column.columnDef.header, getContext())}
-      </TableHead>
+      <TableHead style={cellStyle}>{flexRender(column.columnDef.header, getContext())}</TableHead>
     );
   }
 
@@ -58,9 +56,7 @@ const HeaderCell = ({ header }: Props) => {
             />
           </Button>
         </TooltipTrigger>
-        <TooltipContent sideOffset={4} className="bg-surface">
-          Order by {header.id}
-        </TooltipContent>
+        <TooltipContent sideOffset={4}>Order by {header.id}</TooltipContent>
       </Tooltip>
     </TableHead>
   );

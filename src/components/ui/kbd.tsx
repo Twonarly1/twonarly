@@ -1,27 +1,15 @@
-import { cn } from "@/lib/utils";
-
-function Kbd({ className, ...props }: React.ComponentProps<"kbd">) {
+function Kbd({ ...props }: React.ComponentProps<"kbd">) {
   return (
     <kbd
       data-slot="kbd"
-      className={cn(
-        "pointer-events-none inline-flex h-5 w-fit min-w-5 select-none items-center justify-center gap-1 rounded border bg-muted custom:bg-surface px-1 font-medium font-sans text-sm",
-        "[&_svg:not([class*='size-'])]:size-3",
-        className,
-      )}
+      className="pointer-events-none ml-2 inline-flex h-5 w-fit min-w-5 select-none items-center justify-center gap-1 rounded border bg-muted custom:bg-surface px-1 font-medium font-sans text-sm [&_svg:not([class*='size-'])]:size-3"
       {...props}
     />
   );
 }
 
-function KbdGroup({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <kbd
-      data-slot="kbd-group"
-      className={cn("inline-flex items-center gap-1", className)}
-      {...props}
-    />
-  );
+function KbdGroup({ ...props }: React.ComponentProps<"div">) {
+  return <kbd data-slot="kbd-group" className="inline-flex items-center gap-1" {...props} />;
 }
 
 export { Kbd, KbdGroup };

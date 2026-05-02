@@ -29,7 +29,7 @@ const SearchTaskDialog = ({ table }: Props) => {
     <Dialog open={isSearchTaskOpen} onOpenChange={setIsSearchTaskOpen}>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="text-foreground text-lg">Search Task</DialogTitle>
+          <DialogTitle>Search Task</DialogTitle>
         </DialogHeader>
 
         <div className="relative flex items-center">
@@ -38,7 +38,7 @@ const SearchTaskDialog = ({ table }: Props) => {
             placeholder="Search tasks..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="h-10 pl-8"
+            className="pl-8"
           />
         </div>
       </DialogContent>

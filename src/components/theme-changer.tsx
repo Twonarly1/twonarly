@@ -148,8 +148,8 @@ export default function ThemeChanger({ theme, onChange }: Props) {
         </div>
       </div>
 
-      <Collapsible open={activeZone !== null} className="mx-auto w-full sm:max-w-md">
-        <div className="mx-auto flex w-full flex-col gap-2 py-4 sm:px-8">
+      <Collapsible open={activeZone !== null}>
+        <div className="mx-auto flex w-full flex-col gap-2 py-4 sm:max-w-md sm:px-8">
           <div className="flex w-full items-center justify-between gap-2">
             <span className="font-medium text-base first-letter:uppercase">{activeZone}</span>
 
@@ -160,12 +160,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
                 </Button>
               )}
 
-              <Input
-                value={inputValue}
-                onChange={handleInputChange}
-                placeholder="#000000"
-                className="h-7 w-fit"
-              />
+              <Input value={inputValue} onChange={handleInputChange} placeholder="#000000" />
             </div>
           </div>
 
@@ -174,8 +169,8 @@ export default function ThemeChanger({ theme, onChange }: Props) {
           </div>
 
           {contrastConfig && (
-            <Item className="p-0">
-              <ItemContent className="mr-4 flex-none sm:mr-8">
+            <Item>
+              <ItemContent>
                 <ItemTitle>
                   {match(activeZone)
                     .with("content", () => "Surface Contrast")
@@ -183,7 +178,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
                     .otherwise(() => "")}
                 </ItemTitle>
               </ItemContent>
-              <ItemActions className="flex w-full flex-1">
+              <ItemActions>
                 <SliderControl value={contrastConfig.value} onChange={contrastConfig.onChange} />
               </ItemActions>
             </Item>

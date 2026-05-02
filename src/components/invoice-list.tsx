@@ -77,7 +77,7 @@ const InvoiceList = () => {
                 </div>
               </div>
             </ItemContent>
-            <ItemActions className="space-x-2">
+            <ItemActions>
               <span className="hidden items-center gap-2 sm:flex">
                 <Skeleton className="size-4 rounded-full" />
                 <Skeleton className="h-4 w-12" />
@@ -89,29 +89,26 @@ const InvoiceList = () => {
       </ItemGroup>
     );
 
-  if (invoices.length > 0) return <span className="px-4">No invoices yet</span>;
+  if (invoices.length === 0)
+    return <span className="px-4 text-faded-foreground">No invoices yet</span>;
 
   return (
     <ItemGroup variant="list">
       {invoices.map((invoice) => {
+        const statusIcon = match(invoice.status)
+          .with("paid", () => <StatusSuccessIcon />)
+          .with("uncollectible", () => <StatusErrorIcon />)
+          .with("open", "draft", "void", () => <StatusWarningIcon />)
+          .otherwise(() => <StatusInfoIcon />);
+
         return (
           <Item key={invoice.id}>
             <ItemContent>
               <div className="flex items-center gap-2">
-                <div className="flex w-6 sm:hidden">
-                  {match(invoice.status)
-                    .with("paid", () => <StatusSuccessIcon className="icon-sm" />)
-                    .with("uncollectible", () => <StatusErrorIcon className="icon-sm" />)
-                    .with("open", "draft", "void", () => <StatusWarningIcon className="icon-sm" />)
-                    .otherwise(() => (
-                      <StatusInfoIcon className="icon-sm" />
-                    ))}
-                </div>
+                <div className="flex w-6 sm:hidden">{statusIcon}</div>
 
                 <div className="space-y-1">
-                  <ItemTitle className="flex items-center gap-2 font-normal">
-                    {invoice.lines.map((line) => line.description).join(", ")}
-                  </ItemTitle>
+                  <ItemTitle>{invoice.lines.map((line) => line.description).join(", ")}</ItemTitle>
                   <ItemDescription>
                     {formatDate(new Date(invoice.created * 1000), { year: true })}
                   </ItemDescription>
@@ -119,15 +116,9 @@ const InvoiceList = () => {
               </div>
             </ItemContent>
 
-            <ItemActions className="space-x-2">
+            <ItemActions>
               <span className="hidden items-center gap-2 sm:flex">
-                {match(invoice.status)
-                  .with("paid", () => <StatusSuccessIcon className="icon-sm" />)
-                  .with("uncollectible", () => <StatusErrorIcon className="icon-sm" />)
-                  .with("open", "draft", "void", () => <StatusWarningIcon className="icon-sm" />)
-                  .otherwise(() => (
-                    <StatusInfoIcon className="icon-sm" />
-                  ))}
+                {statusIcon}
                 <span className="first-letter:uppercase">{invoice.status}</span>
               </span>
 
@@ -147,8 +138,13 @@ const InvoiceList = () => {
 
       {hasMore && (
         <Item>
-          <ItemContent className="items-center">
-            <Button variant="ghost" onClick={loadMore} disabled={loadingMore}>
+          <ItemContent>
+            <Button
+              variant="ghost"
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="mx-auto w-fit"
+            >
               {loadingMore ? "Loading…" : "Show past invoices"}
             </Button>
           </ItemContent>

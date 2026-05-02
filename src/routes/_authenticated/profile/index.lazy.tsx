@@ -153,7 +153,7 @@ function ProfilePage() {
                     </button>
                   </DropdownMenuTrigger>
 
-                  <DropdownMenuContent align="end" className="min-w-48">
+                  <DropdownMenuContent align="end">
                     <DropdownMenuGroup className="space-y-0.5">
                       <DropdownMenuItem onClick={triggerFileUpload}>
                         <Pen className="icon-xs" />
@@ -187,7 +187,7 @@ function ProfilePage() {
                       </div>
                     </button>
                   </TooltipTrigger>
-                  <TooltipContent side="left" sideOffset={8} className="text-xs">
+                  <TooltipContent side="left" sideOffset={8}>
                     Change avatar
                   </TooltipContent>
                 </Tooltip>
@@ -221,14 +221,13 @@ function ProfilePage() {
                 }}
                 id="name"
                 required
-                className="bg-surface shadow-none"
               />
             </ItemActions>
           </Item>
         </ItemGroup>
       </section>
 
-      <Item variant="outline">
+      <Item variant="outline" className="rounded-xl">
         <ItemContent>
           <ItemTitle>Delete account</ItemTitle>
           <ItemDescription>All your data will be permanently deleted.</ItemDescription>
@@ -238,7 +237,7 @@ function ProfilePage() {
             <DialogTrigger asChild>
               <Button variant="destructive">Delete</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-sm">
+            <DialogContent>
               <DialogHeader>
                 <DialogTitle>Delete account</DialogTitle>
                 <DialogDescription>

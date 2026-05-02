@@ -1,6 +1,6 @@
 // https://simpleicons.org/?q=github
-export const GitHubIcon = ({ className }: { className?: string }) => (
-  <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className={className}>
+export const GitHubIcon = () => (
+  <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="icon-sm">
     <title>GitHub</title>
     <path
       fill="currentColor"

@@ -207,20 +207,15 @@ function SettingsPage() {
             </ItemActions>
           </Item>
 
-          <div className="relative z-50">
-            <Collapsible
-              open={isThemeChangerOpen}
-              className="w-full space-y-4 rounded-xl border-none"
-            >
-              <ThemeChanger theme={customTheme} onChange={save} />
-            </Collapsible>
-          </div>
+          <Collapsible open={isThemeChangerOpen}>
+            <ThemeChanger theme={customTheme} onChange={save} />
+          </Collapsible>
         </div>
       </Section>
 
       {!isMobile && (
         <Section title="Layout">
-          <ItemGroup className="divide-none">
+          <ItemGroup>
             <Item>
               <ItemContent>
                 <ItemTitle>Sidebar position</ItemTitle>

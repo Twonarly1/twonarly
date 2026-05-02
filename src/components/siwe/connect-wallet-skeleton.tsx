@@ -1,4 +1,4 @@
-import { Skeleton, skeletonRows } from "../ui/skeleton";
+import { Skeleton, skeletonRows } from "@/components/ui/skeleton";
 
 export function ConnectWalletSkeleton() {
   return (

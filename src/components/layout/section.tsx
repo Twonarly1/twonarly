@@ -1,10 +1,10 @@
-interface SectionProps {
+interface Props {
   title: string;
   description?: string;
   children: React.ReactNode;
 }
 
-const Section = ({ title, description, children }: SectionProps) => {
+const Section = ({ title, description, children }: Props) => {
   return (
     <section className="space-y-4">
       <div className="space-y-1 px-4">

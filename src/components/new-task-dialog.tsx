@@ -1,8 +1,6 @@
-import { useForm } from "@tanstack/react-form";
 import { useNavigate, useRouter, useSearch } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect } from "react";
-import { maxLength, minLength, pipe, string } from "valibot";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,30 +25,30 @@ const NewTaskDialog = () => {
     type: DialogType.CreateTask,
   });
 
-  const form = useForm({
-    defaultValues: {
-      name: "",
-    },
-    onSubmit: async ({ value }) => {
-      await addTaskFn({
-        data: {
-          name: value.name,
-        },
-      });
+  const [name, setName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const canSubmit = name.trim().length > 0 && name.length <= 256 && !isSubmitting;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!canSubmit) return;
+    setIsSubmitting(true);
+    try {
+      await addTaskFn({ data: { name: name.trim() } });
       router.invalidate();
       setIsCreateTaskOpen(false);
-
-      form.reset();
-    },
-  });
+      setName("");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: we only want to listen to changes in isCreateTaskOpen
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       if (isCreateTaskOpen) return;
-
       if (e.key === "c") {
         e.preventDefault();
         setIsCreateTaskOpen(true);
@@ -66,71 +64,44 @@ const NewTaskDialog = () => {
       open={isCreateTaskOpen}
       onOpenChange={(open) => {
         setIsCreateTaskOpen(open);
-        if (!open && newTask) {
-          navigate({
-            to: ".",
-            search: (prev) => ({ ...prev, newTask: undefined }),
-            replace: true,
-          });
+        if (!open) {
+          setName("");
+          if (newTask) {
+            navigate({
+              to: ".",
+              search: (prev) => ({ ...prev, newTask: undefined }),
+              replace: true,
+            });
+          }
         }
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="ghost" className="flex h-8 gap-2 border-border active:scale-[0.97]">
+        <Button variant="ghost" className="flex h-8 border-border active:scale-[0.97]">
           New Task
           <Kbd>C</Kbd>
         </Button>
       </DialogTrigger>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle className="text-foreground text-lg">New Task</DialogTitle>
+          <DialogTitle>New Task</DialogTitle>
         </DialogHeader>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            form.handleSubmit();
-          }}
-          className="space-y-1"
-        >
-          <form.Field
-            name="name"
-            validators={{
-              onSubmit: pipe(
-                string(),
-                minLength(1, "Name is required"),
-                maxLength(256, "Name is too long"),
-              ),
-            }}
+        <form onSubmit={handleSubmit} className="space-y-1">
+          <Input
+            autoFocus
+            aria-label="Name"
+            placeholder="Enter a task name..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Button
+            type="submit"
+            disabled={!canSubmit}
+            className="mt-2 ml-auto flex pointer-hover:scale-[1.04] active:scale-[0.97]"
           >
-            {(field) => (
-              <Input
-                autoFocus
-                aria-label="Name"
-                placeholder="Enter a task name..."
-                className="border-transparent focus-visible:border-primary"
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => {
-                  field.handleChange(e.target.value);
-                }}
-              />
-            )}
-          </form.Field>
-
-          <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting, state.isDefaultValue]}
-          >
-            {([canSubmit, isSubmitting, isDefaultValue]) => (
-              <Button
-                type="submit"
-                disabled={!canSubmit || isSubmitting || isDefaultValue}
-                className="mt-2 ml-auto flex pointer-hover:scale-[1.04] active:scale-[0.97]"
-              >
-                Create task
-              </Button>
-            )}
-          </form.Subscribe>
+            Create task
+          </Button>
         </form>
       </DialogContent>
     </Dialog>

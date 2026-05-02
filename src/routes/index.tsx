@@ -57,7 +57,7 @@ function App() {
               onClick={() => signIn("google")}
               className="px-12 py-4"
             >
-              <GoogleIcon className="size-4" />
+              <GoogleIcon />
               Sign in with Google
             </Button>
 
@@ -67,7 +67,7 @@ function App() {
               onClick={() => signIn("github")}
               className="px-12 py-4"
             >
-              <GitHubIcon className="size-4" />
+              <GitHubIcon />
               Sign in with GitHub
             </Button>
 
@@ -91,7 +91,7 @@ function App() {
               mode="sign-in"
               trigger={
                 <Button variant="outline" size="lg" className="px-12 py-4">
-                  <EthereumIcon className="size-4" />
+                  <EthereumIcon />
                   Sign In With Ethereum
                 </Button>
               }

@@ -3,6 +3,7 @@ import { CheckSquare } from "lucide-react";
 import { useRef } from "react";
 
 import HeaderCell from "@/components/table/header-cell";
+import { Button } from "@/components/ui/button";
 import {
   Empty,
   EmptyDescription,
@@ -11,7 +12,6 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
-import { Button } from "../ui/button";
 
 import type { RowData, Table as TableProps } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";
@@ -37,11 +37,11 @@ export function DataTable({ table }: Props) {
 
   return (
     <div ref={tableContainerRef} className="min-h-full flex-1 overflow-auto">
-      <Table style={{ tableLayout: "auto", width: "100%", height: "100%" }}>
+      <Table>
         {(!isEmpty || isFiltered) && (
-          <TableHeader className="sticky top-0 z-0">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+              <TableRow key={headerGroup.id} data-static="true">
                 {headerGroup.headers.map((header) => (
                   <HeaderCell key={header.id} header={header} />
                 ))}
@@ -51,10 +51,10 @@ export function DataTable({ table }: Props) {
         )}
         <TableBody>
           {isEmpty ? (
-            <TableRow className="hover:bg-transparent">
-              <TableCell colSpan={table.getAllColumns().length} className="h-64 p-0">
+            <TableRow data-static="true">
+              <TableCell colSpan={table.getAllColumns().length}>
                 <Empty>
-                  <EmptyMedia variant="icon">
+                  <EmptyMedia>
                     <CheckSquare />
                   </EmptyMedia>
                   <EmptyHeader>
@@ -85,7 +85,6 @@ export function DataTable({ table }: Props) {
                   data-row-id={row.id}
                   tabIndex={0}
                   data-state={row.getIsSelected() && "selected"}
-                  className="group hover:bg-primary/5"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
