@@ -14,11 +14,3 @@ export function lchToHex(tuple: LchTuple): string {
   const [l, c, h] = tuple;
   return colord({ l, c, h }).toHex();
 }
-
-export function isLight(hex: string): boolean {
-  return colord(hex).isLight();
-}
-
-export function isDark(hex: string): boolean {
-  return colord(hex).isDark();
-}

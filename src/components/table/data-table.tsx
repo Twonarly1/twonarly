@@ -1,5 +1,4 @@
 import { flexRender } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
 import { useRef } from "react";
 
 import HeaderCell from "@/components/table/header-cell";
@@ -25,20 +24,6 @@ export function DataTable({ table }: Props) {
 
   const { rows } = table.getRowModel();
   const isEmpty = !rows?.length;
-
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 32,
-    overscan: 10,
-  });
-
-  const virtualRows = rowVirtualizer.getVirtualItems();
-  const totalSize = rowVirtualizer.getTotalSize();
-
-  const paddingTop = virtualRows.length > 0 ? virtualRows[0]?.start || 0 : 0;
-  const paddingBottom =
-    virtualRows.length > 0 ? totalSize - (virtualRows[virtualRows.length - 1]?.end || 0) : 0;
 
   return (
     <div ref={tableContainerRef} className="min-h-full flex-1 overflow-auto">
@@ -74,45 +59,30 @@ export function DataTable({ table }: Props) {
               ))}
             </TableRow>
           ) : (
-            <>
-              {paddingTop > 0 && (
-                <tr>
-                  <td style={{ height: `${paddingTop}px` }} />
-                </tr>
-              )}
-
-              {virtualRows.map((virtualRow) => {
-                const row = rows[virtualRow.index];
-                return (
-                  <TableRow
-                    key={row.id}
-                    data-row-id={row.id}
-                    tabIndex={0}
-                    data-state={row.getIsSelected() && "selected"}
-                    className="group hover:bg-primary/5"
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        style={{
-                          width: cell.column.getSize(),
-                          maxWidth: cell.column.getSize(),
-                          minWidth: cell.column.getSize(),
-                        }}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                );
-              })}
-
-              {paddingBottom > 0 && (
-                <tr>
-                  <td style={{ height: `${paddingBottom}px` }} />
-                </tr>
-              )}
-            </>
+            rows.map((row) => {
+              return (
+                <TableRow
+                  key={row.id}
+                  data-row-id={row.id}
+                  tabIndex={0}
+                  data-state={row.getIsSelected() && "selected"}
+                  className="group hover:bg-primary/5"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell
+                      key={cell.id}
+                      style={{
+                        width: cell.column.getSize(),
+                        maxWidth: cell.column.getSize(),
+                        minWidth: cell.column.getSize(),
+                      }}
+                    >
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            })
           )}
         </TableBody>
       </Table>
