@@ -1,8 +1,17 @@
 import { flexRender } from "@tanstack/react-table";
+import { CheckSquare } from "lucide-react";
 import { useRef } from "react";
 
 import HeaderCell from "@/components/table/header-cell";
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
 import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "../ui/button";
 
 import type { RowData, Table as TableProps } from "@tanstack/react-table";
 import type { Task } from "@/lib/db/schema";
@@ -24,39 +33,49 @@ export function DataTable({ table }: Props) {
 
   const { rows } = table.getRowModel();
   const isEmpty = !rows?.length;
+  const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <div ref={tableContainerRef} className="min-h-full flex-1 overflow-auto">
       <Table style={{ tableLayout: "auto", width: "100%", height: "100%" }}>
-        <TableHeader className="sticky top-0 z-0">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="hover:bg-transparent">
-              {headerGroup.headers.map((header) => {
-                return <HeaderCell key={header.id} header={header} />;
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
+        {(!isEmpty || isFiltered) && (
+          <TableHeader className="sticky top-0 z-0">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="hover:bg-transparent">
+                {headerGroup.headers.map((header) => (
+                  <HeaderCell key={header.id} header={header} />
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+        )}
         <TableBody>
           {isEmpty ? (
             <TableRow className="hover:bg-transparent">
-              {table.getAllColumns().map((column) => (
-                <TableCell
-                  key={column.id}
-                  style={{
-                    width: column.getSize(),
-                    maxWidth: column.getSize(),
-                    minWidth: column.getSize(),
-                  }}
-                  className="leading-7"
-                >
-                  {column.id === "name" && (
-                    <div className="group flex h-7 w-full items-center truncate rounded border border-transparent px-2 text-foreground leading-7 focus-visible:border-border">
-                      No results
-                    </div>
+              <TableCell colSpan={table.getAllColumns().length} className="h-64 p-0">
+                <Empty>
+                  <EmptyMedia variant="icon">
+                    <CheckSquare />
+                  </EmptyMedia>
+                  <EmptyHeader>
+                    <EmptyTitle>No tasks</EmptyTitle>
+                    <EmptyDescription>
+                      {isFiltered
+                        ? "No tasks match your search."
+                        : "Create your first task to get started."}
+                    </EmptyDescription>
+                  </EmptyHeader>
+                  {isFiltered && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => table.getColumn("name")?.setFilterValue("")}
+                    >
+                      Clear search
+                    </Button>
                   )}
-                </TableCell>
-              ))}
+                </Empty>
+              </TableCell>
             </TableRow>
           ) : (
             rows.map((row) => {

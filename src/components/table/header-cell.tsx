@@ -23,9 +23,9 @@ const HeaderCell = ({ header }: Props) => {
   const showIcon = !!sortDirection || isDefaultSortColumn;
 
   const cellStyle = {
-    width: header.getSize(),
-    minWidth: header.getSize(),
-    maxWidth: header.getSize(),
+    width: `${header.getSize()}px`,
+    minWidth: `${header.getSize()}px`,
+    maxWidth: `${header.getSize()}px`,
   };
 
   if (!canSort) {

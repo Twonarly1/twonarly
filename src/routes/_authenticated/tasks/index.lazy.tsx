@@ -5,6 +5,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import clsx from "clsx";
 import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -43,7 +44,7 @@ export const Route = createLazyFileRoute("/_authenticated/tasks/")({
 });
 
 function TasksPage() {
-  const { tasks } = Route.useLoaderData();
+  const { tasks, counts } = Route.useLoaderData();
   const { archived, newTask } = Route.useSearch();
 
   const [data, setData] = useState(tasks ?? []);
@@ -79,9 +80,9 @@ function TasksPage() {
           </div>
         ),
         enableSorting: false,
-        size: 32,
-        minSize: 32,
-        maxSize: 32,
+        size: 16,
+        minSize: 16,
+        maxSize: 16,
         cell: ({ row }) => (
           <div className="ml-2 flex">
             <Checkbox
@@ -100,6 +101,9 @@ function TasksPage() {
       {
         accessorKey: "createdAt",
         id: "created at",
+        size: 32,
+        minSize: 32,
+        maxSize: 32,
         sortingFn: "datetime",
         cell: ({ getValue }) => {
           const createdAt = new Date(getValue() as string);
@@ -160,6 +164,11 @@ function TasksPage() {
     },
   });
 
+  const viewOptions = [
+    { value: "active", label: "Active", count: counts.active, show: !!archived },
+    { value: "archived", label: "Archived", count: counts.archived, show: !archived },
+  ];
+
   useEffect(() => {
     table.getColumn("name")?.setFilterValue(debouncedSearch);
   }, [debouncedSearch, table]);
@@ -182,20 +191,24 @@ function TasksPage() {
           <TableActions table={table} />
         </div>
 
-        <div className="flex flex-col rounded-xl border bg-surface">
+        <div className="mt-1 flex flex-col rounded-xl border bg-surface">
           <div className="flex items-center justify-between gap-2 p-2 sm:p-4">
             <div className="flex items-center gap-2">
               {/* Desktop: full search input */}
               <div className="relative hidden items-center sm:flex">
                 <Search
                   strokeWidth={2.5}
-                  className="absolute left-2.5 size-3.5 text-muted-foreground"
+                  className={clsx(
+                    "absolute left-2.5 size-3.5 text-muted-foreground",
+                    data.length === 0 && "opacity-50",
+                  )}
                 />
                 <Input
                   placeholder="Search tasks..."
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
                   className="max-w-[233px] pl-8"
+                  disabled={data.length === 0}
                 />
               </div>
 
@@ -205,6 +218,7 @@ function TasksPage() {
                 size="icon-sm"
                 className="h-8 w-8 sm:hidden"
                 onClick={() => setIsSearchTaskOpen(true)}
+                disabled={data.length === 0}
               >
                 <Search className="size-3.5" />
               </Button>
@@ -227,8 +241,17 @@ function TasksPage() {
                 </SelectTrigger>
                 <SelectContent align="start">
                   <SelectGroup>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="archived">Archived</SelectItem>
+                    <SelectItem value="active">
+                      Active{" "}
+                      {archived && <span className="text-muted-foreground">({counts.active})</span>}
+                    </SelectItem>
+
+                    <SelectItem value="archived">
+                      Archived{" "}
+                      {!archived && (
+                        <span className="text-muted-foreground">({counts.archived})</span>
+                      )}
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

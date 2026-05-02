@@ -12,7 +12,7 @@ const DefaultError = ({ error }: ErrorComponentProps) => {
   const message = error instanceof Error ? error.message : "Something went wrong";
 
   return (
-    <div className="mx-auto flex w-full max-w-lg flex-col items-center justify-center gap-8 text-center">
+    <div className="mx-auto flex h-full w-full max-w-lg flex-col items-center justify-center gap-8 text-center">
       {/* Icon badge */}
       <StatusErrorIcon className="size-12! shrink-0 grow-0" />
 

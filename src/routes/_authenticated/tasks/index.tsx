@@ -9,8 +9,8 @@ export const Route = createFileRoute("/_authenticated/tasks/")({
   }),
   loaderDeps: ({ search }) => ({ archived: search.archived }),
   loader: async ({ deps }) => {
-    const tasks = await fetchTasks({ data: { archived: deps.archived } });
-    return { tasks };
+    const { tasks, counts } = await fetchTasks({ data: { archived: deps.archived } });
+    return { tasks, counts };
   },
   pendingMs: 0,
 });
