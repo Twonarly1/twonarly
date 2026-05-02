@@ -8,7 +8,7 @@ import { StatusInfoIcon } from "@/components/icons/status-info";
 import { StatusSuccessIcon } from "@/components/icons/status-success";
 import { StatusWarningIcon } from "@/components/icons/status-warning";
 import { Button } from "@/components/ui/button";
-import { useIsPhone } from "@/lib/hooks/use-phone";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useTheme } from "@/providers/theme-provider";
 
 import type { ReactNode } from "react";
@@ -62,14 +62,14 @@ toast.warning = (d: ToastData) => toast("warning", d);
 
 function Toaster(props: ToasterProps) {
   const { theme } = useTheme();
-  const isPhone = useIsPhone();
+  const isMobile = useIsMobile();
 
   return (
     <ToasterPrimitive
       icons={INTENT_ICONS}
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
-      position={isPhone ? "top-center" : "bottom-right"}
+      position={isMobile ? "top-center" : "bottom-right"}
       {...props}
     />
   );

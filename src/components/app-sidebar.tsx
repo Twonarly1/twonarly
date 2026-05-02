@@ -1,7 +1,6 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
 import clsx from "clsx";
 import { Check, ChevronDown } from "lucide-react";
-import { useEffect } from "react";
 
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
@@ -27,7 +26,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn, signOut } from "@/lib/auth/auth-client";
@@ -37,7 +35,6 @@ import { Route } from "@/routes/_authenticated";
 
 const AppSidebar = () => {
   const { deviceSessions, user } = Route.useRouteContext();
-  const { isMobile, toggleSidebar } = useSidebar();
   const navigate = useNavigate();
   const router = useRouter();
   const { layout } = useLayout();
@@ -58,20 +55,6 @@ const AppSidebar = () => {
       toast.error({ title: "Failed to switch account" });
     }
   };
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-
-      if (e.key === "b") {
-        e.preventDefault();
-        toggleSidebar();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [toggleSidebar]);
 
   return (
     <Sidebar>
@@ -104,56 +87,54 @@ const AppSidebar = () => {
                 sideOffset={4}
               >
                 <DropdownMenuGroup>
-                  {!isMobile && (
-                    <DropdownMenuSub>
-                      <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="space-y-0.5">
-                          {deviceSessions?.map((deviceSession) => (
-                            <DropdownMenuItem
-                              key={deviceSession.session.token}
-                              onSelect={() => handleAccountSwitch(deviceSession.session.token)}
-                            >
-                              <Avatar
-                                src={deviceSession.user.image}
-                                alt={deviceSession.user.name}
-                                className="mr-0.5 size-6 rounded"
-                              />
-                              <div className="flex flex-col">
-                                <p className="text-base">{deviceSession.user.name}</p>
-                                <p className="text-muted-foreground text-sm">
-                                  {deviceSession.user.email}
-                                </p>
-                              </div>
-                              {deviceSession.user.id === user?.id && (
-                                <Check className="icon-xs ml-auto" />
-                              )}
-                            </DropdownMenuItem>
-                          ))}
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent className="space-y-0.5">
+                        {deviceSessions?.map((deviceSession) => (
+                          <DropdownMenuItem
+                            key={deviceSession.session.token}
+                            onSelect={() => handleAccountSwitch(deviceSession.session.token)}
+                          >
+                            <Avatar
+                              src={deviceSession.user.image}
+                              alt={deviceSession.user.name}
+                              className="mr-0.5 size-6 rounded"
+                            />
+                            <div className="flex flex-col">
+                              <p className="text-base">{deviceSession.user.name}</p>
+                              <p className="text-muted-foreground text-sm">
+                                {deviceSession.user.email}
+                              </p>
+                            </div>
+                            {deviceSession.user.id === user?.id && (
+                              <Check className="icon-xs ml-auto" />
+                            )}
+                          </DropdownMenuItem>
+                        ))}
 
-                          <DropdownMenuSeparator />
+                        <DropdownMenuSeparator />
 
-                          <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                              <DropdownMenuSubContent>
-                                {/* <DropdownMenuGroup> */}
-                                <DropdownMenuItem onSelect={() => signIn("google")}>
-                                  <GoogleIcon className="size-4" />
-                                  Google
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onSelect={() => signIn("github")}>
-                                  <GitHubIcon className="size-4" />
-                                  GitHub
-                                </DropdownMenuItem>
-                                {/* </DropdownMenuGroup> */}
-                              </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                          </DropdownMenuSub>
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                  )}
+                        <DropdownMenuSub>
+                          <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
+                          <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                              {/* <DropdownMenuGroup> */}
+                              <DropdownMenuItem onSelect={() => signIn("google")}>
+                                <GoogleIcon className="size-4" />
+                                Google
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onSelect={() => signIn("github")}>
+                                <GitHubIcon className="size-4" />
+                                GitHub
+                              </DropdownMenuItem>
+                              {/* </DropdownMenuGroup> */}
+                            </DropdownMenuSubContent>
+                          </DropdownMenuPortal>
+                        </DropdownMenuSub>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
                   <DropdownMenuItem onSelect={handleSignOut}>Log out</DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>

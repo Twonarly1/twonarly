@@ -73,6 +73,12 @@ export default function ThemeChanger({ theme, onChange }: Props) {
     }
   };
 
+  const handleClearSidebar = () => {
+    const { sidebar: _, ...rest } = theme;
+    onChange(rest);
+    if (activeZone === "sidebar") setActiveZone(null);
+  };
+
   const contrastConfig = match(activeZone)
     .with("content", () => ({
       value: theme.contrast,
@@ -93,13 +99,17 @@ export default function ThemeChanger({ theme, onChange }: Props) {
     <div className="flex w-full flex-col gap-6 p-4 sm:gap-3">
       {/* ── Layout map ── */}
       <div className="mx-auto flex w-full flex-col items-center gap-2 sm:max-w-100 sm:p-2">
-        <div className="grid w-full grid-cols-[100px_1fr] gap-x-2 overflow-hidden">
+        <div className="grid w-full max-w-80 grid-cols-[100px_1fr] gap-x-2 overflow-hidden sm:max-w-full">
+          {/* Surface */}
           <Button
             variant="unstyled"
             onClick={() => handleZoneClick("sidebar")}
             className="row-span-2 hidden h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-sidebar pt-2 text-sidebar-foreground transition-transform hover:bg-sidebar/80 hover:text-sidebar-foreground active:scale-[0.99] sm:flex"
+            style={{
+              opacity: activeZone !== null && activeZone !== "sidebar" ? 0.3 : 1,
+            }}
           >
-            <span className="mx-auto flex">Sidebar</span>
+            <span className="mx-auto flex cursor-crosshair select-none">Sidebar</span>
 
             {/* Mock nav items showing sidebar-accent contrast */}
             <div className="mt-4 flex w-full cursor-crosshair flex-col justify-start gap-1">
@@ -109,28 +119,31 @@ export default function ThemeChanger({ theme, onChange }: Props) {
             </div>
           </Button>
 
+          {/* Content */}
           <Button
             variant="unstyled"
             onMouseDown={() => handleZoneClick("content")}
-            className="z-10 col-span-2 flex h-60 cursor-crosshair! items-start justify-center rounded-xl border-border border-dashed bg-content p-2 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99] sm:col-span-1"
+            className="z-10 col-span-2 flex h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-content px-8 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99] sm:col-span-1"
+            style={{
+              opacity: activeZone !== null && activeZone !== "content" ? 0.3 : 1,
+            }}
           >
-            Content
+            <span className="mt-2 w-full cursor-crosshair select-none text-center">Content</span>
+            <div className="border- mt-8 flex w-full flex-1 cursor-crosshair! items-center justify-center rounded-lg rounded-b-none border border-b-0 border-dashed bg-surface">
+              Surface
+            </div>
           </Button>
 
-          <Button
-            variant="unstyled"
-            onClick={() => handleZoneClick("content")}
-            className="z-20 col-span-2 mx-8 -mt-48.25 flex h-48 cursor-crosshair! items-center justify-center rounded-xl rounded-b-none border-border border-b-0 border-dashed bg-surface transition-none transition-transform active:scale-[0.99] sm:col-span-1 sm:mx-8"
-          >
-            Surface
-          </Button>
-
+          {/* Accent */}
           <Button
             variant="unstyled"
             onClick={() => handleZoneClick("accent")}
-            className="col-span-2 mx-auto mt-2 flex h-8 w-full cursor-crosshair! border border-border border-dashed bg-primary text-primary-foreground transition-transform hover:bg-primary/80 active:scale-[0.99]"
+            className="col-span-2 mx-auto mt-2 flex h-8 w-full cursor-crosshair! border border-border border-dashed bg-primary text-primary-foreground opacity-30 transition-transform hover:bg-primary/80 active:scale-[0.99]"
+            style={{
+              opacity: activeZone !== null && activeZone !== "accent" ? 0.3 : 1,
+            }}
           >
-            Accent
+            <span className="select-none">Accent</span>
           </Button>
         </div>
       </div>
@@ -140,12 +153,20 @@ export default function ThemeChanger({ theme, onChange }: Props) {
           <div className="flex w-full items-center justify-between gap-2">
             <span className="font-medium text-base first-letter:uppercase">{activeZone}</span>
 
-            <Input
-              value={inputValue}
-              onChange={handleInputChange}
-              placeholder="#000000"
-              className="h-7 w-fit"
-            />
+            <div className="flex items-center gap-2">
+              {hasSidebarOverride && activeZone === "sidebar" && (
+                <Button variant="ghost" size="sm" onClick={handleClearSidebar}>
+                  Clear
+                </Button>
+              )}
+
+              <Input
+                value={inputValue}
+                onChange={handleInputChange}
+                placeholder="#000000"
+                className="h-7 w-fit"
+              />
+            </div>
           </div>
 
           <div className="color-picker-custom cursor-crosshair!">

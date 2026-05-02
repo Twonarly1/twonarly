@@ -5,13 +5,6 @@ import React from "react";
 import { match } from "ts-pattern";
 
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { COOKIES } from "@/lib/constants/cookies";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
@@ -24,7 +17,6 @@ import type { CSSProperties } from "react";
 const SIDEBAR_COOKIE_NAME = COOKIES.sidebar;
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = "14rem";
-const SIDEBAR_WIDTH_MOBILE = "18rem";
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed";
@@ -98,6 +90,20 @@ function SidebarProvider({
     [state, open, setOpen, isMobile, openMobile, toggleSidebar],
   );
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if (e.key === "b") {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [toggleSidebar]);
+
   return (
     <SidebarContext value={contextValue}>
       <div
@@ -110,7 +116,7 @@ function SidebarProvider({
         }
         className={cn(
           "group/sidebar-wrapper max-h-svh min-h-svh w-full overflow-hidden",
-          layout.sidebarVariant === "inset" ? "flex bg-sidebar" : "flex",
+          layout.sidebarVariant === "inset" ? "flex bg-sidebar" : "flex bg-content",
           layout.sidebarPosition === "right" && "flex-row-reverse",
           className,
         )}
@@ -123,34 +129,8 @@ function SidebarProvider({
 }
 
 function Sidebar({ className, children, ...props }: React.ComponentProps<"div">) {
-  const { isMobile, state, openMobile, setOpenMobile, toggleSidebar } = useSidebar();
+  const { state } = useSidebar();
   const { layout } = useLayout();
-
-  if (isMobile) {
-    return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          data-mobile="true"
-          className="w-(--sidebar-width) border-l-0 bg-transparent p-2 text-sidebar-foreground [&>button]:hidden"
-          style={{ "--sidebar-width": SIDEBAR_WIDTH_MOBILE } as CSSProperties}
-          side={layout.sidebarPosition}
-        >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
-          <div className="z-50 flex h-full w-full flex-col rounded-lg bg-background">
-            {children}
-            <Button variant="ghost" className="m-2" onClick={toggleSidebar}>
-              Close
-            </Button>
-          </div>
-        </SheetContent>
-      </Sheet>
-    );
-  }
 
   const {
     sidebarPosition: position,
@@ -161,12 +141,16 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
   const isFloating = variant === "floating";
 
   const borderClass = match({ variant, position })
-    .with({ variant: "classic", position: "left" }, () => "shadow-[1px_0_0_0_var(--color-border)]")
-    .with(
-      { variant: "classic", position: "right" },
-      () => "shadow-[-1px_0_0_0_var(--color-border)]",
+    .with({ variant: "classic", position: "left" }, () =>
+      collapsible === "offcanvas" && state === "collapsed"
+        ? undefined
+        : "shadow-[1px_0_0_0_var(--color-border)]",
     )
-    // We use outline here to avoid layout shift with borders
+    .with({ variant: "classic", position: "right" }, () =>
+      collapsible === "offcanvas" && state === "collapsed"
+        ? undefined
+        : "shadow-[-1px_0_0_0_var(--color-border)]",
+    )
     .with({ variant: "floating" }, () => "rounded-lg outline outline-border")
     .otherwise(() => undefined);
 
@@ -197,7 +181,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
             ? cn(
                 "left-0",
                 isFloating
-                  ? "group-data-[collapsible=offcanvas]:-translate-x-[calc(100%+0.5rem)]"
+                  ? "group-data-[collapsible=offcanvas]:-translate-x-[calc(100%+1rem)]"
                   : "group-data-[collapsible=offcanvas]:-translate-x-full",
               )
             : cn(

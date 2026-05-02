@@ -4,7 +4,7 @@ import AppSidebar from "@/components/app-sidebar";
 import MobileBottomNav from "@/components/mobile-nav";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useIsPhone } from "@/lib/hooks/use-phone";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { LayoutProvider } from "@/providers/layout-provider";
 import { fetchLayout } from "@/server/functions/preferences/layout";
 import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
@@ -27,12 +27,12 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthenticatedLayout() {
   const { layoutSettings } = Route.useRouteContext();
-  const isPhone = useIsPhone();
+  const isMobile = useIsMobile();
 
   return (
     <LayoutProvider initial={layoutSettings}>
       <TooltipProvider delayDuration={400} skipDelayDuration={300}>
-        {isPhone ? <PhoneLayout /> : <DesktopLayout />}
+        {isMobile ? <PhoneLayout /> : <DesktopLayout />}
       </TooltipProvider>
     </LayoutProvider>
   );

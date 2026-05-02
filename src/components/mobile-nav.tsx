@@ -56,7 +56,7 @@ const MobileBottomNav = () => {
                   to="/tasks"
                   search={{ newTask: true, archived: undefined }}
                   variant="ghost"
-                  className="size-10 rounded-full"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
                   onClick={() => setOpen(false)}
                 >
                   <Plus className="size-4" />
@@ -64,7 +64,7 @@ const MobileBottomNav = () => {
 
                 <Button
                   variant="ghost"
-                  className="size-10 rounded-full bg-muted custom:bg-surface transition-colors duration-150 ease-out-strong"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
                   onClick={() => setOpen((v) => !v)}
                 >
                   <X className="size-4" />
@@ -77,7 +77,7 @@ const MobileBottomNav = () => {
                     key={item.to}
                     to={item.to}
                     variant="ghost"
-                    className="size-10 rounded-full"
+                    className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
                     activeProps={{ className: "text-foreground bg-muted custom:bg-surface" }}
                   >
                     <item.icon className="size-4" />
@@ -86,7 +86,7 @@ const MobileBottomNav = () => {
 
                 <Button
                   variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong"
+                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
                   onClick={() => setOpen((v) => !v)}
                 >
                   <MoreHorizontal className="size-4" />
