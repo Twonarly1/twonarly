@@ -3,9 +3,9 @@ import {
   ArrowDownToLine,
   ArrowUpToLine,
   ChevronDown,
-  Droplet,
   Monitor,
   Moon,
+  SprayCan,
   Sun,
 } from "lucide-react";
 import { useRef, useState } from "react";
@@ -51,7 +51,7 @@ const THEME_OPTIONS = [
   {
     value: "custom",
     label: "Custom",
-    icon: Droplet,
+    icon: SprayCan,
     className: "icon-xs fill-primary text-primary",
   },
 ];
@@ -183,7 +183,7 @@ function SettingsPage() {
                       .with("dark", () => <Moon className="icon-xs" />)
                       .with("system", () => <Monitor className="icon-xs" />)
                       .with("custom", () => (
-                        <Droplet className="icon-xs fill-primary text-primary" />
+                        <SprayCan className="icon-xs fill-primary text-primary" />
                       ))
                       .exhaustive()}
                     <SelectValue placeholder="Select a theme" />

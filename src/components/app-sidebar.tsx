@@ -1,5 +1,4 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import clsx from "clsx";
 import { Check, ChevronDown } from "lucide-react";
 
 import { GitHubIcon } from "@/components/icons/github";
@@ -22,7 +21,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -58,90 +56,82 @@ const AppSidebar = () => {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  className={clsx(
-                    "flex justify-start px-0!",
-                    (layout.sidebarVariant === "inset" || layout.sidebarVariant === "classic") &&
-                      "mt-2",
-                  )}
-                >
-                  <Avatar
-                    src={user.image}
-                    alt={user.name || "User avatar"}
-                    className="size-7.5 rounded-lg"
-                  />
-                  <span className="font-medium text-base">{user?.name}</span>
-                  <ChevronDown className="icon-sm mr-2 ml-auto group-data-[collapsible=icon]:hidden" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton className="flex justify-start px-0!">
+                <Avatar
+                  src={user.image}
+                  alt={user.name || "User avatar"}
+                  className="size-7.5 rounded-lg"
+                />
+                <span className="font-medium text-base">{user?.name}</span>
+                <ChevronDown className="icon-sm mr-2 ml-auto group-data-[collapsible=icon]:hidden" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
 
-              <DropdownMenuContent
-                className="min-w-52"
-                align={layout.sidebarPosition === "left" ? "start" : "end"}
-                side="bottom"
-                sideOffset={4}
-              >
-                <DropdownMenuGroup>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent className="space-y-0.5">
-                        {deviceSessions?.map((deviceSession) => (
-                          <DropdownMenuItem
-                            key={deviceSession.session.token}
-                            onSelect={() => handleAccountSwitch(deviceSession.session.token)}
-                          >
-                            <Avatar
-                              src={deviceSession.user.image}
-                              alt={deviceSession.user.name}
-                              className="mr-0.5 size-6 rounded"
-                            />
-                            <div className="flex flex-col">
-                              <p className="text-base">{deviceSession.user.name}</p>
-                              <p className="text-muted-foreground text-sm">
-                                {deviceSession.user.email}
-                              </p>
-                            </div>
-                            {deviceSession.user.id === user?.id && (
-                              <Check className="icon-xs ml-auto" />
-                            )}
-                          </DropdownMenuItem>
-                        ))}
+            <DropdownMenuContent
+              className="min-w-52"
+              align={layout.sidebarPosition === "left" ? "start" : "end"}
+              side="bottom"
+              sideOffset={4}
+            >
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Switch Account</DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent className="space-y-0.5">
+                      {deviceSessions?.map((deviceSession) => (
+                        <DropdownMenuItem
+                          key={deviceSession.session.token}
+                          onSelect={() => handleAccountSwitch(deviceSession.session.token)}
+                        >
+                          <Avatar
+                            src={deviceSession.user.image}
+                            alt={deviceSession.user.name}
+                            className="mr-0.5 size-6 rounded"
+                          />
+                          <div className="flex flex-col">
+                            <p className="text-base">{deviceSession.user.name}</p>
+                            <p className="text-muted-foreground text-sm">
+                              {deviceSession.user.email}
+                            </p>
+                          </div>
+                          {deviceSession.user.id === user?.id && (
+                            <Check className="icon-xs ml-auto" />
+                          )}
+                        </DropdownMenuItem>
+                      ))}
 
-                        <DropdownMenuSeparator />
+                      <DropdownMenuSeparator />
 
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
-                          <DropdownMenuPortal>
-                            <DropdownMenuSubContent>
-                              {/* <DropdownMenuGroup> */}
-                              <DropdownMenuItem onSelect={() => signIn("google")}>
-                                <GoogleIcon className="size-4" />
-                                Google
-                              </DropdownMenuItem>
-                              <DropdownMenuItem onSelect={() => signIn("github")}>
-                                <GitHubIcon className="size-4" />
-                                GitHub
-                              </DropdownMenuItem>
-                              {/* </DropdownMenuGroup> */}
-                            </DropdownMenuSubContent>
-                          </DropdownMenuPortal>
-                        </DropdownMenuSub>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                  <DropdownMenuItem onSelect={handleSignOut}>Log out</DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>Add an account...</DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent>
+                            {/* <DropdownMenuGroup> */}
+                            <DropdownMenuItem onSelect={() => signIn("google")}>
+                              <GoogleIcon className="size-4" />
+                              Google
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => signIn("github")}>
+                              <GitHubIcon className="size-4" />
+                              GitHub
+                            </DropdownMenuItem>
+                            {/* </DropdownMenuGroup> */}
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+                <DropdownMenuItem onSelect={handleSignOut}>Log out</DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+      </SidebarMenu>
 
       <SidebarContent>
         <SidebarGroup>

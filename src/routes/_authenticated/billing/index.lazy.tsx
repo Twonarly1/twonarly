@@ -72,7 +72,7 @@ function BillingPage() {
 
   return (
     <PageContainer>
-      <h1 className="items-baseline font-medium text-4xl">Billing</h1>
+      <h1 className="items-baseline px-4 font-medium text-4xl">Billing</h1>
 
       <section>
         <Item variant="outline" className="rounded-xl">

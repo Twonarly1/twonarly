@@ -2,7 +2,6 @@ import { createLazyFileRoute, useNavigate, useRouter } from "@tanstack/react-rou
 import { useServerFn } from "@tanstack/react-start";
 import { Camera, Pen, Trash } from "lucide-react";
 import { useRef, useState } from "react";
-import { useOnClickOutside } from "usehooks-ts";
 
 import PageContainer from "@/components/layout/page-container";
 import Avatar from "@/components/ui/avatar";
@@ -42,8 +41,6 @@ import { removeAvatar } from "@/server/functions/user/remove-avatar";
 import { updateUser } from "@/server/functions/user/update-user";
 import { uploadAvatar } from "@/server/functions/user/upload-avatar";
 
-import type { RefObject } from "react";
-
 export const Route = createLazyFileRoute("/_authenticated/profile/")({
   component: ProfilePage,
 });
@@ -61,7 +58,6 @@ function ProfilePage() {
   const deleteUserFn = useServerFn(deleteUser);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const [name, setName] = useState(user.name);
 
@@ -126,15 +122,9 @@ function ProfilePage() {
     }
   };
 
-  useOnClickOutside(containerRef as RefObject<HTMLElement>, () => {
-    if (name?.trim() && name !== user.name) {
-      handleUpdateName();
-    }
-  });
-
   return (
-    <PageContainer ref={containerRef}>
-      <h1 className="items-baseline font-medium text-4xl">Profile</h1>
+    <PageContainer>
+      <h1 className="items-baseline px-4 font-medium text-4xl">Profile</h1>
 
       <section>
         <ItemGroup>
@@ -150,7 +140,7 @@ function ProfilePage() {
                     <button
                       type="button"
                       tabIndex={0}
-                      className="group relative size-9 cursor-pointer"
+                      className="group relative size-9 cursor-pointer rounded-full"
                     >
                       <Avatar
                         src={user.image}
@@ -222,6 +212,13 @@ function ProfilePage() {
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                onBlur={() => {
+                  if (name?.trim() && name !== user.name) handleUpdateName();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") e.currentTarget.blur();
+                  if (e.key === "Escape") setName(user.name);
+                }}
                 id="name"
                 required
                 className="bg-surface shadow-none"

@@ -1,6 +1,5 @@
 "use client";
 
-import { PanelLeft } from "lucide-react";
 import React from "react";
 import { match } from "ts-pattern";
 
@@ -11,6 +10,7 @@ import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Slot } from "@/lib/utils/slot";
 import { useLayout } from "@/providers/layout-provider";
+import { Kbd } from "./kbd";
 
 import type { CSSProperties } from "react";
 
@@ -191,6 +191,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
                   : "group-data-[collapsible=offcanvas]:translate-x-full",
               ),
           isFloating && (isLeft ? "ml-2 py-2" : "py-2"),
+          variant === "inset" && "mt-2.25",
           className,
         )}
         {...props}
@@ -211,7 +212,7 @@ function Sidebar({ className, children, ...props }: React.ComponentProps<"div">)
 }
 
 function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const { layout } = useLayout();
 
   return (
@@ -222,27 +223,55 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
         layout.sidebarCollapsible === "none" && "invisible",
       )}
     >
-      <Button
-        data-sidebar="trigger"
-        data-slot="sidebar-trigger"
-        variant="ghost"
-        size="icon"
-        className={cn(
-          "z-10 flex transition-transform duration-150 custom:hover:bg-surface",
-          layout.sidebarVariant === "inset" && "m-2",
-          layout.sidebarVariant === "classic" && "m-4",
-          layout.sidebarVariant === "floating" && "m-4",
-          className,
-        )}
-        onClick={(event) => {
-          onClick?.(event);
-          toggleSidebar();
-        }}
-        {...props}
-      >
-        <PanelLeft className="icon-sm" />
-        <span className="sr-only">Toggle Sidebar</span>
-      </Button>
+      <Tooltip delayDuration={500}>
+        <TooltipTrigger asChild>
+          <Button
+            data-sidebar="trigger"
+            data-slot="sidebar-trigger"
+            variant="ghost"
+            size="icon"
+            className={cn(
+              "z-10 flex transition-transform duration-150 custom:hover:bg-surface",
+              layout.sidebarVariant === "floating" && "m-2 mb-0",
+              className,
+            )}
+            onClick={(event) => {
+              onClick?.(event);
+              toggleSidebar();
+            }}
+            {...props}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>{state === "collapsed" ? "Expand sidebar" : "Collapse sidebar"}</title>
+              <rect
+                x="1.5"
+                y="1.5"
+                width="15"
+                height="15"
+                rx="4"
+                stroke="currentColor"
+                strokeWidth="0.7"
+              />
+              <rect x="4" y="3.5" width="5" height="11" rx="2" fill="currentColor" opacity="0.3" />
+            </svg>
+            <span className="sr-only">Toggle Sidebar</span>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent
+          side={layout?.sidebarPosition === "right" ? "left" : "right"}
+          sideOffset={8}
+          className="bg-surface"
+        >
+          {state === "collapsed" ? "Collapse sidebar" : "Expand sidebar"}{" "}
+          <Kbd className="ml-2">B</Kbd>
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }
@@ -279,17 +308,6 @@ function SidebarInset({ className, children, ...props }: React.ComponentProps<"m
   );
 }
 
-function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="sidebar-header"
-      data-sidebar="header"
-      className="flex flex-col gap-2 p-2 group-data-[collapsible=icon]:items-center"
-      {...props}
-    />
-  );
-}
-
 function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -310,7 +328,7 @@ function SidebarGroup({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-group"
       data-sidebar="group"
       className={cn(
-        "relative flex w-full min-w-0 flex-col p-2 group-data-[collapsible=icon]:items-center",
+        "relative flex w-full min-w-0 flex-col group-data-[collapsible=icon]:items-center",
         className,
       )}
       {...props}
@@ -330,7 +348,7 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "flex h-8 shrink-0 select-none items-center px-0 font-medium text-sidebar-foreground/70 text-sm outline-hidden group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0",
+        "mt-4 flex shrink-0 select-none items-center px-2 font-medium text-sidebar-foreground/70 text-sm outline-hidden group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0",
         className,
       )}
       {...props}
@@ -344,7 +362,7 @@ function SidebarMenu({ className, ...props }: React.ComponentProps<"ul">) {
       data-slot="sidebar-menu"
       data-sidebar="menu"
       className={cn(
-        "flex w-full min-w-0 flex-col gap-px group-data-[collapsible=icon]:items-center",
+        "flex w-full min-w-0 flex-col gap-px p-2 group-data-[collapsible=icon]:items-center",
         className,
       )}
       {...props}
@@ -426,7 +444,6 @@ export {
   SidebarContent,
   SidebarGroup,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,

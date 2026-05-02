@@ -55,7 +55,7 @@ function DesktopLayout() {
       <AppSidebar />
       <SidebarInset>
         <div className="overflow-y-auto pb-12">
-          <header className="shrink-0 items-center gap-2 px-2">
+          <header className="shrink-0 items-center gap-2 p-2">
             <SidebarTrigger />
           </header>
           <Outlet />
