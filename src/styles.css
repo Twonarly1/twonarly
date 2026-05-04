@@ -213,8 +213,8 @@ html.pointer-cursor [data-slot="dropdown-menu-checkbox-item"] * {
 }
 
 .color-picker-custom .react-colorful__saturation-pointer {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
 }
 
 .color-picker-custom .react-colorful__saturation {

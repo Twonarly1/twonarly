@@ -5,6 +5,7 @@ import { useStoreWithEqualityFn } from "zustand/traditional";
 export enum DialogType {
   CreateTask = "create_task",
   SearchTask = "search_task",
+  ImportTheme = "import_theme",
 }
 
 interface DialogState {

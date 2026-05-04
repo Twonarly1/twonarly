@@ -1,14 +1,27 @@
-import { lchToHex } from "@/lib/utils/color";
+import { colord, extend } from "colord";
+import lchPlugin from "colord/plugins/lch";
 
-import type { LchTuple } from "@/lib/utils/color";
+extend([lchPlugin]);
+
+export type LchTuple = [number, number, number]; // [L, C, H]
+
+export function hexToLch(hex: string): LchTuple {
+  const { l, c, h } = colord(hex).toLch();
+  return [l, c, h];
+}
+
+export function lchToHex(tuple: LchTuple): string {
+  const [l, c, h] = tuple;
+  return colord({ l, c, h }).toHex();
+}
 
 export interface CustomTheme {
   base?: LchTuple;
   accent?: LchTuple;
-  contrast: number;
+  contrast?: number;
   sidebar?: {
     base?: LchTuple;
-    contrast: number;
+    contrast?: number;
   };
 }
 
@@ -18,11 +31,11 @@ type ColorPalette = Record<string, [number, number, number]>;
 
 function computePalette(theme: CustomTheme): ColorPalette {
   const palette: ColorPalette = {};
+  const contrast = theme.contrast ?? 100;
 
   if (theme.base) {
     const [L, C, H] = theme.base;
     const isLight = L >= 50;
-    const { contrast } = theme;
 
     palette.background = [L, C, H];
     palette.content = [isLight ? clamp(L + 3) : clamp(L + 2), C * 0.9, H];
@@ -62,16 +75,14 @@ function computePalette(theme: CustomTheme): ColorPalette {
 
   if (theme.sidebar?.base) {
     const [sL, sC, sH] = theme.sidebar.base;
-    const sc = theme.sidebar.contrast;
+    const sidebarContrast = theme.sidebar.contrast ?? 50;
     palette.sidebar = [sL, sC, sH];
     palette["sidebar-foreground"] = [sL >= 50 ? 15 : 95, 0, 0];
-    palette["sidebar-accent"] = [clamp(sL - sc * 0.1), sC * 0.8, sH];
+    palette["sidebar-accent"] = [clamp(sL - sidebarContrast * 0.1), sC * 0.8, sH];
   }
 
   return palette;
 }
-
-// ─── Client: apply LCH values to DOM ────────────────────────────────────────
 
 export function applyCustomTheme(root: HTMLElement, theme: CustomTheme) {
   const palette = computePalette(theme);
@@ -92,8 +103,6 @@ export function clearCustomTheme(root: HTMLElement) {
     root.style.removeProperty(`--${key}`);
   }
 }
-
-// ─── Server: precompute hex values for cookie/SSR ───────────────────────────
 
 export function computeColorsFromTheme(theme: CustomTheme): Record<string, string> {
   const palette = computePalette(theme);

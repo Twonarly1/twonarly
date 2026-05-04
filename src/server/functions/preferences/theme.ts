@@ -12,11 +12,11 @@ const lchTuple = tuple([number(), number(), number()]);
 const customThemeValidator = object({
   base: optional(lchTuple),
   accent: optional(lchTuple),
-  contrast: number(),
+  contrast: optional(number()),
   sidebar: optional(
     object({
       base: optional(lchTuple),
-      contrast: number(),
+      contrast: optional(number()),
     }),
   ),
 });

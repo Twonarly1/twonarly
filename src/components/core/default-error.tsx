@@ -12,15 +12,13 @@ const DefaultError = ({ error }: ErrorComponentProps) => {
 
   return (
     <div className="mx-auto flex min-h-full w-full max-w-lg flex-col items-center justify-center gap-8 text-center">
-      {/* Icon badge */}
-      <TriangleAlert className="size-16 rounded-full bg-red-100 p-2 text-red-600" />
+      <TriangleAlert className="size-24 shrink-0 p-4 text-destructive" />
 
       <div className="space-y-2">
         <h1 className="font-medium text-2xl">Something went wrong</h1>
         <p className="text-base text-muted-foreground">{message}</p>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-3">
         <Button
           variant="outline"

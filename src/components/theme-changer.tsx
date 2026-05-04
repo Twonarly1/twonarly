@@ -8,8 +8,8 @@ import { Collapsible } from "@/components/ui/collapsible";
 import { Input } from "@/components/ui/input";
 import { Item, ItemActions, ItemContent, ItemTitle } from "@/components/ui/item";
 import { SliderControl } from "@/components/ui/slider";
-import { hexToLch, lchToHex } from "@/lib/utils/color";
-import { computeColorsFromTheme } from "@/lib/utils/theme";
+import { capitalizeFirstLetter } from "@/lib/utils/format";
+import { computeColorsFromTheme, hexToLch, lchToHex } from "@/lib/utils/theme";
 
 import type { CustomTheme } from "@/lib/utils/theme";
 
@@ -56,7 +56,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
       .with("sidebar", () =>
         debouncedOnChange({
           ...theme,
-          sidebar: { contrast: theme.sidebar?.contrast ?? 30, ...theme.sidebar, base: lch },
+          sidebar: { contrast: sidebarContrast, ...theme.sidebar, base: lch },
         }),
       )
       .with("content", () => debouncedOnChange({ ...theme, base: lch }))
@@ -79,15 +79,18 @@ export default function ThemeChanger({ theme, onChange }: Props) {
     if (activeZone === "sidebar") setActiveZone(null);
   };
 
+  const contrast = theme.contrast ?? 100;
+  const sidebarContrast = theme.sidebar?.contrast ?? 50;
+
   const contrastConfig = match(activeZone)
     .with("content", () => ({
-      value: theme.contrast,
+      value: contrast,
       onChange: (v: number) => debouncedOnChange({ ...theme, contrast: v }),
     }))
     .with("sidebar", () =>
       hasSidebarOverride && theme.sidebar
         ? {
-            value: theme.sidebar.contrast,
+            value: sidebarContrast,
             onChange: (v: number) =>
               debouncedOnChange({ ...theme, sidebar: { ...theme.sidebar!, contrast: v } }),
           }
@@ -96,94 +99,91 @@ export default function ThemeChanger({ theme, onChange }: Props) {
     .otherwise(() => null);
 
   return (
-    <div className="flex w-full flex-col gap-6 p-4 sm:gap-3">
-      {/* ── Layout map ── */}
-      <div className="mx-auto flex w-full flex-col items-center gap-2 sm:max-w-100 sm:p-2">
-        <div className="grid w-full max-w-80 grid-cols-[100px_1fr] gap-x-2 overflow-hidden sm:max-w-full">
-          {/* Surface */}
-          <Button
-            variant="unstyled"
-            onClick={() => handleZoneClick("sidebar")}
-            className="row-span-2 hidden h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-sidebar pt-2 text-sidebar-foreground transition-transform hover:bg-sidebar/80 hover:text-sidebar-foreground active:scale-[0.99] sm:flex"
-            style={{
-              opacity: activeZone !== null && activeZone !== "sidebar" ? 0.3 : 1,
-            }}
-          >
-            <span className="mx-auto flex cursor-crosshair select-none">Sidebar</span>
+    <div className="mx-auto w-full space-y-4 p-4 sm:max-w-lg sm:p-8">
+      <div className="grid w-full grid-cols-[100px_1fr] gap-x-2 overflow-hidden">
+        {/* Surface */}
+        <Button
+          variant="unstyled"
+          onClick={() => handleZoneClick("sidebar")}
+          className="row-span-2 hidden h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-sidebar pt-2 text-sidebar-foreground transition-transform hover:bg-sidebar/80 hover:text-sidebar-foreground active:scale-[0.99] sm:flex"
+          style={{
+            opacity: activeZone !== null && activeZone !== "sidebar" ? 0.3 : 1,
+          }}
+        >
+          <span className="mx-auto flex cursor-crosshair select-none">Sidebar</span>
 
-            {/* Mock nav items showing sidebar-accent contrast */}
-            <div className="mt-4 flex w-full cursor-crosshair flex-col justify-start gap-1">
-              <div className="h-4 cursor-crosshair rounded-md bg-sidebar-accent" />
-              <div className="h-4 w-full cursor-crosshair rounded-md bg-sidebar-accent/60" />
-              <div className="h-4 w-full cursor-crosshair rounded-md bg-sidebar-accent/60" />
-            </div>
-          </Button>
+          {/* Mock nav items showing sidebar-accent contrast */}
+          <div className="mt-4 flex w-full cursor-crosshair flex-col justify-start gap-1">
+            <div className="h-4 cursor-crosshair rounded-md bg-sidebar-accent" />
+            <div className="h-4 w-full cursor-crosshair rounded-md bg-sidebar-accent/60" />
+            <div className="h-4 w-full cursor-crosshair rounded-md bg-sidebar-accent/60" />
+          </div>
+        </Button>
 
-          {/* Content */}
-          <Button
-            variant="unstyled"
-            onMouseDown={() => handleZoneClick("content")}
-            className="z-10 col-span-2 flex h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-content px-8 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99] sm:col-span-1"
-            style={{
-              opacity: activeZone !== null && activeZone !== "content" ? 0.3 : 1,
-            }}
-          >
-            <span className="mt-2 w-full cursor-crosshair select-none text-center">Content</span>
-            <div className="border- mt-8 flex w-full flex-1 cursor-crosshair! items-center justify-center rounded-lg rounded-b-none border border-b-0 border-dashed bg-surface">
-              Surface
-            </div>
-          </Button>
+        {/* Content */}
+        <Button
+          variant="unstyled"
+          onMouseDown={() => handleZoneClick("content")}
+          className="z-10 col-span-2 flex h-60 cursor-crosshair! flex-col items-start justify-start rounded-xl border-border border-dashed bg-content px-8 text-foreground transition-transform hover:bg-content/80 active:scale-[0.99] sm:col-span-1"
+          style={{
+            opacity: activeZone !== null && activeZone !== "content" ? 0.3 : 1,
+          }}
+        >
+          <span className="mt-2 w-full cursor-crosshair select-none text-center">Content</span>
+          <div className="border- mt-8 flex w-full flex-1 cursor-crosshair! items-center justify-center rounded-lg rounded-b-none border border-b-0 border-dashed bg-surface">
+            Surface
+          </div>
+        </Button>
 
-          {/* Accent */}
-          <Button
-            variant="unstyled"
-            onClick={() => handleZoneClick("accent")}
-            className="col-span-2 mx-auto mt-2 flex h-8 w-full cursor-crosshair! border border-border border-dashed bg-primary text-primary-foreground opacity-30 transition-transform hover:bg-primary/80 active:scale-[0.99]"
-            style={{
-              opacity: activeZone !== null && activeZone !== "accent" ? 0.3 : 1,
-            }}
-          >
-            <span className="select-none">Accent</span>
-          </Button>
-        </div>
+        {/* Accent */}
+        <Button
+          variant="unstyled"
+          onClick={() => handleZoneClick("accent")}
+          className="col-span-2 mx-auto mt-2 flex h-8 w-full cursor-crosshair! border border-border border-dashed bg-primary text-primary-foreground opacity-30 transition-transform hover:bg-primary/80 active:scale-[0.99]"
+          style={{
+            opacity: activeZone !== null && activeZone !== "accent" ? 0.3 : 1,
+          }}
+        >
+          <span className="select-none">Accent</span>
+        </Button>
       </div>
 
       <Collapsible open={activeZone !== null}>
-        <div className="mx-auto flex w-full flex-col gap-2 py-4 sm:max-w-md sm:px-8">
-          <div className="flex w-full items-center justify-between gap-2">
-            <span className="font-medium text-base first-letter:uppercase">{activeZone}</span>
+        <Item className="px-0">
+          <ItemContent>
+            <ItemTitle>{capitalizeFirstLetter(activeZone ?? "")}</ItemTitle>
+          </ItemContent>
 
-            <div className="flex items-center gap-2">
-              {hasSidebarOverride && activeZone === "sidebar" && (
-                <Button variant="ghost" size="sm" onClick={handleClearSidebar}>
-                  Clear
-                </Button>
-              )}
+          <ItemActions>
+            {hasSidebarOverride && activeZone === "sidebar" && (
+              <Button variant="ghost" size="sm" onClick={handleClearSidebar}>
+                Clear
+              </Button>
+            )}
 
-              <Input value={inputValue} onChange={handleInputChange} placeholder="#000000" />
-            </div>
-          </div>
+            <Input value={inputValue} onChange={handleInputChange} placeholder="#000000" />
+          </ItemActions>
+        </Item>
 
-          <div className="color-picker-custom cursor-crosshair!">
-            <HexColorPicker color={inputValue || "#000000"} onChange={handleColorChange} />
-          </div>
-
-          {contrastConfig && (
-            <Item>
-              <ItemContent>
-                <ItemTitle>
-                  {match(activeZone)
-                    .with("content", () => "Surface Contrast")
-                    .with("sidebar", () => "Sidebar Button Contrast")
-                    .otherwise(() => "")}
-                </ItemTitle>
-              </ItemContent>
-              <ItemActions>
-                <SliderControl value={contrastConfig.value} onChange={contrastConfig.onChange} />
-              </ItemActions>
-            </Item>
-          )}
+        <div className="color-picker-custom cursor-crosshair! p-2">
+          <HexColorPicker color={inputValue || "#000000"} onChange={handleColorChange} />
         </div>
+
+        {contrastConfig && (
+          <Item className="px-0">
+            <ItemContent>
+              <ItemTitle>
+                {match(activeZone)
+                  .with("content", () => "Surface Contrast")
+                  .with("sidebar", () => "Sidebar Button Contrast")
+                  .otherwise(() => "")}
+              </ItemTitle>
+            </ItemContent>
+            <ItemActions className="flex-1">
+              <SliderControl value={contrastConfig.value} onChange={contrastConfig.onChange} />
+            </ItemActions>
+          </Item>
+        )}
       </Collapsible>
     </div>
   );

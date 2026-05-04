@@ -106,7 +106,7 @@ function ItemTitle({ ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="item-title"
-      className="flex w-fit items-center gap-2 font-medium text-base text-foreground leading-snug group-data-[variant=destructive]/item:text-destructive"
+      className="flex w-fit items-center gap-2 font-medium text-base text-foreground leading-snug first-letter:uppercase group-data-[variant=destructive]/item:text-destructive"
       {...props}
     />
   );

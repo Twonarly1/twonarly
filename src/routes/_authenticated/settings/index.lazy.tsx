@@ -1,21 +1,32 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import {
-  ArrowDownToLine,
-  ArrowUpToLine,
   ChevronDown,
+  Copy,
+  FileBracesCorner,
   Monitor,
   Moon,
-  SprayCan,
+  MoreHorizontal,
+  Palette,
+  SquareChevronDown,
+  SquareChevronUp,
   Sun,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
+import ImportThemeDialog from "@/components/import-theme-dialog";
 import PageContainer from "@/components/layout/page-container";
 import Section from "@/components/layout/section";
 import ThemeChanger from "@/components/theme-changer";
 import { Button } from "@/components/ui/button";
 import { Collapsible } from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Item,
   ItemActions,
@@ -33,6 +44,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { toast } from "@/components/ui/toast";
+import { useCopy } from "@/lib/hooks/use-copy";
+import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { applyCustomTheme, computeColorsFromTheme } from "@/lib/utils/theme";
 import { useAppearance } from "@/providers/appearance-provider";
@@ -40,7 +54,7 @@ import { useLayout } from "@/providers/layout-provider";
 import { useTheme } from "@/providers/theme-provider";
 import { setThemePreferences } from "@/server/functions/preferences/theme";
 
-import type { LchTuple } from "@/lib/utils/color";
+import type { CustomTheme } from "@/lib/utils/theme";
 import type { AppearanceSettings } from "@/providers/appearance-provider";
 import type { LayoutSettings } from "@/providers/layout-provider";
 
@@ -51,21 +65,10 @@ const THEME_OPTIONS = [
   {
     value: "custom",
     label: "Custom",
-    icon: SprayCan,
-    className: "icon-xs fill-primary text-primary",
+    icon: Palette,
+    className: "icon-xs",
   },
 ];
-
-interface CustomTheme {
-  base?: LchTuple;
-  accent?: LchTuple;
-  contrast: number;
-  sidebar?: {
-    base?: LchTuple;
-    accent?: LchTuple;
-    contrast: number;
-  };
-}
 
 const initialTheme: CustomTheme = {
   contrast: 100,
@@ -84,9 +87,14 @@ function SettingsPage() {
   const { appearance, updateAppearance } = useAppearance();
   const { layout, updateLayout } = useLayout();
   const isMobile = useIsMobile();
-  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+  const { copy } = useCopy(JSON.stringify(customTheme, null, 2));
 
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
   const [isThemeChangerOpen, setIsThemeChangerOpen] = useState(theme === "custom");
+
+  const { setIsOpen: setIsImportThemeOpen } = useDialogStore({
+    type: DialogType.ImportTheme,
+  });
 
   const handleThemeChange = (v: string) => {
     const newTheme = v as typeof theme;
@@ -161,18 +169,45 @@ function SettingsPage() {
             </ItemContent>
             <ItemActions>
               {theme === "custom" && (
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  className="transition-none"
-                  onClick={() => setIsThemeChangerOpen(!isThemeChangerOpen)}
-                >
-                  {isThemeChangerOpen ? (
-                    <ArrowUpToLine className="icon-sm" />
-                  ) : (
-                    <ArrowDownToLine className="icon-sm" />
-                  )}
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon-sm">
+                      <MoreHorizontal className="icon-sm" />
+                    </Button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent
+                    align={layout.sidebarPosition === "left" ? "start" : "end"}
+                    side="bottom"
+                    sideOffset={4}
+                  >
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem onSelect={() => setIsThemeChangerOpen(!isThemeChangerOpen)}>
+                        {isThemeChangerOpen ? (
+                          <SquareChevronUp className="icon-sm" />
+                        ) : (
+                          <SquareChevronDown className="icon-sm" />
+                        )}
+                        {isThemeChangerOpen ? "Close" : "Open"} Theme Editor
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onSelect={() => setIsImportThemeOpen(true)}>
+                        <FileBracesCorner className="icon-sm" />
+                        Import Theme
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          copy();
+                          toast.success({
+                            title: "Theme copied!",
+                          });
+                        }}
+                      >
+                        <Copy className="icon-sm" />
+                        Copy Theme
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
 
               <Select value={theme} onValueChange={handleThemeChange}>
@@ -182,9 +217,7 @@ function SettingsPage() {
                       .with("light", () => <Sun className="icon-xs" />)
                       .with("dark", () => <Moon className="icon-xs" />)
                       .with("system", () => <Monitor className="icon-xs" />)
-                      .with("custom", () => (
-                        <SprayCan className="icon-xs fill-primary text-primary" />
-                      ))
+                      .with("custom", () => <Palette className="icon-xs" />)
                       .exhaustive()}
                     <SelectValue placeholder="Select a theme" />
                     <ChevronDown className="icon-xs ml-2" />
@@ -320,6 +353,8 @@ function SettingsPage() {
           </ItemGroup>
         </Section>
       )}
+
+      <ImportThemeDialog onChange={save} />
     </PageContainer>
   );
 }
