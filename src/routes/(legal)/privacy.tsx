@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { app } from "@/lib/config/app.config";
 
-export const Route = createFileRoute("/privacy")({
+export const Route = createFileRoute("/(legal)/privacy")({
   component: PrivacyPage,
   head: () => ({
     meta: [{ title: `Privacy Policy — ${app.name}` }],

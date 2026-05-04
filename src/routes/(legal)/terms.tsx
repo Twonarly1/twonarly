@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { app } from "@/lib/config/app.config";
 
-export const Route = createFileRoute("/terms")({
+export const Route = createFileRoute("/(legal)/terms")({
   component: TermsPage,
   head: () => ({
     meta: [{ title: `Terms of Service — ${app.name}` }],
