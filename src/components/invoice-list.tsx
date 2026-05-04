@@ -25,7 +25,6 @@ import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 const INVOICE_LIMIT = 6;
 
 const InvoiceList = () => {
-  const [showInvoices, setShowInvoices] = useState(false);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
