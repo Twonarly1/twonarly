@@ -1,5 +1,5 @@
 import { Link, useNavigate, useRouter } from "@tanstack/react-router";
-import { Check, ChevronDown } from "lucide-react";
+import { Check, ChevronDown, SquareDashed } from "lucide-react";
 
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
@@ -134,9 +134,26 @@ const AppSidebar = () => {
 
       <SidebarContent>
         <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                isActive={"/dashboard" === router.state.location.pathname}
+                tooltip="Dashboard"
+                asChild
+              >
+                <Link to="/dashboard" className="rounded-lg">
+                  <SquareDashed className="icon-sm" />
+                  <span className="text-base">Dashboard</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+
+        <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarMenu>
-            {navLinks.map((item) => (
+            {navLinks.slice(1, navLinks.length).map((item) => (
               <SidebarMenuItem key={item.to}>
                 <SidebarMenuButton
                   isActive={item.to === router.state.location.pathname}

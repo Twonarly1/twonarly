@@ -1,6 +1,6 @@
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 
 import InvoiceList from "@/components/invoice-list";
@@ -29,6 +29,8 @@ function BillingPage() {
   const { upgraded } = Route.useSearch();
   const { subscriptions, plans } = Route.useLoaderData();
   const navigate = useNavigate();
+
+  const [showInvoices, setShowInvoices] = useState(false);
 
   const subscription = subscriptions?.find(
     (sub) => sub.status === "active" || sub.status === "trialing",
@@ -135,7 +137,17 @@ function BillingPage() {
       </section>
 
       <Section title="Invoices" description="Your billing history and receipts">
-        <InvoiceList />
+        {showInvoices ? (
+          <InvoiceList />
+        ) : (
+          <Button
+            variant="outline"
+            onClick={() => setShowInvoices(true)}
+            className="absolute top-2 right-4 mx-auto flex"
+          >
+            Load invoices
+          </Button>
+        )}
       </Section>
     </PageContainer>
   );

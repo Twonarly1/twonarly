@@ -25,17 +25,18 @@ import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
 const INVOICE_LIMIT = 6;
 
 const InvoiceList = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["invoices"],
-    queryFn: () => fetchInvoices({ data: { limit: INVOICE_LIMIT, startingAfter: undefined } }),
-    staleTime: 1000 * 60 * 5,
-  });
-
+  const [showInvoices, setShowInvoices] = useState(false);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [hasMore, setHasMore] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const animateFromIndex = useRef(0);
   const initialized = useRef(false);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["invoices"],
+    queryFn: () => fetchInvoices({ data: { limit: INVOICE_LIMIT, startingAfter: undefined } }),
+    staleTime: 1000 * 60 * 5,
+  });
 
   // Sync query data into local state for pagination
   if (data && !initialized.current) {
