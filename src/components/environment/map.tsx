@@ -213,12 +213,10 @@ export default function Map3D() {
   return (
     <div
       ref={wrapRef}
+      className="overflow-hidden bg-content"
       style={{
         height: "100vh",
         width: "100%",
-        background: "#ffffff",
-        overflow: "hidden",
-        cursor: "grab",
       }}
     >
       <div

@@ -54,8 +54,8 @@ export function DataTable({ table }: Props) {
             <TableRow data-static="true">
               <TableCell colSpan={table.getAllColumns().length}>
                 <Empty>
-                  <EmptyMedia>
-                    <CheckSquare />
+                  <EmptyMedia className="bg-transparent">
+                    <CheckSquare className="bg-transparent" />
                   </EmptyMedia>
                   <EmptyHeader>
                     <EmptyTitle>No tasks</EmptyTitle>

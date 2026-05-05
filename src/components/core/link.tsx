@@ -10,10 +10,11 @@ import type { AnchorHTMLAttributes } from "react";
 const BasicLink = ({
   variant,
   size,
+  color,
   className,
   ...rest
 }: AnchorHTMLAttributes<HTMLAnchorElement> & VariantProps<typeof buttonVariants>) => (
-  <a className={clsx(buttonVariants({ variant, size }), className)} {...rest} />
+  <a className={clsx(buttonVariants({ variant, size, color }), className)} {...rest} />
 );
 
 const CreatedLink = createLink(BasicLink);

@@ -346,7 +346,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-active={isActive}
       className={clsx(
-        "peer/menu-button group/menu-button group/button text-sm",
+        "peer/menu-button group/menu-button text-sm",
         "flex h-8 w-full select-none items-center gap-1.5 overflow-hidden px-2 py-1.5 outline-none",
         "whitespace-nowrap font-medium text-sidebar-foreground/70 leading-snug",
         "rounded-lg border border-transparent",

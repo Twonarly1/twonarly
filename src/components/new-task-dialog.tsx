@@ -94,9 +94,10 @@ const NewTaskDialog = () => {
             placeholder="Enter a task name..."
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="h-8"
           />
           <div className="mt-2 flex justify-end">
-            <Button type="submit" disabled={!canSubmit} press="scale">
+            <Button type="submit" disabled={!canSubmit} press="scale" color="primary">
               Create task
             </Button>
           </div>

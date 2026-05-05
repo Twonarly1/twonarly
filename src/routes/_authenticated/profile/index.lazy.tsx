@@ -235,7 +235,7 @@ function ProfilePage() {
         <ItemActions>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="destructive">Delete</Button>
+              <Button variant="ghost">Delete</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -249,7 +249,7 @@ function ProfilePage() {
                 <DialogClose asChild>
                   <Button variant="ghost">Cancel</Button>
                 </DialogClose>
-                <Button variant="destructive-fill" onClick={handleDeleteAccount}>
+                <Button color="destructive" onClick={handleDeleteAccount}>
                   Delete
                 </Button>
               </DialogFooter>

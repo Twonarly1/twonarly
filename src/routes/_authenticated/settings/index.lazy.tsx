@@ -52,6 +52,7 @@ import { applyCustomTheme, computeColorsFromTheme } from "@/lib/utils/theme";
 import { useAppearance } from "@/providers/appearance-provider";
 import { useLayout } from "@/providers/layout-provider";
 import { useTheme } from "@/providers/theme-provider";
+import { FONT_SIZES } from "@/server/functions/preferences/appearance";
 import { setThemePreferences } from "@/server/functions/preferences/theme";
 
 import type { CustomTheme } from "@/lib/utils/theme";
@@ -59,14 +60,14 @@ import type { AppearanceSettings } from "@/providers/appearance-provider";
 import type { LayoutSettings } from "@/providers/layout-provider";
 
 const THEME_OPTIONS = [
-  { value: "light", label: "Light", icon: Sun, className: "icon-xs" },
-  { value: "dark", label: "Dark", icon: Moon, className: "icon-xs" },
-  { value: "system", label: "System", icon: Monitor, className: "icon-xs" },
+  { value: "light", label: "Light", icon: Sun, className: "icon-sm" },
+  { value: "dark", label: "Dark", icon: Moon, className: "icon-sm" },
+  { value: "system", label: "System", icon: Monitor, className: "icon-sm" },
   {
     value: "custom",
     label: "Custom",
     icon: Palette,
-    className: "icon-xs",
+    className: "icon-sm",
   },
 ];
 
@@ -150,11 +151,11 @@ function SettingsPage() {
               </SelectTrigger>
               <SelectContent align="end">
                 <SelectGroup>
-                  <SelectItem value="smaller">Smaller</SelectItem>
-                  <SelectItem value="small">Small</SelectItem>
-                  <SelectItem value="default">Default</SelectItem>
-                  <SelectItem value="large">Large</SelectItem>
-                  <SelectItem value="larger">Larger</SelectItem>
+                  {FONT_SIZES.map((size) => (
+                    <SelectItem key={size} value={size}>
+                      <span style={{ fontSize: size }}> {size}</span>
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -214,10 +215,10 @@ function SettingsPage() {
                 <SelectTrigger asChild>
                   <Button variant="outline">
                     {match(theme)
-                      .with("light", () => <Sun className="icon-xs" />)
-                      .with("dark", () => <Moon className="icon-xs" />)
-                      .with("system", () => <Monitor className="icon-xs" />)
-                      .with("custom", () => <Palette className="icon-xs" />)
+                      .with("light", () => <Sun className="icon-sm" />)
+                      .with("dark", () => <Moon className="icon-sm" />)
+                      .with("system", () => <Monitor className="icon-sm" />)
+                      .with("custom", () => <Palette className="icon-sm" />)
                       .exhaustive()}
                     <SelectValue placeholder="Select a theme" />
                     <ChevronDown className="icon-xs" />

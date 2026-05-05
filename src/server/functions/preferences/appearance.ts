@@ -6,9 +6,11 @@ import { COOKIES } from "@/lib/constants/cookies";
 
 import type { InferOutput } from "valibot";
 
-const fontSizeSchema = picklist(["smaller", "small", "default", "large", "larger"]);
+const fontSizeSchema = picklist(["10px", "11px", "12px", "13px", "14px"]);
 
-type FontSize = InferOutput<typeof fontSizeSchema>;
+export type FontSize = InferOutput<typeof fontSizeSchema>;
+
+export const FONT_SIZES = fontSizeSchema.options;
 
 export const getAppearance = createServerFn().handler(async () => {
   const fontSize = (getCookie(COOKIES.fontSize) || "default") as FontSize;

@@ -75,12 +75,18 @@ function LandingPage() {
           <span className="font-semibold text-foreground">{app.name}</span>
           <nav className="flex items-center gap-3">
             {session ? (
-              <Link to="/tasks" search={{ archived: undefined, newTask: undefined }}>
+              <Link
+                to="/tasks"
+                color="primary"
+                search={{ archived: undefined, newTask: undefined }}
+              >
                 Open App
                 <ArrowRight className="size-3.5" />
               </Link>
             ) : (
-              <Link to="/sign-in">Sign in</Link>
+              <Link to="/sign-in" color="primary">
+                Sign in
+              </Link>
             )}
           </nav>
         </div>
@@ -118,13 +124,17 @@ function LandingPage() {
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               {session ? (
-                <Link to="/tasks" search={{ archived: undefined, newTask: undefined }}>
+                <Link
+                  to="/tasks"
+                  color="primary"
+                  search={{ archived: undefined, newTask: undefined }}
+                >
                   Open App
                   <ArrowRight className="size-4" />
                 </Link>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link to="/sign-in">
+                  <Link to="/sign-in" color="primary">
                     Get started free
                     <ArrowRight className="icon-sm" />
                   </Link>
@@ -246,12 +256,16 @@ function LandingPage() {
             </p>
 
             {session ? (
-              <Link to="/tasks" search={{ archived: undefined, newTask: undefined }}>
+              <Link
+                to="/tasks"
+                color="primary"
+                search={{ archived: undefined, newTask: undefined }}
+              >
                 Open App
                 <ArrowRight className="icon-sm" />
               </Link>
             ) : (
-              <Link to="/sign-in">
+              <Link to="/sign-in" color="primary">
                 Create your account
                 <ArrowRight className="icon-sm" />
               </Link>

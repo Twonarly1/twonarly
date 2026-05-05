@@ -5,8 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { setAppearance as setAppearanceServerFn } from "@/server/functions/preferences/appearance";
 
 import type { PropsWithChildren } from "react";
-
-type FontSize = "smaller" | "small" | "default" | "large" | "larger";
+import type { FontSize } from "@/server/functions/preferences/appearance";
 
 type AppearanceSettings = {
   fontSize: FontSize;
@@ -46,13 +45,7 @@ export function AppearanceProvider({
   // Sync to DOM
   useEffect(() => {
     const root = document.documentElement;
-
-    if (appearance.fontSize !== "default") {
-      root.setAttribute("data-font-size", appearance.fontSize);
-    } else {
-      root.removeAttribute("data-font-size");
-    }
-
+    root.style.setProperty("--font-size-base", appearance.fontSize);
     root.classList.toggle("pointer-cursor", appearance.usePointerCursor);
   }, [appearance.fontSize, appearance.usePointerCursor]);
 

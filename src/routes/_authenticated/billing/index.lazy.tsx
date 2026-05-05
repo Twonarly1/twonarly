@@ -141,7 +141,7 @@ function BillingPage() {
           <InvoiceList />
         ) : (
           <Button
-            variant="outline"
+            variant="outline-surface"
             onClick={() => setShowInvoices(true)}
             className="absolute top-2 right-4"
           >
