@@ -32,9 +32,9 @@ function toast(intent: Intent, data: ToastData) {
   return toastPrimitive.custom((id) => (
     <div className="relative flex items-center gap-3 rounded-lg bg-surface px-3 py-2 shadow-lg ring-1 ring-black/5 sm:min-w-sm">
       <Button
-        variant="unstyled"
+        variant="ghost"
         size="icon-xs"
-        className="absolute top-1 right-1 text-muted-foreground hover:text-foreground"
+        className="absolute top-1 right-1"
         onClick={() => toastPrimitive.dismiss(id)}
       >
         <X className="icon-sm" />

@@ -49,12 +49,8 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close asChild data-slot="dialog-close">
-            <Button
-              variant="unstyled"
-              size="icon-xs"
-              className="absolute top-2 right-2 text-muted-foreground hover:text-foreground"
-            >
-              <X className="icon-sm" />
+            <Button variant="ghost" size="icon-xs" className="absolute top-2 right-2">
+              <X className="icon-sm mx-auto" />
               <span className="sr-only">Close</span>
             </Button>
           </DialogPrimitive.Close>

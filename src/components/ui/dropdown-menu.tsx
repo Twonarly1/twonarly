@@ -163,7 +163,7 @@ function DropdownMenuSubTrigger({
     <DropdownMenuPrimitive.SubTrigger
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
-      className="custom:focus-bg-surface flex cursor-default select-none items-center gap-2 rounded px-2 py-1 outline-hidden focus:bg-muted focus:text-foreground custom:data-[state=open]:bg-surface data-[state=open]:bg-muted data-inset:pl-8 data-[state=open]:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0"
+      className="flex cursor-default select-none items-center gap-2 rounded px-2 py-1 outline-hidden custom:focus:bg-surface focus:bg-muted focus:text-foreground data-[state=open]:bg-muted data-inset:pl-8 data-[state=open]:text-foreground custom:data-[state=open]:focus:bg-surface data-[state=open]:focus:bg-muted [&_svg]:pointer-events-none [&_svg]:shrink-0"
       {...props}
     >
       {children}

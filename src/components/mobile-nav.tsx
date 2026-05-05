@@ -38,14 +38,14 @@ const MobileBottomNav = () => {
       <nav className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 md:hidden">
         <div className="flex flex-col overflow-hidden rounded-2xl border bg-content shadow-lg">
           <Collapsible open={open}>
-            <div className="flex flex-col gap-0.5 p-2">
+            <div className="flex flex-col gap-0.5 p-2 text-left">
               {navLinks.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  variant="ghost"
-                  className="h-9 justify-start custom:hover:bg-surface"
+                  variant="outline-surface"
+                  size="lg"
                   activeProps={{
                     className: "text-foreground bg-muted custom:bg-surface border-border",
                   }}
@@ -63,45 +63,33 @@ const MobileBottomNav = () => {
                 <Link
                   to="/tasks"
                   search={{ newTask: true, archived: undefined }}
-                  variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
+                  variant="mobileNav"
+                  size="lg"
                   onClick={() => setOpen(false)}
                 >
                   <Plus className="size-4" />
                 </Link>
 
-                <Button
-                  variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
-                  onClick={() => setOpen(false)}
-                >
+                <Button variant="mobileNav" size="lg" onClick={() => setOpen(false)}>
                   <X className="size-4" />
                 </Button>
               </>
             ) : isTasksPage ? (
               <>
-                <Button
-                  variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
-                  onClick={() => setIsSearchTaskOpen(true)}
-                >
+                <Button variant="mobileNav" size="lg" onClick={() => setIsSearchTaskOpen(true)}>
                   <Search className="size-4" />
                 </Button>
 
                 <Link
                   to="/tasks"
                   search={{ newTask: true, archived: undefined }}
-                  variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
+                  variant="mobileNav"
+                  size="lg"
                 >
                   <Plus className="size-4" />
                 </Link>
 
-                <Button
-                  variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
-                  onClick={() => setOpen((v) => !v)}
-                >
+                <Button variant="mobileNav" size="lg" onClick={() => setOpen((v) => !v)}>
                   <MoreHorizontal className="size-4" />
                 </Button>
               </>
@@ -111,19 +99,15 @@ const MobileBottomNav = () => {
                   <Link
                     key={item.to}
                     to={item.to}
-                    variant="ghost"
-                    className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
+                    variant="mobileNav"
+                    size="lg"
                     activeProps={{ className: "text-foreground bg-muted custom:bg-surface" }}
                   >
                     <item.icon className="size-4" />
                   </Link>
                 ))}
 
-                <Button
-                  variant="ghost"
-                  className="size-10 rounded-full transition-colors duration-150 ease-out-strong custom:hover:bg-surface"
-                  onClick={() => setOpen((v) => !v)}
-                >
+                <Button variant="mobileNav" size="lg" onClick={() => setOpen((v) => !v)}>
                   <MoreHorizontal className="size-4" />
                 </Button>
               </>

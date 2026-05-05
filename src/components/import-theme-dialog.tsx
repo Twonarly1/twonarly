@@ -132,12 +132,7 @@ const ImportThemeDialog = ({ onChange }: Props) => {
           <div className="flex items-start justify-between gap-2 rounded-lg border border-destructive/20 bg-destructive/5 px-3 py-2 text-destructive text-sm">
             <span>{errorMessages[error]}</span>
             {error === "invalid_shape" && (
-              <Button
-                variant="ghost"
-                size="sm"
-                className="shrink-0 text-destructive hover:text-destructive"
-                onClick={handleUseExample}
-              >
+              <Button variant="ghost" size="sm" onClick={handleUseExample}>
                 Use example
               </Button>
             )}

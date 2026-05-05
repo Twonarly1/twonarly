@@ -84,17 +84,17 @@ const TableActions = ({ table }: Props) => {
   if (!selectedCount) return null;
 
   return (
-    <div className="flex h-10 items-center justify-end">
+    <div className="flex h-10 items-center justify-end gap-2">
       <span className="select-none text-secondary-foreground">
         {selectedCount} selected <span className="pl-1">—</span>
       </span>
 
-      <Button variant="outline" onClick={handleArchive} className="ml-2 custom:bg-surface">
+      <Button variant="outline-surface" onClick={handleArchive}>
         <Archive className="icon-sm" />
         Archive
       </Button>
 
-      <Button variant="outline" onClick={handleDelete} className="ml-1 custom:bg-surface">
+      <Button variant="outline-surface" onClick={handleDelete}>
         <Trash className="icon-sm" />
         Delete
       </Button>

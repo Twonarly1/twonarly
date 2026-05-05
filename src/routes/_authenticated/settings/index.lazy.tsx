@@ -143,9 +143,9 @@ function SettingsPage() {
               }
             >
               <SelectTrigger asChild>
-                <Button variant="outline" className="transition-none">
+                <Button variant="outline">
                   <SelectValue placeholder="Select font size" />
-                  <ChevronDown className="icon-xs ml-2 text-muted-foreground" />
+                  <ChevronDown className="icon-xs" />
                 </Button>
               </SelectTrigger>
               <SelectContent align="end">
@@ -172,7 +172,7 @@ function SettingsPage() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" size="icon-sm">
-                      <MoreHorizontal className="icon-sm" />
+                      <MoreHorizontal className="icon-sm mx-auto" />
                     </Button>
                   </DropdownMenuTrigger>
 
@@ -212,7 +212,7 @@ function SettingsPage() {
 
               <Select value={theme} onValueChange={handleThemeChange}>
                 <SelectTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2 transition-none">
+                  <Button variant="outline">
                     {match(theme)
                       .with("light", () => <Sun className="icon-xs" />)
                       .with("dark", () => <Moon className="icon-xs" />)
@@ -220,7 +220,7 @@ function SettingsPage() {
                       .with("custom", () => <Palette className="icon-xs" />)
                       .exhaustive()}
                     <SelectValue placeholder="Select a theme" />
-                    <ChevronDown className="icon-xs ml-2" />
+                    <ChevronDown className="icon-xs" />
                   </Button>
                 </SelectTrigger>
                 <SelectContent align="end">
@@ -262,9 +262,9 @@ function SettingsPage() {
                   }
                 >
                   <SelectTrigger asChild>
-                    <Button variant="outline" className="transition-none">
+                    <Button variant="outline">
                       <SelectValue placeholder="Select sidebar position" />
-                      <ChevronDown className="icon-xs ml-2" />
+                      <ChevronDown className="icon-xs" />
                     </Button>
                   </SelectTrigger>
                   <SelectContent align="end">
@@ -290,9 +290,9 @@ function SettingsPage() {
                   }
                 >
                   <SelectTrigger asChild>
-                    <Button variant="outline" className="transition-none">
+                    <Button variant="outline">
                       <SelectValue placeholder="Select sidebar variant" />
-                      <ChevronDown className="icon-xs ml-2" />
+                      <ChevronDown className="icon-xs" />
                     </Button>
                   </SelectTrigger>
                   <SelectContent align="end">
@@ -321,9 +321,9 @@ function SettingsPage() {
                   }
                 >
                   <SelectTrigger asChild>
-                    <Button variant="outline" className="transition-none">
+                    <Button variant="outline">
                       <SelectValue placeholder="Select sidebar collapsible option" />
-                      <ChevronDown className="icon-xs ml-2" />
+                      <ChevronDown className="icon-xs" />
                     </Button>
                   </SelectTrigger>
                   <SelectContent align="end">

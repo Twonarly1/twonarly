@@ -1,8 +1,7 @@
 import { cva } from "class-variance-authority";
+import clsx from "clsx";
 import * as React from "react";
 import { createContext } from "react";
-
-import { cn } from "@/lib/utils";
 
 import type { VariantProps } from "class-variance-authority";
 
@@ -69,7 +68,7 @@ function Item({
     ref?: React.Ref<HTMLElement>;
   }) {
   const groupVariant = React.useContext(ItemGroupContext);
-  const classes = cn(itemVariants({ variant, size, className }));
+  const classes = clsx(itemVariants({ variant, size }), className);
 
   return groupVariant === "list" ? (
     <li

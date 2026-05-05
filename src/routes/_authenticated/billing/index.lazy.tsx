@@ -143,7 +143,7 @@ function BillingPage() {
           <Button
             variant="outline"
             onClick={() => setShowInvoices(true)}
-            className="absolute top-2 right-4 mx-auto flex"
+            className="absolute top-2 right-4"
           >
             Load invoices
           </Button>

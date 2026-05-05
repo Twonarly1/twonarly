@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { Check, ChevronDown, SquareDashed } from "lucide-react";
 
 import { GitHubIcon } from "@/components/icons/github";
@@ -60,7 +60,7 @@ const AppSidebar = () => {
         <SidebarMenuItem>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <SidebarMenuButton className="flex justify-start px-0!">
+              <SidebarMenuButton className="justify-start px-0!">
                 <Avatar
                   src={user.image}
                   alt={user.name || "User avatar"}
@@ -139,12 +139,10 @@ const AppSidebar = () => {
               <SidebarMenuButton
                 isActive={"/dashboard" === router.state.location.pathname}
                 tooltip="Dashboard"
-                asChild
+                onClick={() => navigate({ to: "/dashboard" })}
               >
-                <Link to="/dashboard" className="rounded-lg">
-                  <SquareDashed className="icon-sm" />
-                  <span className="text-base">Dashboard</span>
-                </Link>
+                <SquareDashed className="icon-sm" />
+                <span className="text-base">Dashboard</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -158,12 +156,10 @@ const AppSidebar = () => {
                 <SidebarMenuButton
                   isActive={item.to === router.state.location.pathname}
                   tooltip={item.label}
-                  asChild
+                  onClick={() => navigate({ to: item.to })}
                 >
-                  <Link to={item.to} className="rounded-lg">
-                    <item.icon className="icon-sm" />
-                    <span className="text-base">{item.label}</span>
-                  </Link>
+                  <item.icon className="icon-sm" />
+                  <span className="text-base">{item.label}</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}

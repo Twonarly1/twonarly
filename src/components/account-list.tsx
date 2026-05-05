@@ -74,47 +74,26 @@ const AccountList = () => {
                   Log out
                 </Button>
               ) : (
-                <>
-                  <div className="hidden items-center gap-2 sm:flex">
-                    <Button
-                      variant="outline"
-                      onClick={() => handleAccountSwitch(deviceSession.session.token!)}
-                    >
-                      <Repeat className="icon-xs" />
-                      Switch
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      onClick={() => handleRemoveAccount(deviceSession.session.token!)}
-                    >
-                      Revoke
-                    </Button>
-                  </div>
-
-                  {/* mobile dropdown */}
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="sm:hidden">
-                        Manage
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onSelect={() => handleAccountSwitch(deviceSession.session.token!)}
-                        >
-                          <Repeat className="icon-xs" />
-                          Switch to this account
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onSelect={() => handleRemoveAccount(deviceSession.session.token!)}
-                        >
-                          Revoke access
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost">Manage</Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem
+                        onSelect={() => handleAccountSwitch(deviceSession.session.token!)}
+                      >
+                        <Repeat className="icon-xs" />
+                        Switch account
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => handleRemoveAccount(deviceSession.session.token!)}
+                      >
+                        Revoke access
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </ItemActions>
           </Item>

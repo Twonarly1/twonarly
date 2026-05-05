@@ -67,7 +67,6 @@ function TasksPage() {
         header: ({ table }) => (
           <div className="ml-2 flex">
             <Checkbox
-              className="mx-auto flex size-3.5 items-center justify-center"
               checked={
                 table.getIsAllPageRowsSelected()
                   ? true
@@ -86,7 +85,6 @@ function TasksPage() {
         cell: ({ row }) => (
           <div className="ml-2 flex">
             <Checkbox
-              className="mx-auto flex size-3.5 items-center justify-center"
               checked={row.getIsSelected()}
               onCheckedChange={(value) => row.toggleSelected(!!value)}
             />
@@ -210,8 +208,8 @@ function TasksPage() {
               {/* Mobile: icon only */}
               <Button
                 variant="outline"
-                size="icon-sm"
-                className="h-8 w-8 sm:hidden"
+                size="icon"
+                className="sm:hidden"
                 onClick={() => setIsSearchTaskOpen(true)}
                 disabled={data.length === 0}
               >
@@ -229,7 +227,7 @@ function TasksPage() {
                 }
               >
                 <SelectTrigger asChild>
-                  <Button variant="outline" className="h-8 transition-none">
+                  <Button variant="outline">
                     <SelectValue placeholder="Select view" />
                     <ChevronDown className="icon-xs ml-1 text-muted-foreground" />
                   </Button>

@@ -77,7 +77,7 @@ const NewTaskDialog = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="ghost" className="flex h-8 border-border active:scale-[0.97]">
+        <Button variant="outline" press="scale">
           New Task
           <Kbd>C</Kbd>
         </Button>
@@ -95,13 +95,11 @@ const NewTaskDialog = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <Button
-            type="submit"
-            disabled={!canSubmit}
-            className="mt-2 ml-auto flex pointer-hover:scale-[1.04] active:scale-[0.97]"
-          >
-            Create task
-          </Button>
+          <div className="mt-2 flex justify-end">
+            <Button type="submit" disabled={!canSubmit} press="scale">
+              Create task
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>

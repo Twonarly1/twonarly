@@ -64,12 +64,12 @@ function SignInPage() {
       />
 
       <div className="relative w-full max-w-sm">
-        <Link variant="ghost" to="/" className="mb-6">
+        <Link variant="ghost" to="/">
           <ArrowLeft className="icon-sm" />
           Back
         </Link>
 
-        <div className="mb-8 text-center">
+        <div className="mt-6 mb-8 text-center">
           <span className="font-semibold text-foreground text-xl">{app.name}</span>
           <h1 className="mt-2 font-bold text-2xl text-foreground tracking-tight">Welcome back</h1>
           <p className="mt-1 text-muted-foreground text-sm">Choose how you'd like to sign in</p>
@@ -77,12 +77,22 @@ function SignInPage() {
 
         <div className="rounded-xl border bg-background p-8 shadow-sm">
           <div className="grid gap-2">
-            <Button variant="outline" size="lg" onClick={() => signIn("google")} className="w-full">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => signIn("google")}
+              className="justify-center"
+            >
               <GoogleIcon />
               Continue with Google
             </Button>
 
-            <Button variant="outline" size="lg" onClick={() => signIn("github")} className="w-full">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={() => signIn("github")}
+              className="justify-center"
+            >
               <GitHubIcon />
               Continue with GitHub
             </Button>
@@ -93,7 +103,12 @@ function SignInPage() {
               <div className="h-px w-full bg-border" />
             </div>
 
-            <Button variant="outline" size="lg" onClick={handlePasskeySignIn} className="w-full">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={handlePasskeySignIn}
+              className="justify-center"
+            >
               <Fingerprint className="size-4" />
               Sign in with Passkey
             </Button>
@@ -101,7 +116,7 @@ function SignInPage() {
             <ConnectWalletDialog
               mode="sign-in"
               trigger={
-                <Button variant="outline" size="lg" className="w-full">
+                <Button variant="outline" size="lg" className="justify-center">
                   <EthereumIcon />
                   Sign In With Ethereum
                 </Button>

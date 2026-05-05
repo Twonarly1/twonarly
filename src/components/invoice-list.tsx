@@ -139,14 +139,11 @@ const InvoiceList = () => {
       {hasMore && (
         <Item>
           <ItemContent>
-            <Button
-              variant="ghost"
-              onClick={loadMore}
-              disabled={loadingMore}
-              className="mx-auto w-fit"
-            >
-              {loadingMore ? "Loading…" : "Show past invoices"}
-            </Button>
+            <div className="mx-auto w-fit">
+              <Button variant="ghost" onClick={loadMore} disabled={loadingMore}>
+                {loadingMore ? "Loading…" : "Show past invoices"}
+              </Button>
+            </div>
           </ItemContent>
         </Item>
       )}

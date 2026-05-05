@@ -44,11 +44,11 @@ const HeaderCell = ({ header }: Props) => {
     <TableHead colSpan={header.colSpan} style={cellStyle}>
       <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
-          <Button variant="ghost" onClick={handleSort} className="group w-fit text-sm">
+          <Button variant="ghost" onClick={handleSort} className="group text-sm">
             {flexRender(column.columnDef.header, getContext())}
             <SortIcon
               className={clsx(
-                "size-3 shrink-0",
+                "icon-sm shrink-0",
                 showIcon
                   ? "opacity-100"
                   : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100",

@@ -75,11 +75,7 @@ function LandingPage() {
           <span className="font-semibold text-foreground">{app.name}</span>
           <nav className="flex items-center gap-3">
             {session ? (
-              <Link
-                to="/tasks"
-                search={{ archived: undefined, newTask: undefined }}
-                className="flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 font-medium text-primary-foreground text-sm transition-opacity hover:opacity-90"
-              >
+              <Link to="/tasks" search={{ archived: undefined, newTask: undefined }}>
                 Open App
                 <ArrowRight className="size-3.5" />
               </Link>
@@ -122,17 +118,13 @@ function LandingPage() {
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               {session ? (
-                <Link
-                  to="/tasks"
-                  search={{ archived: undefined, newTask: undefined }}
-                  className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground text-sm transition-opacity hover:opacity-90"
-                >
+                <Link to="/tasks" search={{ archived: undefined, newTask: undefined }}>
                   Open App
                   <ArrowRight className="size-4" />
                 </Link>
               ) : (
                 <div className="flex items-center gap-3">
-                  <Link to="/sign-in" className="h-8">
+                  <Link to="/sign-in">
                     Get started free
                     <ArrowRight className="icon-sm" />
                   </Link>
@@ -142,7 +134,6 @@ function LandingPage() {
                     onClick={() => {
                       document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
                     }}
-                    className="h-8"
                   >
                     See what's included
                   </Button>

@@ -4,14 +4,11 @@ import clsx from "clsx";
 import React from "react";
 import { match } from "ts-pattern";
 
-import { SidebarToggleIcon } from "@/components/icons/sidebar-toggle";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { COOKIES } from "@/lib/constants/cookies";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
-import { cn } from "@/lib/utils";
-import { Slot } from "@/lib/utils/slot";
 import { useLayout } from "@/providers/layout-provider";
 
 import type { CSSProperties } from "react";
@@ -217,7 +214,26 @@ function SidebarTrigger({ onClick, ...props }: React.ComponentProps<typeof Butto
             }}
             {...props}
           >
-            <SidebarToggleIcon />
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mx-auto"
+            >
+              <title>"Toggle sidebar</title>
+              <rect
+                x="1.5"
+                y="1.5"
+                width="15"
+                height="15"
+                rx="4"
+                stroke="currentColor"
+                strokeWidth="0.7"
+              />
+              <rect x="4" y="3.5" width="5" height="11" rx="2" fill="currentColor" opacity="0.3" />
+            </svg>
             <span className="sr-only">Toggle Sidebar</span>
           </Button>
         </TooltipTrigger>
@@ -278,13 +294,9 @@ function SidebarGroup(props: React.ComponentProps<"div">) {
   );
 }
 
-function SidebarGroupLabel({
-  asChild = false,
-  ...props
-}: React.ComponentProps<"div"> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : "div";
+function SidebarGroupLabel({ ...props }: React.ComponentProps<"div">) {
   return (
-    <Comp
+    <div
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className="mt-4 flex shrink-0 select-none items-center px-2 font-medium text-sidebar-foreground/70 text-sm outline-hidden group-data-[collapsible=icon]:w-0 group-data-[collapsible=icon]:overflow-hidden group-data-[collapsible=icon]:px-0 [&>svg]:size-4 [&>svg]:shrink-0"
@@ -326,15 +338,14 @@ function SidebarMenuButton({
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 }) {
-  const Comp = asChild ? Slot : "button";
   const { isMobile, state } = useSidebar();
 
   const button = (
-    <Comp
+    <button
       data-slot="sidebar-menu-button"
       data-sidebar="menu-button"
       data-active={isActive}
-      className={cn(
+      className={clsx(
         "peer/menu-button group/menu-button group/button text-sm",
         "flex h-8 w-full select-none items-center gap-1.5 overflow-hidden px-2 py-1.5 outline-none",
         "whitespace-nowrap font-medium text-sidebar-foreground/70 leading-snug",
