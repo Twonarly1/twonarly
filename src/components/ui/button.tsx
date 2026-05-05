@@ -18,8 +18,10 @@ const buttonVariants = cva(
           "border-transparent text-secondary-foreground hover:bg-muted custom:hover:bg-content hover:text-foreground",
         mobileNav:
           "rounded-full transition-colors duration-150 hover:bg-muted ease-out-strong custom:hover:bg-surface",
+        sidebar:
+          "peer/menu-button group/menu-button w-full gap-1.5 px-[0.625rem] text-sm font-medium leading-snug border-transparent text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:border-primary data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-foreground justify-start group-data-[collapsible=icon]:[&>span]:hidden [&>span:last-child]:truncate overflow-hidden",
       },
-      color: {
+      tone: {
         default: "",
         primary:
           "bg-primary border-0 focus-visible:border-0 text-primary-foreground hover:bg-primary/80 focus-visible:ring focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
@@ -42,7 +44,7 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: "default",
-      color: "default",
+      tone: "default",
       size: "sm",
     },
   },
@@ -53,12 +55,13 @@ function Button({
   variant,
   size,
   press,
-  color,
+  tone,
+  onTransitionEndCapture,
   ...props
 }: React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>) {
   return (
     <button
-      className={clsx(buttonVariants({ variant, size, color, press }), className)}
+      className={clsx(buttonVariants({ variant, size, tone, press }), className)}
       {...props}
     />
   );

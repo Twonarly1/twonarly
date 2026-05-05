@@ -2,7 +2,7 @@ function Kbd({ ...props }: React.ComponentProps<"kbd">) {
   return (
     <kbd
       data-slot="kbd"
-      className="pointer-events-none ml-2 inline-flex h-5 w-fit min-w-5 select-none items-center justify-center gap-1 rounded border bg-muted custom:bg-surface px-1 font-medium font-sans text-sm [&_svg:not([class*='size-'])]:size-3"
+      className="pointer-events-none ml-2 inline-flex h-4 w-fit min-w-4 select-none items-center justify-center gap-1 rounded border bg-muted custom:bg-surface font-medium font-sans text-xs [&_svg:not([class*='size-'])]:size-3"
       {...props}
     />
   );

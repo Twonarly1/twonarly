@@ -172,8 +172,8 @@ function SettingsPage() {
               {theme === "custom" && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon-sm">
-                      <MoreHorizontal className="icon-sm mx-auto" />
+                    <Button variant="outline" className="flex size-7 justify-center">
+                      <MoreHorizontal className="icon-sm" />
                     </Button>
                   </DropdownMenuTrigger>
 
@@ -245,6 +245,22 @@ function SettingsPage() {
             <ThemeChanger theme={customTheme} onChange={save} />
           </Collapsible>
         </div>
+
+        {!isMobile && (
+          <Item variant="outline" className="rounded-xl">
+            <ItemContent>
+              <ItemTitle>Use pointer cursors</ItemTitle>
+              <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
+            </ItemContent>
+            <ItemActions>
+              <Switch
+                id="switch-pointer-cursor"
+                checked={appearance.usePointerCursor}
+                onCheckedChange={(v) => updateAppearance({ usePointerCursor: v })}
+              />
+            </ItemActions>
+          </Item>
+        )}
       </Section>
 
       {!isMobile && (
@@ -335,20 +351,6 @@ function SettingsPage() {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-              </ItemActions>
-            </Item>
-
-            <Item>
-              <ItemContent>
-                <ItemTitle>Use pointer cursors</ItemTitle>
-                <ItemDescription>Use a pointer cursor for interactive elements</ItemDescription>
-              </ItemContent>
-              <ItemActions>
-                <Switch
-                  id="switch-pointer-cursor"
-                  checked={appearance.usePointerCursor}
-                  onCheckedChange={(v) => updateAppearance({ usePointerCursor: v })}
-                />
               </ItemActions>
             </Item>
           </ItemGroup>

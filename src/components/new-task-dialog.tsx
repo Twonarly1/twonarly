@@ -97,7 +97,7 @@ const NewTaskDialog = () => {
             className="h-8"
           />
           <div className="mt-2 flex justify-end">
-            <Button type="submit" disabled={!canSubmit} press="scale" color="primary">
+            <Button type="submit" disabled={!canSubmit} press="scale" tone="primary">
               Create task
             </Button>
           </div>

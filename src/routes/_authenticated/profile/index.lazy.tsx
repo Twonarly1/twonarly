@@ -249,7 +249,7 @@ function ProfilePage() {
                 <DialogClose asChild>
                   <Button variant="ghost">Cancel</Button>
                 </DialogClose>
-                <Button color="destructive" onClick={handleDeleteAccount}>
+                <Button tone="destructive" onClick={handleDeleteAccount}>
                   Delete
                 </Button>
               </DialogFooter>

@@ -2,7 +2,7 @@ import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
 import AppSidebar from "@/components/app-sidebar";
 import MobileBottomNav from "@/components/mobile-nav";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { LayoutProvider } from "@/providers/layout-provider";
@@ -55,9 +55,6 @@ function DesktopLayout() {
       <AppSidebar />
       <SidebarInset>
         <div className="overflow-y-auto pb-12">
-          <header className="shrink-0 items-center gap-2 p-2">
-            <SidebarTrigger />
-          </header>
           <Outlet />
         </div>
       </SidebarInset>

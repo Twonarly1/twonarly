@@ -54,10 +54,6 @@ function RootDocument({ children }: PropsWithChildren) {
     .filter(Boolean)
     .join(" ");
 
-  // Font size data attribute — omitted when "default"
-  const fontSizeAttr =
-    appearance.fontSize !== "default" ? { "data-font-size": appearance.fontSize } : undefined;
-
   // Inline script that applies before first paint
   const themeScript =
     theme === "custom" && css ? (
@@ -72,7 +68,7 @@ function RootDocument({ children }: PropsWithChildren) {
     ) : null;
 
   return (
-    <html lang="en" className={htmlClass} {...fontSizeAttr} suppressHydrationWarning>
+    <html lang="en" className={htmlClass} suppressHydrationWarning>
       <head>
         <HeadContent />
         {themeScript}

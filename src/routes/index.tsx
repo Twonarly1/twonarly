@@ -31,60 +31,88 @@ const features = [
     icon: Shield,
     title: "Multi-Provider Auth",
     description:
-      "Sign in with Google, GitHub, Passkeys, or your Ethereum wallet. Multi-session support lets you switch accounts instantly.",
+      "Google, GitHub, Passkeys, Ethereum. Yes, Ethereum. Switch accounts without logging out like an animal.",
   },
   {
     icon: Palette,
     title: "Fully Themeable",
     description:
-      "Light, dark, system, or fully custom themes powered by OKLCH. Adjust colors, font sizes, sidebar layout, and more — all persisted across devices.",
+      "Light, dark, custom. OKLCH colors that actually make sense. Font sizes, sidebar layouts, all persisted. You're welcome.",
   },
   {
     icon: CreditCard,
     title: "Stripe Billing",
     description:
-      "Subscription management built in. Track plans, trial periods, invoices, and cancellations with a Stripe-powered billing portal.",
+      "Plans, trials, invoices, cancellations. The whole uncomfortable conversation, handled gracefully.",
   },
   {
     icon: CheckSquare,
     title: "Task Management",
     description:
-      "A full CRUD module with inline editing, bulk actions, search, filtering, archiving, and virtualized rendering for large datasets.",
+      "A fully functional task management module. Create, edit, delete, archive. Here's the todo app.",
   },
   {
     icon: Wallet,
     title: "Web3 Ready",
     description:
-      "Sign In With Ethereum (SIWE) with full nonce validation, wallet linking, and WalletConnect support baked right in.",
+      "SIWE with nonce validation, wallet linking, WalletConnect. For when your users are built different.",
   },
   {
     icon: Zap,
     title: "Modern Stack",
     description:
-      "TanStack Start + React 19, Drizzle ORM, Tailwind CSS v4, and Bun. Server functions, streaming SSR, and type-safe routing out of the box.",
+      "TanStack Start, React 19, Drizzle, Tailwind v4, Bun. No legacy guilt. No webpack.",
   },
+];
+
+const authMethods = [
+  { icon: GoogleIcon, label: "Google" },
+  { icon: GitHubIcon, label: "GitHub" },
+  { icon: () => <Fingerprint className="icon-sm" />, label: "Passkeys" },
+  { icon: EthereumIcon, label: "Ethereum" },
+];
+
+const stack = [
+  "TanStack Start",
+  "React 19",
+  "Drizzle ORM",
+  "Tailwind v4",
+  "better-auth",
+  "Stripe",
+  "Wagmi",
+  "Bun",
 ];
 
 function LandingPage() {
   const { session } = Route.useLoaderData();
 
   return (
-    <div className="flex min-h-dvh w-full flex-col bg-background text-foreground">
+    <div className="mx-auto flex min-h-dvh w-full flex-col bg-background text-foreground">
+      {/* Nav */}
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-14 items-center justify-between px-6">
-          <span className="font-semibold text-foreground">{app.name}</span>
-          <nav className="flex items-center gap-3">
+        <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-6">
+          <span className="font-semibold text-sm">{app.name}</span>
+          <nav className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() =>
+                document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Features
+            </Button>
             {session ? (
               <Link
                 to="/tasks"
-                color="primary"
+                tone="primary"
+                size="sm"
                 search={{ archived: undefined, newTask: undefined }}
               >
-                Open App
-                <ArrowRight className="size-3.5" />
+                Open App <ArrowRight className="icon-xs" />
               </Link>
             ) : (
-              <Link to="/sign-in" color="primary">
+              <Link to="/sign-in" tone="primary" size="sm">
                 Sign in
               </Link>
             )}
@@ -92,115 +120,98 @@ function LandingPage() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col">
+      <main className="flex flex-1 flex-col gap-16 py-16">
         {/* Hero */}
-        <section className="relative flex flex-col items-center justify-center overflow-hidden px-6 py-24 text-center md:py-36">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage:
-                "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
-              backgroundSize: "48px 48px",
-            }}
-          />
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.646 0.196 293.756 / 0.12), transparent)",
-            }}
-          />
-
-          <div className="relative max-w-3xl">
-            <h1 className="mb-5 font-bold text-5xl text-foreground leading-tight tracking-tight md:text-6xl">
-              Your app, <span style={{ color: "var(--primary)" }}>fully equipped</span>
-            </h1>
-
-            <p className="mx-auto mb-8 max-w-xl text-lg text-muted-foreground leading-relaxed">
-              {app.name} gives you authentication, billing, theming, and a full task management
-              module — all wired together on a modern TanStack Start stack. Skip the boilerplate.
-              Build what matters.
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {session ? (
-                <Link
-                  to="/tasks"
-                  color="primary"
-                  search={{ archived: undefined, newTask: undefined }}
-                >
-                  Open App
-                  <ArrowRight className="size-4" />
-                </Link>
-              ) : (
-                <div className="flex items-center gap-3">
-                  <Link to="/sign-in" color="primary">
-                    Get started free
-                    <ArrowRight className="icon-sm" />
-                  </Link>
-
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      document.getElementById("features")?.scrollIntoView({ behavior: "smooth" });
-                    }}
+        <section id="hero">
+          <div className="mx-auto max-w-5xl">
+            <div>
+              <p className="mb-3 font-mono text-muted-foreground text-xs uppercase tracking-widest">
+                A starter kit that respects your time
+              </p>
+              <h1 className="mb-5 font-bold text-5xl leading-[1.1] tracking-tight md:text-6xl">
+                Skip the setup.
+                <br />
+                <span style={{ color: "var(--primary)" }}>Ship the thing.</span>
+              </h1>
+              <p className="mb-8 max-w-lg text-muted-foreground leading-relaxed">
+                {app.name} is a full-featured TanStack Start boilerplate. Auth, billing, theming,
+                tasks — all wired up, no assembly required.
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                {session ? (
+                  <Link
+                    to="/tasks"
+                    tone="primary"
+                    search={{ archived: undefined, newTask: undefined }}
                   >
-                    See what's included
-                  </Button>
-                </div>
-              )}
+                    Open App <ArrowRight className="icon-sm" />
+                  </Link>
+                ) : (
+                  <>
+                    <Link to="/sign-in" tone="primary">
+                      Get started free <ArrowRight className="icon-sm" />
+                    </Link>
+                    <Button
+                      variant="outline"
+                      onClick={() =>
+                        document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
+                      }
+                    >
+                      What's included
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
 
-        {/* Social proof / stack badges */}
-        <section className="border-y bg-muted/40 px-6 py-5">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-8 gap-y-3">
-            {[
-              "TanStack Start",
-              "React 19",
-              "Drizzle ORM",
-              "Tailwind CSS v4",
-              "better-auth",
-              "Stripe",
-              "Wagmi + SIWE",
-              "Bun",
-            ].map((tech) => (
-              <span key={tech} className="select-none font-medium text-muted-foreground text-sm">
-                {tech}
-              </span>
-            ))}
+            {/* Auth + Stack row */}
+            <div className="mx-auto flex max-w-6xl flex-col gap-6 pt-8 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-muted-foreground text-xs">Sign in with</span>
+                <div className="flex items-center gap-1">
+                  {authMethods.map(({ icon: Icon, label }) => (
+                    <span
+                      key={label}
+                      title={label}
+                      className="flex size-7 items-center justify-center rounded-md border bg-surface text-foreground"
+                    >
+                      <Icon />
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1">
+                {stack.map((tech) => (
+                  <span key={tech} className="font-mono text-muted-foreground text-xs">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Features */}
-        <section id="features" className="px-6 py-20 md:py-28">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-14 text-center">
-              <h2 className="mb-3 font-bold text-3xl text-foreground tracking-tight md:text-4xl">
-                Everything you need, nothing you don't
+        <section id="features">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-12">
+              <h2 className="font-bold text-2xl tracking-tight">
+                Everything you were going to build anyway.
               </h2>
-              <p className="mx-auto max-w-lg text-muted-foreground">
-                Six production-grade modules that cover the hard parts of building a modern
-                application — so you can focus on your product.
-              </p>
+              <p className="mt-2 text-muted-foreground text-sm">Six modules. Zero excuses.</p>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-px border bg-border sm:grid-cols-2 lg:grid-cols-3">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={feature.title} className="rounded-xl border bg-background p-6">
-                    <div
-                      className="mb-4 flex size-10 items-center justify-center rounded-lg"
-                      style={{ backgroundColor: "oklch(0.646 0.196 293.756 / 0.1)" }}
-                    >
-                      <Icon className="size-5" style={{ color: "var(--primary)" }} />
+                  <div key={feature.title} className="flex flex-col gap-3 bg-background p-6">
+                    <Icon className="icon-sm text-primary" style={{ color: "var(--primary)" }} />
+                    <div>
+                      <h3 className="mb-1 font-semibold text-sm">{feature.title}</h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        {feature.description}
+                      </p>
                     </div>
-                    <h3 className="mb-2 font-semibold text-foreground">{feature.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {feature.description}
-                    </p>
                   </div>
                 );
               })}
@@ -208,75 +219,38 @@ function LandingPage() {
           </div>
         </section>
 
-        {/* Auth methods highlight */}
-        <section className="border-y bg-muted/30 px-6 py-20">
-          <div className="mx-auto max-w-6xl">
-            <div className="grid gap-12 md:grid-cols-2 md:items-center">
-              <div>
-                <h2 className="mb-4 font-bold text-3xl text-foreground tracking-tight">
-                  Sign in however you like
-                </h2>
-                <p className="mb-8 text-muted-foreground leading-relaxed">
-                  {app.name} ships with four authentication methods out of the box. Users can link
-                  multiple accounts, switch sessions without signing out, and manage passkeys and
-                  connected wallets from one place.
-                </p>
-                <ul className="grid gap-3">
-                  {[
-                    { icon: GoogleIcon, label: "Google OAuth" },
-                    { icon: GitHubIcon, label: "GitHub OAuth" },
-                    {
-                      icon: () => <Fingerprint className="icon-sm shrink-0" />,
-                      label: "Passkeys (biometric)",
-                    },
-                    { icon: EthereumIcon, label: "Sign In With Ethereum" },
-                  ].map(({ icon: Icon, label }) => (
-                    <li key={label} className="flex items-center gap-3 text-foreground text-sm">
-                      <span className="flex size-8 items-center justify-center rounded-lg border bg-background">
-                        <Icon />
-                      </span>
-                      {label}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA */}
-        <section className="px-6 py-24 text-center md:py-32">
-          <div className="mx-auto max-w-2xl">
-            <h2 className="mb-4 font-bold text-4xl text-foreground tracking-tight">
-              Ready to ship?
-            </h2>
-            <p className="mb-8 text-lg text-muted-foreground leading-relaxed">
-              Stop building auth and billing from scratch. {app.name} is your foundation — already
-              done, already tested, already production-ready.
-            </p>
-
-            {session ? (
-              <Link
-                to="/tasks"
-                color="primary"
-                search={{ archived: undefined, newTask: undefined }}
-              >
-                Open App
-                <ArrowRight className="icon-sm" />
-              </Link>
-            ) : (
-              <Link to="/sign-in" color="primary">
-                Create your account
-                <ArrowRight className="icon-sm" />
-              </Link>
-            )}
+        <section id="cta">
+          <div className="mx-auto max-w-5xl">
+            <div className="rounded-xl border bg-surface px-8 py-12 text-center">
+              <p className="mb-2 font-mono text-muted-foreground text-xs uppercase tracking-widest">
+                Seriously though
+              </p>
+              <h2 className="mb-4 font-bold text-3xl tracking-tight">Just start building.</h2>
+              <p className="mx-auto mb-8 max-w-sm text-muted-foreground text-sm">
+                You've read this far. You already know you need this. The button is right there.
+              </p>
+              {session ? (
+                <Link
+                  to="/tasks"
+                  tone="primary"
+                  search={{ archived: undefined, newTask: undefined }}
+                >
+                  Open App <ArrowRight className="icon-sm" />
+                </Link>
+              ) : (
+                <Link to="/sign-in" tone="primary">
+                  Get started free <ArrowRight className="icon-sm" />
+                </Link>
+              )}
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t px-6 py-8">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4">
-          <span className="font-semibold text-foreground text-sm">{app.name}</span>
+      <footer className="border-t px-6 py-6">
+        <div className="mx-auto flex max-w-5xl items-center justify-between">
+          <span className="font-semibold text-sm">{app.name}</span>
           <p className="text-muted-foreground text-xs">
             Built with TanStack Start · Deployed on Vercel
           </p>

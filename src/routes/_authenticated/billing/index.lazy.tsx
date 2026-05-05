@@ -90,6 +90,7 @@ function BillingPage() {
             <Button
               onClick={isActive ? openBillingPortal : handleUpgrade}
               className="cursor-pointer"
+              tone="primary"
             >
               {isActive ? "Manage" : "Upgrade"}
             </Button>
@@ -124,7 +125,8 @@ function BillingPage() {
               {!isCurrent && plan.name !== "Free" && (
                 <CardFooter>
                   <Button
-                    className="w-full cursor-pointer"
+                    className="flex w-full cursor-pointer justify-center"
+                    tone="primary"
                     onClick={isActive ? openBillingPortal : handleUpgrade}
                   >
                     Upgrade to {plan.name}
