@@ -12,7 +12,7 @@ const FREE_PLAN = {
   features: ["Unlimited tasks", "Custom themes"],
 };
 
-export const fetchPlans = createServerFn({ method: "GET" }).handler(async () => {
+export const getPlans = createServerFn({ method: "GET" }).handler(async () => {
   const prices = await stripeClient.prices.list({
     active: true,
     expand: ["data.product"],

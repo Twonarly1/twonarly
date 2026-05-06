@@ -7,7 +7,7 @@ import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { tasks as tasksTable } from "@/lib/db/schema";
 
-export const fetchTasks = createServerFn({ method: "GET" })
+export const getTasks = createServerFn({ method: "GET" })
   .inputValidator(object({ archived: optional(boolean()) }))
   .handler(async ({ data }) => {
     const session = await auth.api.getSession({ headers: getRequestHeaders() });

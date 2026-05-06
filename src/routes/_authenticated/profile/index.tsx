@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { getSession } from "@/server/functions/session/get-session";
+import { getSession } from "@/server/functions/user/get-session";
 
 export const Route = createFileRoute("/_authenticated/profile/")({
   loader: async () => {

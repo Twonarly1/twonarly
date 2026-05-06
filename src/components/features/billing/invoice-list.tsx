@@ -18,9 +18,9 @@ import {
 } from "@/components/ui/item";
 import { Skeleton, skeletonRows } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/utils/format";
-import { fetchInvoices } from "@/server/functions/subscriptions/fetch-invoices";
+import { getInvoices } from "@/server/functions/subscriptions/get-invoices";
 
-import type { Invoice } from "@/server/functions/subscriptions/fetch-invoices";
+import type { Invoice } from "@/server/functions/subscriptions/get-invoices";
 
 const INVOICE_LIMIT = 6;
 
@@ -33,7 +33,7 @@ const InvoiceList = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["invoices"],
-    queryFn: () => fetchInvoices({ data: { limit: INVOICE_LIMIT, startingAfter: undefined } }),
+    queryFn: () => getInvoices({ data: { limit: INVOICE_LIMIT, startingAfter: undefined } }),
     staleTime: 1000 * 60 * 5,
   });
 
@@ -50,7 +50,7 @@ const InvoiceList = () => {
 
     setLoadingMore(true);
     try {
-      const result = await fetchInvoices({
+      const result = await getInvoices({
         data: { startingAfter: lastId, limit: INVOICE_LIMIT },
       });
       animateFromIndex.current = invoices.length;

@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 
-import { ConnectWalletSkeleton } from "@/components/siwe/connect-wallet-skeleton";
+import { ConnectWalletSkeleton } from "@/components/features/auth/siwe/connect-wallet-skeleton";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import type { ReactNode } from "react";
 
 const ConnectWalletContent = lazy(() =>
   Promise.all([
-    import("@/components/siwe/connect-wallet-content").then((mod) => ({
+    import("@/components/features/auth/siwe/connect-wallet-content").then((mod) => ({
       default: mod.ConnectWalletContent,
     })),
     new Promise((resolve) => setTimeout(resolve, 800)),

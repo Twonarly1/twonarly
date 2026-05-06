@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
+import { useDebounce } from "@/lib/hooks/use-debounce";
 import { updateLayout as updateLayoutServerFn } from "@/server/functions/preferences/layout";
 
 import type { PropsWithChildren } from "react";
@@ -47,29 +48,16 @@ export function LayoutProvider({
       (initial?.sidebarCollapsible as SidebarCollapsible) ?? LAYOUT_DEFAULTS.sidebarCollapsible,
   });
 
-  // Debounced DB sync
-  const pendingRef = useRef<Partial<LayoutSettings>>({});
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedLayout = useDebounce(layout, 500);
 
   const updateLayout = useCallback((patch: Partial<LayoutSettings>) => {
     setLayout((prev) => ({ ...prev, ...patch }));
-
-    pendingRef.current = { ...pendingRef.current, ...patch };
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      if (Object.keys(pendingRef.current).length > 0) {
-        updateLayoutServerFn({ data: pendingRef.current });
-        pendingRef.current = {};
-      }
-    }, 500);
   }, []);
 
-  // Cleanup
+  // Persist to server (debounced)
   useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
+    updateLayoutServerFn({ data: debouncedLayout });
+  }, [debouncedLayout]);
 
   return <LayoutContext value={{ layout, updateLayout }}>{children}</LayoutContext>;
 }

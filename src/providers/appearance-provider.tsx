@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
+import { useDebounce } from "@/lib/hooks/use-debounce";
 import { setAppearance as setAppearanceServerFn } from "@/server/functions/preferences/appearance";
 
 import type { PropsWithChildren } from "react";
@@ -24,23 +25,16 @@ export function AppearanceProvider({
   initial,
 }: PropsWithChildren<{ initial: AppearanceSettings }>) {
   const [appearance, setAppearance] = useState<AppearanceSettings>(initial);
-
-  // Debounced cookie sync
-  const pendingRef = useRef<Partial<AppearanceSettings>>({});
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedAppearance = useDebounce(appearance, 500);
 
   const updateAppearance = useCallback((patch: Partial<AppearanceSettings>) => {
     setAppearance((prev) => ({ ...prev, ...patch }));
-
-    pendingRef.current = { ...pendingRef.current, ...patch };
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      if (Object.keys(pendingRef.current).length > 0) {
-        setAppearanceServerFn({ data: pendingRef.current });
-        pendingRef.current = {};
-      }
-    }, 500);
   }, []);
+
+  // Persist to server (debounced)
+  useEffect(() => {
+    setAppearanceServerFn({ data: debouncedAppearance });
+  }, [debouncedAppearance]);
 
   // Sync to DOM
   useEffect(() => {
@@ -48,13 +42,6 @@ export function AppearanceProvider({
     root.style.setProperty("--font-size-base", appearance.fontSize);
     root.classList.toggle("pointer-cursor", appearance.usePointerCursor);
   }, [appearance.fontSize, appearance.usePointerCursor]);
-
-  // Cleanup
-  useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
 
   return <AppearanceContext value={{ appearance, updateAppearance }}>{children}</AppearanceContext>;
 }

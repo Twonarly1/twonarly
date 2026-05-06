@@ -9,12 +9,12 @@ import clsx from "clsx";
 import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
+import NewTaskDialog from "@/components/features/tasks/new-task-dialog";
+import SearchTaskDialog from "@/components/features/tasks/search-task-dialog";
+import { DataTable } from "@/components/features/tasks/table/data-table";
+import EditableCell from "@/components/features/tasks/table/editable-cell";
+import TableActions from "@/components/features/tasks/table/table-actions";
 import PageContainer from "@/components/layout/page-container";
-import NewTaskDialog from "@/components/new-task-dialog";
-import SearchTaskDialog from "@/components/search-task-dialog";
-import { DataTable } from "@/components/table/data-table";
-import EditableCell from "@/components/table/editable-cell";
-import TableActions from "@/components/table/table-actions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";

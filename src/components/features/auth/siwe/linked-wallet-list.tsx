@@ -1,6 +1,6 @@
 import { useRouter } from "@tanstack/react-router";
 
-import { ConnectWalletDialog } from "@/components/siwe/connect-wallet-dialog";
+import { ConnectWalletDialog } from "@/components/features/auth/siwe/connect-wallet-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Item,

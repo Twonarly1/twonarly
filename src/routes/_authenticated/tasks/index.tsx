@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { fetchTasks } from "@/server/functions/task/fetch-tasks";
+import { getTasks } from "@/server/functions/task/get-tasks";
 
 export const Route = createFileRoute("/_authenticated/tasks/")({
   validateSearch: (search) => ({
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_authenticated/tasks/")({
   }),
   loaderDeps: ({ search }) => ({ archived: search.archived }),
   loader: async ({ deps }) => {
-    const { tasks, counts } = await fetchTasks({ data: { archived: deps.archived } });
+    const { tasks, counts } = await getTasks({ data: { archived: deps.archived } });
     return { tasks, counts };
   },
   pendingMs: 0,

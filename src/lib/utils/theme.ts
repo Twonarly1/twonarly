@@ -1,9 +1,18 @@
 import { colord, extend } from "colord";
 import lchPlugin from "colord/plugins/lch";
 
+import type { CustomTheme } from "@/server/functions/preferences/theme";
+
 extend([lchPlugin]);
 
-export type LchTuple = [number, number, number]; // [L, C, H]
+const EMPTY_THEME: CustomTheme = {
+  base: [0, 0, 0],
+  accent: [0, 0, 0],
+  contrast: 100,
+  sidebar: { base: [0, 0, 0], contrast: 50 },
+};
+
+export type LchTuple = [number, number, number];
 
 export function hexToLch(hex: string): LchTuple {
   const { l, c, h } = colord(hex).toLch();
@@ -13,16 +22,6 @@ export function hexToLch(hex: string): LchTuple {
 export function lchToHex(tuple: LchTuple): string {
   const [l, c, h] = tuple;
   return colord({ l, c, h }).toHex();
-}
-
-export interface CustomTheme {
-  base?: LchTuple;
-  accent?: LchTuple;
-  contrast?: number;
-  sidebar?: {
-    base?: LchTuple;
-    contrast?: number;
-  };
 }
 
 const clamp = (v: number) => Math.max(0, Math.min(100, v));
@@ -92,14 +91,7 @@ export function applyCustomTheme(root: HTMLElement, theme: CustomTheme) {
 }
 
 export function clearCustomTheme(root: HTMLElement) {
-  const allKeys = computePalette({
-    base: [0, 0, 0],
-    accent: [0, 0, 0],
-    contrast: 100,
-    sidebar: { base: [0, 0, 0], contrast: 50 },
-  });
-
-  for (const key of Object.keys(allKeys)) {
+  for (const key of Object.keys(computePalette(EMPTY_THEME))) {
     root.style.removeProperty(`--${key}`);
   }
 }

@@ -2,7 +2,7 @@ import { flexRender } from "@tanstack/react-table";
 import { CheckSquare } from "lucide-react";
 import { useRef } from "react";
 
-import HeaderCell from "@/components/table/header-cell";
+import HeaderCell from "@/components/features/tasks/table/header-cell";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -51,7 +51,7 @@ export function DataTable({ table }: Props) {
         )}
         <TableBody>
           {isEmpty ? (
-            <TableRow data-static="true">
+            <TableRow data-static="true" className="hover:bg-inherit">
               <TableCell colSpan={table.getAllColumns().length}>
                 <Empty>
                   <EmptyMedia className="bg-transparent">

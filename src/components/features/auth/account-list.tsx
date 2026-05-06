@@ -25,6 +25,7 @@ const AccountList = () => {
 
   const handleSignOut = async () => {
     await signOut();
+    await router.invalidate();
     navigate({ to: "/" });
   };
 
@@ -71,7 +72,7 @@ const AccountList = () => {
             <ItemActions>
               {isCurrent ? (
                 <Button variant="ghost" onClick={handleSignOut}>
-                  Log out
+                  Logout
                 </Button>
               ) : (
                 <DropdownMenu>

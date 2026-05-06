@@ -2,8 +2,8 @@ import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { match } from "ts-pattern";
 
+import ConnectOptionList from "@/components/features/auth/siwe/connect-option-list";
 import { StatusErrorIcon } from "@/components/icons/status-error";
-import ConnectOptionList from "@/components/siwe/connect-option-list";
 import { buttonVariants } from "@/components/ui/button";
 import {
   Empty,

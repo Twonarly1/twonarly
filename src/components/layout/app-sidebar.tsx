@@ -24,6 +24,7 @@ const AppSidebar = () => {
 
   const handleSignOut = async () => {
     await signOut();
+    await router.invalidate();
     await navigate({ to: "/" });
   };
 
@@ -33,17 +34,13 @@ const AppSidebar = () => {
         <SidebarMenu>
           <SidebarMenuItem>
             <div className="flex items-center justify-between">
-              <div className="px-2 font-medium text-lg group-data-[collapsible=icon]:hidden">
-                <Link to="/" size="md" className="border-0">
+              <div className="font-medium text-lg group-data-[collapsible=icon]:hidden">
+                <Link to="/" size="md" className="border-transparent focus-visible:border-primary">
                   {app.name}
                 </Link>
               </div>
 
-              <SidebarTrigger
-              // onClick={toggleSidebar}
-              // className={clsx("w-fit!", layout.sidebarCollapsible === "none" && "invisible")}
-              // tooltip="Toggle Sidebar"
-              />
+              <SidebarTrigger />
             </div>
           </SidebarMenuItem>
         </SidebarMenu>

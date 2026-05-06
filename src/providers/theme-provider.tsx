@@ -1,19 +1,20 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
+import { useDebounce } from "@/lib/hooks/use-debounce";
 import { applyCustomTheme, clearCustomTheme } from "@/lib/utils/theme";
 import { setThemePreferences } from "@/server/functions/preferences/theme";
 
 import type { PropsWithChildren } from "react";
 import type { CustomTheme, Theme } from "@/server/functions/preferences/theme";
 
-interface ThemeContext {
+interface ThemeContextValue {
   theme: Theme;
   setTheme: (value: Theme) => void;
   customTheme: CustomTheme | undefined;
   setCustomTheme: (theme: CustomTheme) => void;
 }
 
-const ThemeContext = createContext<ThemeContext | null>(null);
+const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 export function ThemeProvider({
   children,
@@ -26,13 +27,17 @@ export function ThemeProvider({
   const [theme, setThemeState] = useState<Theme>(initialTheme);
   const [customTheme, setCustomTheme] = useState<CustomTheme | undefined>(initialCustomTheme);
 
-  const setTheme = useCallback(
-    (newTheme: Theme) => {
-      setThemeState(newTheme);
-      setThemePreferences({ data: { theme: newTheme, customTheme } });
-    },
-    [customTheme],
-  );
+  const debouncedTheme = useDebounce(theme, 500);
+  const debouncedCustomTheme = useDebounce(customTheme, 500);
+
+  const setTheme = useCallback((newTheme: Theme) => {
+    setThemeState(newTheme);
+  }, []);
+
+  // Persist to server (debounced)
+  useEffect(() => {
+    setThemePreferences({ data: { theme: debouncedTheme, customTheme: debouncedCustomTheme } });
+  }, [debouncedTheme, debouncedCustomTheme]);
 
   // System theme
   useEffect(() => {
@@ -55,10 +60,9 @@ export function ThemeProvider({
     }
   }, [theme]);
 
-  // Custom theme — apply on mount AND when theme/customTheme changes
+  // Custom theme colors
   useEffect(() => {
     const root = document.documentElement;
-
     if (theme === "custom" && customTheme?.base) {
       applyCustomTheme(root, customTheme);
     } else {
@@ -66,6 +70,7 @@ export function ThemeProvider({
     }
   }, [theme, customTheme]);
 
+  // data-theme attribute
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);

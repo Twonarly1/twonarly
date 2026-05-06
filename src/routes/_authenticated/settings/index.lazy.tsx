@@ -14,10 +14,10 @@ import {
 import { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
-import ImportThemeDialog from "@/components/import-theme-dialog";
+import ImportThemeDialog from "@/components/features/settings/import-theme-dialog";
+import ThemeChanger from "@/components/features/settings/theme-changer";
 import PageContainer from "@/components/layout/page-container";
 import Section from "@/components/layout/section";
-import ThemeChanger from "@/components/theme-changer";
 import { Button } from "@/components/ui/button";
 import { Collapsible } from "@/components/ui/collapsible";
 import {
@@ -55,9 +55,9 @@ import { useTheme } from "@/providers/theme-provider";
 import { FONT_SIZES } from "@/server/functions/preferences/appearance";
 import { setThemePreferences } from "@/server/functions/preferences/theme";
 
-import type { CustomTheme } from "@/lib/utils/theme";
 import type { AppearanceSettings } from "@/providers/appearance-provider";
 import type { LayoutSettings } from "@/providers/layout-provider";
+import type { CustomTheme } from "@/server/functions/preferences/theme";
 
 const THEME_OPTIONS = [
   { value: "light", label: "Light", icon: Sun, className: "icon-sm" },
@@ -112,8 +112,8 @@ function SettingsPage() {
 
   const save = (next: CustomTheme) => {
     applyCustomTheme(document.documentElement, next);
-    setCustomTheme(next); // local state
-    setProviderTheme(next); // provider state so the effect has the right value
+    setCustomTheme(next);
+    setProviderTheme(next);
 
     if (next.base && theme !== "custom") {
       setTheme("custom");

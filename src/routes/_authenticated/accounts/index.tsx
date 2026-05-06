@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { fetchAccounts } from "@/server/functions/accounts/fetch-accounts";
-import { fetchUserPasskeys } from "@/server/functions/user/fetch-passkeys";
-import { fetchLinkedWallets } from "@/server/functions/wallet/fetch-linked-wallets";
+import { getAccounts } from "@/server/functions/user/get-accounts";
+import { getPasskeys } from "@/server/functions/user/get-passkeys";
+import { getWallets } from "@/server/functions/user/get-wallets";
 
 export const Route = createFileRoute("/_authenticated/accounts/")({
   loader: async () => {
-    const [accounts, wallets, passkeys] = await Promise.all([
-      fetchAccounts(),
-      fetchLinkedWallets(),
-      fetchUserPasskeys(),
+    const [accounts, passkeys, wallets] = await Promise.all([
+      getAccounts(),
+      getPasskeys(),
+      getWallets(),
     ]);
-    return { accounts, wallets, passkeys };
+    return { accounts, passkeys, wallets };
   },
 });

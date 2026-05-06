@@ -1,12 +1,13 @@
 import { Braces } from "lucide-react";
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
-import { Button } from "./ui/button";
-import { Textarea } from "./ui/textarea";
 
-import type { CustomTheme, LchTuple } from "@/lib/utils/theme";
+import type { LchTuple } from "@/lib/utils/theme";
+import type { CustomTheme } from "@/server/functions/preferences/theme";
 
 const PLACEHOLDER = `{
   "base": [80, 20, 300],

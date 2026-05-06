@@ -16,7 +16,7 @@ import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
 import { Button } from "@/components/ui/button";
 import { app } from "@/lib/config/app.config";
-import { getSession } from "@/server/functions/session/get-session";
+import { getSession } from "@/server/functions/user/get-session";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -90,12 +90,13 @@ function LandingPage() {
     <div className="mx-auto flex min-h-dvh w-full flex-col bg-background text-foreground">
       {/* Nav */}
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-6">
-          <span className="font-semibold text-sm">{app.name}</span>
-          <nav className="flex items-center gap-2">
+        <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-4 sm:px-6">
+          <span className="font-semibold text-xl">{app.name}</span>
+          <nav className="flex items-center gap-1 sm:gap-2">
             <Button
               variant="ghost"
               size="sm"
+              className="hidden sm:inline-flex"
               onClick={() =>
                 document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
               }
@@ -120,54 +121,52 @@ function LandingPage() {
         </div>
       </header>
 
-      <main className="flex flex-1 flex-col gap-16 py-16">
+      <main className="flex flex-1 flex-col gap-12 py-12 sm:gap-16 sm:py-16">
         {/* Hero */}
         <section id="hero">
-          <div className="mx-auto max-w-5xl">
-            <div>
-              <p className="mb-3 font-mono text-muted-foreground text-xs uppercase tracking-widest">
-                A starter kit that respects your time
-              </p>
-              <h1 className="mb-5 font-bold text-5xl leading-[1.1] tracking-tight md:text-6xl">
-                Skip the setup.
-                <br />
-                <span style={{ color: "var(--primary)" }}>Ship the thing.</span>
-              </h1>
-              <p className="mb-8 max-w-lg text-muted-foreground leading-relaxed">
-                {app.name} is a full-featured TanStack Start boilerplate. Auth, billing, theming,
-                tasks — all wired up, no assembly required.
-              </p>
-              <div className="flex flex-wrap items-center gap-3">
-                {session ? (
-                  <Link
-                    to="/tasks"
-                    variant="primary"
-                    search={{ archived: undefined, newTask: undefined }}
-                  >
-                    Open App <ArrowRight className="icon-sm" />
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+            <p className="mb-3 font-mono text-muted-foreground text-xs uppercase tracking-widest">
+              A starter kit that respects your time
+            </p>
+            <h1 className="mb-5 font-bold text-4xl leading-[1.1] tracking-tight sm:text-5xl md:text-6xl">
+              Skip the setup.
+              <br />
+              <span style={{ color: "var(--primary)" }}>Ship the thing.</span>
+            </h1>
+            <p className="mb-8 max-w-lg text-muted-foreground text-sm leading-relaxed sm:text-base">
+              {app.name} is a full-featured TanStack Start boilerplate. Auth, billing, theming,
+              tasks — all wired up, no assembly required.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              {session ? (
+                <Link
+                  to="/tasks"
+                  variant="primary"
+                  search={{ archived: undefined, newTask: undefined }}
+                >
+                  Open App <ArrowRight className="icon-sm" />
+                </Link>
+              ) : (
+                <>
+                  <Link to="/sign-in" variant="primary">
+                    Get started free <ArrowRight className="icon-sm" />
                   </Link>
-                ) : (
-                  <>
-                    <Link to="/sign-in" variant="primary">
-                      Get started free <ArrowRight className="icon-sm" />
-                    </Link>
-                    <Button
-                      variant="outline"
-                      onClick={() =>
-                        document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
-                      }
-                    >
-                      What's included
-                    </Button>
-                  </>
-                )}
-              </div>
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
+                    }
+                  >
+                    What's included
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Auth + Stack row */}
-            <div className="mx-auto flex max-w-6xl flex-col gap-6 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
               <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-xs">Sign in with</span>
+                <span className="shrink-0 text-muted-foreground text-xs">Sign in with</span>
                 <div className="flex items-center gap-1">
                   {authMethods.map(({ icon: Icon, label }) => (
                     <span
@@ -180,9 +179,9 @@ function LandingPage() {
                   ))}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1">
+              <div className="flex flex-wrap gap-x-3 gap-y-1 divide-x">
                 {stack.map((tech) => (
-                  <span key={tech} className="font-mono text-muted-foreground text-xs">
+                  <span key={tech} className="pr-2 font-mono text-muted-foreground text-xs">
                     {tech}
                   </span>
                 ))}
@@ -193,9 +192,9 @@ function LandingPage() {
 
         {/* Features */}
         <section id="features">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-12">
-              <h2 className="font-bold text-2xl tracking-tight">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+            <div className="mb-8 sm:mb-12">
+              <h2 className="font-bold text-xl tracking-tight sm:text-2xl">
                 Everything you were going to build anyway.
               </h2>
               <p className="mt-2 text-muted-foreground text-sm">Six modules. Zero excuses.</p>
@@ -204,7 +203,7 @@ function LandingPage() {
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={feature.title} className="flex flex-col gap-3 bg-background p-6">
+                  <div key={feature.title} className="flex flex-col gap-3 bg-background p-5 sm:p-6">
                     <Icon className="icon-sm text-primary" style={{ color: "var(--primary)" }} />
                     <div>
                       <h3 className="mb-1 font-semibold text-sm">{feature.title}</h3>
@@ -221,12 +220,14 @@ function LandingPage() {
 
         {/* CTA */}
         <section id="cta">
-          <div className="mx-auto max-w-5xl">
-            <div className="rounded-xl border bg-surface px-8 py-12 text-center">
+          <div className="mx-auto max-w-5xl px-4 sm:px-6">
+            <div className="rounded-xl border bg-surface px-6 py-10 text-center sm:px-8 sm:py-12">
               <p className="mb-2 font-mono text-muted-foreground text-xs uppercase tracking-widest">
                 Seriously though
               </p>
-              <h2 className="mb-4 font-bold text-3xl tracking-tight">Just start building.</h2>
+              <h2 className="mb-4 font-bold text-2xl tracking-tight sm:text-3xl">
+                Just start building.
+              </h2>
               <p className="mx-auto mb-8 max-w-sm text-muted-foreground text-sm">
                 You've read this far. You already know you need this. The button is right there.
               </p>
@@ -248,8 +249,8 @@ function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t px-6 py-6">
-        <div className="mx-auto flex max-w-5xl items-center justify-between">
+      <footer className="border-t px-4 py-6 sm:px-6">
+        <div className="mx-auto flex max-w-5xl flex-col items-start gap-1 sm:flex-row sm:items-center sm:justify-between">
           <span className="font-semibold text-sm">{app.name}</span>
           <p className="text-muted-foreground text-xs">
             Built with TanStack Start · Deployed on Vercel

@@ -5,7 +5,7 @@ import { auth } from "@/lib/config/auth.config";
 
 import type { Subscription } from "@better-auth/stripe";
 
-export const fetchActiveSubscriptions = createServerFn({ method: "GET" }).handler(async () => {
+export const getSubscriptions = createServerFn({ method: "GET" }).handler(async () => {
   const headers = getRequestHeaders();
   const session = await auth.api.getSession({ headers });
 

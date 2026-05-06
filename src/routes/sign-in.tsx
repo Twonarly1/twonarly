@@ -2,15 +2,15 @@ import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { ArrowLeft, Fingerprint } from "lucide-react";
 
 import Link from "@/components/core/link";
+import { ConnectWalletDialog } from "@/components/features/auth/siwe/connect-wallet-dialog";
 import { EthereumIcon } from "@/components/icons/ethereum";
 import { GitHubIcon } from "@/components/icons/github";
 import { GoogleIcon } from "@/components/icons/google";
-import { ConnectWalletDialog } from "@/components/siwe/connect-wallet-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { authClient, signIn } from "@/lib/auth/auth-client";
 import { app } from "@/lib/config/app.config";
-import { getSession } from "@/server/functions/session/get-session";
+import { getSession } from "@/server/functions/user/get-session";
 
 export const Route = createFileRoute("/sign-in")({
   component: SignInPage,

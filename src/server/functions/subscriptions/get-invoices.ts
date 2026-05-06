@@ -20,7 +20,7 @@ const fetchInvoicesInput = object({
   startingAfter: optional(pipe(string(), regex(/^in_[A-Za-z0-9]+$/, "Invalid cursor"))),
 });
 
-export const fetchInvoices = createServerFn({ method: "GET" })
+export const getInvoices = createServerFn({ method: "GET" })
   .inputValidator(fetchInvoicesInput)
   .handler(async ({ data }) => {
     const session = await auth.api.getSession({ headers: getRequestHeaders() });
@@ -59,4 +59,4 @@ export const fetchInvoices = createServerFn({ method: "GET" })
     };
   });
 
-export type Invoice = Awaited<ReturnType<typeof fetchInvoices>>["invoices"][number];
+export type Invoice = Awaited<ReturnType<typeof getInvoices>>["invoices"][number];

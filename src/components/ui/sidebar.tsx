@@ -332,6 +332,7 @@ function SidebarMenuButton({
   ...props
 }: React.ComponentProps<typeof Button> & { tooltip?: string }) {
   const { state, isMobile } = useSidebar();
+
   return (
     <Tooltip delayDuration={500}>
       <TooltipTrigger asChild>
@@ -357,6 +358,7 @@ function SidebarMenuLink({
   ...props
 }: React.ComponentProps<typeof Link> & { tooltip?: string }) {
   const { state, isMobile } = useSidebar();
+
   return (
     <Tooltip delayDuration={500}>
       <TooltipTrigger asChild>

@@ -1,10 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-import AccountList from "@/components/account-list";
+import AccountList from "@/components/features/auth/account-list";
+import PasskeyList from "@/components/features/auth/passkey-list";
+import LinkedWalletList from "@/components/features/auth/siwe/linked-wallet-list";
 import PageContainer from "@/components/layout/page-container";
 import Section from "@/components/layout/section";
-import PasskeyList from "@/components/passkey-list";
-import LinkedWalletList from "@/components/siwe/linked-wallet-list";
 
 export const Route = createLazyFileRoute("/_authenticated/accounts/")({
   component: AccountsPage,

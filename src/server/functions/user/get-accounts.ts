@@ -3,9 +3,9 @@ import { inArray } from "drizzle-orm";
 
 import { db } from "@/lib/db/db";
 import { account } from "@/lib/db/schema";
-import { getDeviceSessions } from "../session/get-device-sessions";
+import { getDeviceSessions } from "./get-device-sessions";
 
-export const fetchAccounts = createServerFn({ method: "GET" }).handler(async () => {
+export const getAccounts = createServerFn({ method: "GET" }).handler(async () => {
   const deviceSessions = await getDeviceSessions();
   const userIds = deviceSessions.map((session) => session.user.id);
 

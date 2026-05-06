@@ -1,14 +1,14 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 
-import AppSidebar from "@/components/app-sidebar";
-import MobileBottomNav from "@/components/mobile-nav";
+import AppSidebar from "@/components/layout/app-sidebar";
+import MobileBottomNav from "@/components/layout/mobile-nav";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { LayoutProvider } from "@/providers/layout-provider";
 import { fetchLayout } from "@/server/functions/preferences/layout";
-import { getDeviceSessions } from "@/server/functions/session/get-device-sessions";
-import { getSession } from "@/server/functions/session/get-session";
+import { getDeviceSessions } from "@/server/functions/user/get-device-sessions";
+import { getSession } from "@/server/functions/user/get-session";
 
 export const Route = createFileRoute("/_authenticated")({
   beforeLoad: async () => {

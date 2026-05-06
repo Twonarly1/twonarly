@@ -6,7 +6,7 @@ import { auth } from "@/lib/config/auth.config";
 import { db } from "@/lib/db/db";
 import { walletAddress } from "@/lib/db/schema";
 
-export const fetchLinkedWallets = createServerFn({ method: "GET" }).handler(async () => {
+export const getWallets = createServerFn({ method: "GET" }).handler(async () => {
   const session = await auth.api.getSession({ headers: getRequestHeaders() });
 
   if (!session) {

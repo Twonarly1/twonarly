@@ -3,7 +3,7 @@ import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { match } from "ts-pattern";
 
-import InvoiceList from "@/components/invoice-list";
+import InvoiceList from "@/components/features/billing/invoice-list";
 import PageContainer from "@/components/layout/page-container";
 import Section from "@/components/layout/section";
 import { Badge } from "@/components/ui/badge";
