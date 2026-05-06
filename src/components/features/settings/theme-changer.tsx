@@ -11,7 +11,7 @@ import { SliderControl } from "@/components/ui/slider";
 import { capitalizeFirstLetter } from "@/lib/utils/format";
 import { computeColorsFromTheme, hexToLch, lchToHex } from "@/lib/utils/theme";
 
-import type { CustomTheme } from "@/lib/utils/theme";
+import type { CustomTheme } from "@/server/functions/preferences/theme";
 
 type ZoneId = "sidebar" | "content" | "accent";
 
