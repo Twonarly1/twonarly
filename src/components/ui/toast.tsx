@@ -30,7 +30,7 @@ interface ToastData {
 
 function toast(intent: Intent, data: ToastData) {
   return toastPrimitive.custom((id) => (
-    <div className="relative flex items-center gap-3 rounded-lg bg-surface px-3 py-2 shadow-lg ring-1 ring-black/5 sm:min-w-sm">
+    <div className="relative flex items-center gap-3 rounded-lg bg-surface px-3 py-2 shadow-lg ring-1 ring-black/5 sm:min-w-80">
       <Button
         variant="ghost"
         size="icon-xs"
@@ -46,7 +46,7 @@ function toast(intent: Intent, data: ToastData) {
           <span className="font-medium text-base leading-loose">{data.title}</span>
         </div>
         {data.description && (
-          <p className="ml-5.5 text-base text-muted-foreground">{data.description}</p>
+          <p className="ml-5.5 text-base text-secondary-foreground">{data.description}</p>
         )}
       </div>
     </div>

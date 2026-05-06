@@ -90,7 +90,7 @@ function BillingPage() {
             <Button
               onClick={isActive ? openBillingPortal : handleUpgrade}
               className="cursor-pointer"
-              tone="primary"
+              variant="primary"
             >
               {isActive ? "Manage" : "Upgrade"}
             </Button>
@@ -126,7 +126,7 @@ function BillingPage() {
                 <CardFooter>
                   <Button
                     className="flex w-full cursor-pointer justify-center"
-                    tone="primary"
+                    variant="primary"
                     onClick={isActive ? openBillingPortal : handleUpgrade}
                   >
                     Upgrade to {plan.name}
@@ -143,7 +143,8 @@ function BillingPage() {
           <InvoiceList />
         ) : (
           <Button
-            variant="outline-surface"
+            variant="outline"
+            inverseHover
             onClick={() => setShowInvoices(true)}
             className="absolute top-2 right-4"
           >

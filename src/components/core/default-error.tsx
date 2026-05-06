@@ -20,13 +20,14 @@ const DefaultError = ({ error }: ErrorComponentProps) => {
       </div>
 
       <div className="flex gap-3">
-        <Button variant="outline-surface" onClick={() => router.invalidate()}>
+        <Button variant="outline" inverseHover onClick={() => router.invalidate()}>
           <RefreshCw className="icon-sm" />
           Try Again
         </Button>
 
         <Button
-          variant="outline-surface"
+          variant="outline"
+          inverseHover
           onClick={(e) => {
             e.preventDefault();
             window.history.back();

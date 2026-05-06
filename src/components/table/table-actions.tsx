@@ -14,7 +14,6 @@ interface Props {
   table: TableProps<Task>;
 }
 
-// TODO: Need inspiration
 const TableActions = ({ table }: Props) => {
   const router = useRouter();
   const selectedCount = table.getFilteredSelectedRowModel().rows.length;
@@ -89,12 +88,12 @@ const TableActions = ({ table }: Props) => {
         {selectedCount} selected <span className="pl-1">—</span>
       </span>
 
-      <Button variant="outline-surface" onClick={handleArchive}>
+      <Button variant="outline" inverseHover onClick={handleArchive}>
         <Archive className="icon-sm" />
         Archive
       </Button>
 
-      <Button variant="outline-surface" onClick={handleDelete}>
+      <Button variant="outline" inverseHover onClick={handleDelete}>
         <Trash className="icon-sm" />
         Delete
       </Button>

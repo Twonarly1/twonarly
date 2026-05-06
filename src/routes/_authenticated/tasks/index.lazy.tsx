@@ -208,12 +208,11 @@ function TasksPage() {
               {/* Mobile: icon only */}
               <Button
                 variant="outline"
-                size="icon"
                 className="sm:hidden"
                 onClick={() => setIsSearchTaskOpen(true)}
                 disabled={data.length === 0}
               >
-                <Search className="size-3.5" />
+                <Search className="icon-sm mx-auto" />
               </Button>
 
               <Select
@@ -227,19 +226,19 @@ function TasksPage() {
                 }
               >
                 <SelectTrigger asChild>
-                  <Button variant="outline">
+                  <Button variant="outline" disabled={counts.active === 0 && counts.archived === 0}>
                     <SelectValue placeholder="Select view" />
                     <ChevronDown className="icon-xs ml-1 text-muted-foreground" />
                   </Button>
                 </SelectTrigger>
                 <SelectContent align="start">
                   <SelectGroup>
-                    <SelectItem value="active">
+                    <SelectItem value="active" disabled={counts.active === 0}>
                       Active{" "}
                       {archived && <span className="text-muted-foreground">({counts.active})</span>}
                     </SelectItem>
 
-                    <SelectItem value="archived">
+                    <SelectItem value="archived" disabled={counts.archived === 0}>
                       Archived{" "}
                       {!archived && (
                         <span className="text-muted-foreground">({counts.archived})</span>

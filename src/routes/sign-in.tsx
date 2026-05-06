@@ -109,7 +109,7 @@ function SignInPage() {
               onClick={handlePasskeySignIn}
               className="justify-center"
             >
-              <Fingerprint className="size-4" />
+              <Fingerprint className="icon-sm" />
               Sign in with Passkey
             </Button>
 

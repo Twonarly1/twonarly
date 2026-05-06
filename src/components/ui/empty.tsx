@@ -38,7 +38,7 @@ function EmptyDescription(props: React.ComponentProps<"p">) {
   return (
     <div
       data-slot="empty-description"
-      className="text-muted-foreground [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4"
+      className="text-secondary-foreground [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4"
       {...props}
     />
   );

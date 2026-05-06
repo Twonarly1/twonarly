@@ -5,46 +5,40 @@ import type { VariantProps } from "class-variance-authority";
 import type * as React from "react";
 
 const buttonVariants = cva(
-  "focus-visible:border-primary border focus-visible:border transition-none rounded-lg inline-flex items-center whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none select-none",
+  [
+    "rounded-lg border inline-flex items-center justify-center whitespace-nowrap",
+    "[&_svg]:pointer-events-none [&_svg]:shrink-0 shrink-0",
+    "disabled:pointer-events-none disabled:opacity-50",
+    "select-none transition-none outline-none",
+  ],
   {
     variants: {
       variant: {
-        default: "",
-        outline:
-          "border-border bg-transparent hover:bg-muted custom:hover:bg-content text-secondary-foreground hover:text-foreground",
-        "outline-surface":
-          "border-border bg-transparent hover:bg-muted custom:hover:bg-surface text-secondary-foreground hover:text-foreground",
-        ghost:
-          "border-transparent text-secondary-foreground hover:bg-muted custom:hover:bg-content hover:text-foreground",
-        mobileNav:
-          "rounded-full transition-colors duration-150 hover:bg-muted ease-out-strong custom:hover:bg-surface",
-        sidebar:
-          "peer/menu-button group/menu-button w-full gap-1.5 px-[0.625rem] text-sm font-medium leading-snug border-transparent text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:border-primary data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-foreground justify-start group-data-[collapsible=icon]:[&>span]:hidden [&>span:last-child]:truncate overflow-hidden",
-      },
-      tone: {
-        default: "",
+        unstyled: "",
         primary:
-          "bg-primary border-0 focus-visible:border-0 text-primary-foreground hover:bg-primary/80 focus-visible:ring focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+          "border-0 bg-primary text-primary-foreground hover:bg-primary/80 focus-visible:ring focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        outline:
+          "focus-visible:border-primary border-border bg-transparent text-secondary-foreground hover:bg-muted hover:text-foreground",
+        ghost:
+          "focus-visible:border-primary border-transparent text-secondary-foreground hover:bg-muted hover:text-foreground custom:hover:bg-content",
         destructive:
-          "bg-destructive border-0 focus-visible:border-0 text-destructive-foreground hover:bg-destructive/80 focus-visible:ring focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-inherit",
+          "border-0 bg-destructive text-destructive-foreground hover:bg-destructive/80 focus-visible:ring focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
       },
       size: {
-        sm: "h-7 gap-2 px-2.5 py-0.5",
+        xs: "h-6 gap-1 px-2",
+        sm: "h-7 gap-1.5 px-2.5",
         md: "h-8 gap-2 px-2.5",
-        lg: "h-9 gap-2 px-2.5",
-        xl: "h-10 gap-2 px-2.5",
-        icon: "size-8",
+        lg: "h-9 gap-2 px-3",
+        xl: "h-10 gap-2 px-3.5",
         "icon-xs": "size-6",
         "icon-sm": "size-7",
+        "icon-md": "size-8",
         "icon-lg": "size-9",
-      },
-      press: {
-        scale: "active:scale-[0.97]",
+        "icon-xl": "size-10",
       },
     },
     defaultVariants: {
-      variant: "default",
-      tone: "default",
+      variant: "unstyled",
       size: "sm",
     },
   },
@@ -54,14 +48,23 @@ function Button({
   className,
   variant,
   size,
-  press,
-  tone,
-  onTransitionEndCapture,
+  inverseHover,
+  withPress,
   ...props
-}: React.ComponentProps<"button"> & VariantProps<typeof buttonVariants>) {
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    withPress?: boolean;
+    inverseHover?: boolean;
+  }) {
   return (
     <button
-      className={clsx(buttonVariants({ variant, size, tone, press }), className)}
+      className={clsx(
+        buttonVariants({ variant, size }),
+        withPress && "active:scale-[0.97]",
+        inverseHover !== undefined &&
+          (inverseHover ? "custom:hover:bg-surface" : "custom:hover:bg-content"),
+        className,
+      )}
       {...props}
     />
   );

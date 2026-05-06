@@ -172,7 +172,7 @@ function SettingsPage() {
               {theme === "custom" && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="flex size-7 justify-center">
+                    <Button variant="outline" size="icon-sm">
                       <MoreHorizontal className="icon-sm" />
                     </Button>
                   </DropdownMenuTrigger>

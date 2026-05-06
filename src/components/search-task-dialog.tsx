@@ -27,7 +27,7 @@ const SearchTaskDialog = ({ table }: Props) => {
 
   return (
     <Dialog open={isSearchTaskOpen} onOpenChange={setIsSearchTaskOpen}>
-      <DialogContent aria-describedby={undefined}>
+      <DialogContent aria-describedby={undefined} side="top">
         <DialogHeader>
           <DialogTitle>Search Task</DialogTitle>
         </DialogHeader>

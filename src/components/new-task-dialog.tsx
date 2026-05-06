@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Kbd } from "@/components/ui/kbd";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { addTask } from "@/server/functions/task/add-task";
 
 const NewTaskDialog = () => {
@@ -20,6 +21,7 @@ const NewTaskDialog = () => {
   const addTaskFn = useServerFn(addTask);
   const router = useRouter();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const { isOpen: isCreateTaskOpen, setIsOpen: setIsCreateTaskOpen } = useDialogStore({
     type: DialogType.CreateTask,
@@ -77,12 +79,12 @@ const NewTaskDialog = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" press="scale">
+        <Button variant="outline" withPress>
           New Task
           <Kbd>C</Kbd>
         </Button>
       </DialogTrigger>
-      <DialogContent aria-describedby={undefined}>
+      <DialogContent aria-describedby={undefined} side={isMobile ? "top" : "center"}>
         <DialogHeader>
           <DialogTitle>New Task</DialogTitle>
         </DialogHeader>
@@ -96,8 +98,9 @@ const NewTaskDialog = () => {
             onChange={(e) => setName(e.target.value)}
             className="h-8"
           />
-          <div className="mt-2 flex justify-end">
-            <Button type="submit" disabled={!canSubmit} press="scale" tone="primary">
+
+          <div className="mt-4 flex justify-end">
+            <Button variant="primary" type="submit" disabled={!canSubmit} withPress>
               Create task
             </Button>
           </div>

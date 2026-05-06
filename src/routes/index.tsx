@@ -105,14 +105,14 @@ function LandingPage() {
             {session ? (
               <Link
                 to="/tasks"
-                tone="primary"
+                variant="primary"
                 size="sm"
                 search={{ archived: undefined, newTask: undefined }}
               >
                 Open App <ArrowRight className="icon-xs" />
               </Link>
             ) : (
-              <Link to="/sign-in" tone="primary" size="sm">
+              <Link to="/sign-in" variant="primary" size="sm">
                 Sign in
               </Link>
             )}
@@ -141,14 +141,14 @@ function LandingPage() {
                 {session ? (
                   <Link
                     to="/tasks"
-                    tone="primary"
+                    variant="primary"
                     search={{ archived: undefined, newTask: undefined }}
                   >
                     Open App <ArrowRight className="icon-sm" />
                   </Link>
                 ) : (
                   <>
-                    <Link to="/sign-in" tone="primary">
+                    <Link to="/sign-in" variant="primary">
                       Get started free <ArrowRight className="icon-sm" />
                     </Link>
                     <Button
@@ -233,13 +233,13 @@ function LandingPage() {
               {session ? (
                 <Link
                   to="/tasks"
-                  tone="primary"
+                  variant="primary"
                   search={{ archived: undefined, newTask: undefined }}
                 >
                   Open App <ArrowRight className="icon-sm" />
                 </Link>
               ) : (
-                <Link to="/sign-in" tone="primary">
+                <Link to="/sign-in" variant="primary">
                   Get started free <ArrowRight className="icon-sm" />
                 </Link>
               )}

@@ -1,9 +1,8 @@
-import { useMatchRoute } from "@tanstack/react-router";
+import { Link as RouterLink, useMatchRoute } from "@tanstack/react-router";
 import { MoreHorizontal, Plus, Search, X } from "lucide-react";
 import { useState } from "react";
 
 import Link from "@/components/core/link";
-import { Button } from "@/components/ui/button";
 import { Collapsible } from "@/components/ui/collapsible";
 import { navLinks } from "@/lib/constants/nav-links";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
@@ -19,6 +18,9 @@ const MobileBottomNav = () => {
   const { setIsOpen: setIsSearchTaskOpen } = useDialogStore({
     type: DialogType.SearchTask,
   });
+
+  const mobileNavClass =
+    "rounded-full! active:bg-muted h-9 gap-2 flex items-center px-2.5 border-transparent transition-colors duration-150 hover:bg-muted ease-out-strong custom:hover:bg-surface";
 
   return (
     <>
@@ -44,7 +46,7 @@ const MobileBottomNav = () => {
                   key={item.to}
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  variant="outline-surface"
+                  variant="ghost"
                   size="lg"
                   activeProps={{
                     className: "text-foreground bg-muted custom:bg-surface border-border",
@@ -60,56 +62,57 @@ const MobileBottomNav = () => {
           <div className="flex w-full items-center justify-between px-3 py-2">
             {open ? (
               <>
-                <Link
+                <RouterLink
                   to="/tasks"
                   search={{ newTask: true, archived: undefined }}
-                  variant="mobileNav"
-                  size="lg"
+                  className={mobileNavClass}
                   onClick={() => setOpen(false)}
                 >
                   <Plus className="size-4" />
-                </Link>
+                </RouterLink>
 
-                <Button variant="mobileNav" size="lg" onClick={() => setOpen(false)}>
+                <button type="button" className={mobileNavClass} onClick={() => setOpen(false)}>
                   <X className="size-4" />
-                </Button>
+                </button>
               </>
             ) : isTasksPage ? (
               <>
-                <Button variant="mobileNav" size="lg" onClick={() => setIsSearchTaskOpen(true)}>
+                <button
+                  type="button"
+                  className={mobileNavClass}
+                  onClick={() => setIsSearchTaskOpen(true)}
+                >
                   <Search className="size-4" />
-                </Button>
+                </button>
 
-                <Link
+                <RouterLink
                   to="/tasks"
                   search={{ newTask: true, archived: undefined }}
-                  variant="mobileNav"
-                  size="lg"
+                  className={mobileNavClass}
                 >
                   <Plus className="size-4" />
-                </Link>
+                </RouterLink>
 
-                <Button variant="mobileNav" size="lg" onClick={() => setOpen((v) => !v)}>
+                <button type="button" className={mobileNavClass} onClick={() => setOpen((v) => !v)}>
                   <MoreHorizontal className="size-4" />
-                </Button>
+                </button>
               </>
             ) : (
               <>
                 {pinnedLinks.map((item) => (
-                  <Link
+                  <RouterLink
                     key={item.to}
                     to={item.to}
-                    variant="mobileNav"
-                    size="lg"
+                    className={mobileNavClass}
                     activeProps={{ className: "text-foreground bg-muted custom:bg-surface" }}
                   >
                     <item.icon className="size-4" />
-                  </Link>
+                  </RouterLink>
                 ))}
 
-                <Button variant="mobileNav" size="lg" onClick={() => setOpen((v) => !v)}>
+                <button type="button" className={mobileNavClass} onClick={() => setOpen((v) => !v)}>
                   <MoreHorizontal className="size-4" />
-                </Button>
+                </button>
               </>
             )}
           </div>

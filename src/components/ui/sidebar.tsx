@@ -5,6 +5,7 @@ import { PanelLeft } from "lucide-react";
 import React from "react";
 import { match } from "ts-pattern";
 
+import Link from "@/components/core/link";
 import { Button } from "@/components/ui/button";
 import { Kbd } from "@/components/ui/kbd";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -194,36 +195,6 @@ function Sidebar({ children, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function SidebarTrigger({ ...props }: React.ComponentProps<typeof Button>) {
-  const { state, toggleSidebar } = useSidebar();
-  const { layout } = useLayout();
-
-  if (layout.sidebarCollapsible === "none") return null;
-
-  return (
-    <Tooltip delayDuration={500}>
-      <TooltipTrigger asChild>
-        <Button
-          data-sidebar="trigger"
-          data-slot="sidebar-trigger"
-          variant="sidebar"
-          size="icon"
-          onClick={toggleSidebar}
-          className="w-fit!"
-          {...props}
-        >
-          <PanelLeft className="icon-sm" />
-          <span className="sr-only">Toggle Sidebar</span>
-        </Button>
-      </TooltipTrigger>
-      <TooltipContent side={layout.sidebarPosition === "right" ? "left" : "right"} sideOffset={16}>
-        {state === "collapsed" ? "Expand sidebar" : "Collapse sidebar"}
-        <Kbd>B</Kbd>
-      </TooltipContent>
-    </Tooltip>
-  );
-}
-
 function SidebarInset({ children, ...props }: React.ComponentProps<"main">) {
   const { layout } = useLayout();
   const { state, isMobile } = useSidebar();
@@ -325,6 +296,86 @@ function SidebarFooter({ ...props }: React.ComponentProps<"div">) {
   );
 }
 
+const sidebarItemClass =
+  "peer/menu-button group/menu-button w-full gap-1.5 px-[0.625rem] text-sm font-medium leading-snug border-transparent text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground focus-visible:border-primary data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-foreground justify-start group-data-[collapsible=icon]:[&>span]:hidden [&>span:last-child]:truncate overflow-hidden";
+
+function SidebarTrigger({ className, ...props }: React.ComponentProps<"button">) {
+  const { state, toggleSidebar } = useSidebar();
+  const { layout } = useLayout();
+
+  if (layout.sidebarCollapsible === "none") return null;
+
+  return (
+    <Tooltip delayDuration={500}>
+      <TooltipTrigger asChild>
+        <Button
+          onClick={toggleSidebar}
+          size="icon-md"
+          className={clsx(sidebarItemClass, "w-fit!", className)}
+          {...props}
+        >
+          <PanelLeft className="icon-sm" />
+          <span className="sr-only">Toggle Sidebar</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent side={layout.sidebarPosition === "right" ? "left" : "right"} sideOffset={16}>
+        {state === "collapsed" ? "Expand sidebar" : "Collapse sidebar"}
+        <Kbd>B</Kbd>
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
+function SidebarMenuButton({
+  className,
+  tooltip,
+  ...props
+}: React.ComponentProps<typeof Button> & { tooltip?: string }) {
+  const { state, isMobile } = useSidebar();
+  return (
+    <Tooltip delayDuration={500}>
+      <TooltipTrigger asChild>
+        <Button size="icon-md" className={clsx(sidebarItemClass, className)} {...props} />
+      </TooltipTrigger>
+      {tooltip && (
+        <TooltipContent
+          side="right"
+          align="center"
+          sideOffset={16}
+          hidden={state !== "collapsed" || isMobile}
+        >
+          {tooltip}
+        </TooltipContent>
+      )}
+    </Tooltip>
+  );
+}
+
+function SidebarMenuLink({
+  className,
+  tooltip,
+  ...props
+}: React.ComponentProps<typeof Link> & { tooltip?: string }) {
+  const { state, isMobile } = useSidebar();
+  return (
+    <Tooltip delayDuration={500}>
+      <TooltipTrigger asChild>
+        <Link size="icon-md" className={clsx(sidebarItemClass, className)} {...props} />
+      </TooltipTrigger>
+      {tooltip && (
+        <TooltipContent
+          side="right"
+          align="center"
+          sideOffset={16}
+          hidden={state !== "collapsed" || isMobile}
+        >
+          {tooltip}
+        </TooltipContent>
+      )}
+    </Tooltip>
+  );
+}
+
 export {
   Sidebar,
   SidebarContent,
@@ -333,7 +384,9 @@ export {
   SidebarGroupLabel,
   SidebarInset,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuLink,
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
