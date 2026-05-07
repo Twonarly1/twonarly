@@ -50,7 +50,7 @@ const AppSidebar = () => {
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarMenu>
-            {navLinks.slice(1, navLinks.length).map((item) => (
+            {navLinks.map((item) => (
               <SidebarMenuItem key={item.to}>
                 <SidebarMenuLink
                   to={item.to}

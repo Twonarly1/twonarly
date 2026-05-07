@@ -179,7 +179,6 @@ export const linkWalletPlugin = (opts: { domain: string }) =>
           return ctx.json({ success: true });
         },
       ),
-
       unlinkWallet: createAuthEndpoint(
         "/siwe/unlink-wallet",
         {
