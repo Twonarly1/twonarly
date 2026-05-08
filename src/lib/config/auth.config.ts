@@ -1,13 +1,20 @@
+import { passkey } from "@better-auth/passkey";
 import { stripe } from "@better-auth/stripe";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { generateRandomString } from "better-auth/crypto";
 import { betterAuth } from "better-auth/minimal";
+import { multiSession, siwe } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { verifyMessage } from "viem";
 
+import { linkWalletPlugin } from "@/lib/auth/link-wallet-plugin";
 import { app } from "@/lib/config/app.config";
 import { stripeClient } from "@/lib/config/stripe.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db/db";
 import * as schema from "@/lib/db/schema";
+
+const SIWE_DOMAIN = new URL(env.BETTER_AUTH_URL ?? app.url).host;
 
 export const auth = betterAuth({
   appName: app.name,
@@ -44,6 +51,27 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    multiSession({ maximumSessions: 3 }),
+    passkey(),
+    siwe({
+      domain: SIWE_DOMAIN,
+      anonymous: true,
+      getNonce: async () => {
+        return generateRandomString(32, "a-z", "A-Z", "0-9");
+      },
+      verifyMessage: async ({ message, signature, address }) => {
+        try {
+          return await verifyMessage({
+            address: address as `0x${string}`,
+            message,
+            signature: signature as `0x${string}`,
+          });
+        } catch {
+          return false;
+        }
+      },
+    }),
+    linkWalletPlugin({ domain: SIWE_DOMAIN }),
     stripe({
       stripeClient,
       stripeWebhookSecret: env.STRIPE_WEBHOOK_SECRET,

@@ -18,7 +18,6 @@ import { Route } from "@/routes/_authenticated/accounts";
 
 const AccountList = () => {
   const { deviceSessions } = Route.useRouteContext();
-  const { accounts } = Route.useLoaderData();
 
   const router = useRouter();
   const navigate = useNavigate();
@@ -43,7 +42,6 @@ const AccountList = () => {
     <ItemGroup variant="list">
       {deviceSessions.map((deviceSession) => {
         const { isCurrent } = deviceSession;
-        const provider = accounts.find((a) => a.userId === deviceSession.user.id)?.providerId;
 
         return (
           <Item key={deviceSession.session.token}>
