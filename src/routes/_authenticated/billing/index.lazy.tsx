@@ -138,20 +138,22 @@ function BillingPage() {
         })}
       </section>
 
-      <Section title="Invoices" description="Your billing history and receipts">
-        {showInvoices ? (
-          <InvoiceList />
-        ) : (
-          <Button
-            variant="outline"
-            inverseHover
-            onClick={() => setShowInvoices(true)}
-            className="absolute top-2 right-4"
-          >
-            Load invoices
-          </Button>
-        )}
-      </Section>
+      {subscription && (
+        <Section title="Invoices" description="Your billing history and receipts">
+          {showInvoices ? (
+            <InvoiceList />
+          ) : (
+            <Button
+              variant="outline"
+              inverseHover
+              onClick={() => setShowInvoices(true)}
+              className="absolute top-2 right-4"
+            >
+              Load invoices
+            </Button>
+          )}
+        </Section>
+      )}
     </PageContainer>
   );
 }

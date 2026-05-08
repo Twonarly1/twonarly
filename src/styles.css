@@ -25,10 +25,10 @@ body {
   --muted: oklch(0.94 0.001 286.375);
   --border: oklch(0.92 0.004 286.32);
 
-  --foreground: oklch(0.15 0.005 282); /* primary — headings, labels */
-  --secondary-foreground: oklch(0.25 0.01 282); /* secondary — body content */
-  --muted-foreground: oklch(0.45 0.01 282); /* tertiary — descriptions, hints */
-  --faded-foreground: oklch(0.65 0.01 282); /* quaternary — placeholders, disabled */
+  --foreground: oklch(0.15 0.005 282);
+  --secondary-foreground: oklch(0.25 0.01 282);
+  --muted-foreground: oklch(0.45 0.01 282);
+  --faded-foreground: oklch(0.65 0.01 282);
 
   --primary: oklch(0.646 0.196 293.756);
   --primary-foreground: oklch(0.985 0 0);

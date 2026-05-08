@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getCookie, setCookie } from "@tanstack/react-start/server";
-import { boolean, object, optional, picklist } from "valibot";
+import { boolean, object, optional, picklist, safeParse } from "valibot";
 
 import { COOKIES } from "@/lib/constants/cookies";
 
@@ -12,8 +12,12 @@ export type FontSize = InferOutput<typeof fontSizeSchema>;
 
 export const FONT_SIZES = fontSizeSchema.options;
 
+const DEFAULT_FONT_SIZE: FontSize = "12px";
+
 export const getAppearance = createServerFn().handler(async () => {
-  const fontSize = (getCookie(COOKIES.fontSize) || "default") as FontSize;
+  const cookieValue = getCookie(COOKIES.fontSize);
+  const parsed = safeParse(fontSizeSchema, cookieValue);
+  const fontSize = parsed.success ? parsed.output : DEFAULT_FONT_SIZE;
   const usePointerCursor = getCookie(COOKIES.pointerCursor) === "true";
 
   return { fontSize, usePointerCursor };

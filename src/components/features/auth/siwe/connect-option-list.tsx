@@ -18,6 +18,7 @@ const ConnectOptionList = ({ wallets, onConnect, disabled }: ConnectOptionListPr
           onClick={() => onConnect(wallet)}
           disabled={disabled}
           size="xl"
+          className="justify-start"
         >
           <img src={wallet.info.icon} alt={wallet.info.name} className="size-5" />
           {wallet.info.name}

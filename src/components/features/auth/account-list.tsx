@@ -51,7 +51,7 @@ const AccountList = () => {
               <div className="flex items-center gap-2">
                 <Avatar
                   src={deviceSession.user.image}
-                  alt={deviceSession.user.name}
+                  alt={deviceSession.user.name || "User avatar"}
                   className="size-8 rounded-lg"
                 />
                 <div>
@@ -59,11 +59,7 @@ const AccountList = () => {
                     <p className="font-medium text-base text-foreground">
                       {deviceSession.user.name}
                     </p>
-                    {provider === "google" && <GoogleIcon />}
-                    {provider === "github" && <GitHubIcon />}
-                    {isCurrent && (
-                      <span className="font-medium text-green-600 text-sm">Active</span>
-                    )}
+                    {isCurrent && <span className="font-medium text-primary text-sm">Active</span>}
                   </div>
                   <p className="text-muted-foreground text-sm">{deviceSession.user.email}</p>
                 </div>

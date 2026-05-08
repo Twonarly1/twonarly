@@ -172,7 +172,7 @@ function LandingPage() {
                     <span
                       key={label}
                       title={label}
-                      className="flex size-7 items-center justify-center rounded-md border bg-surface text-foreground"
+                      className="flex size-8 items-center justify-center rounded-lg border bg-surface text-foreground"
                     >
                       <Icon />
                     </span>
