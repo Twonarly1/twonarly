@@ -13,7 +13,6 @@ export const authClient = createAuthClient({
     passkeyClient(),
     siweClient(),
     stripeClient({
-      //if you want to enable subscription management
       subscription: true,
     }),
   ],

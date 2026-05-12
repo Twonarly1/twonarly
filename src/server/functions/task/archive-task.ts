@@ -3,7 +3,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { and, eq } from "drizzle-orm";
 import { minLength, object, pipe, string } from "valibot";
 
-import { auth } from "@/lib/config/auth.config";
+import { auth } from "@/lib/auth/auth.config";
 import { db } from "@/lib/db";
 import { tasks } from "@/lib/db/schema";
 

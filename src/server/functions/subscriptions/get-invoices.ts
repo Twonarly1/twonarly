@@ -12,7 +12,7 @@ import {
   string,
 } from "valibot";
 
-import { auth } from "@/lib/config/auth.config";
+import { auth } from "@/lib/auth/auth.config";
 import { stripeClient } from "@/lib/config/stripe.config";
 
 const fetchInvoicesInput = object({

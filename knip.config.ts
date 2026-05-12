@@ -1,14 +1,7 @@
 import type { KnipConfig } from "knip";
 
-const knipConfig: KnipConfig = {
-  ignoreDependencies: ["tailwindcss", "tw-animate-css"],
+export default {
   ignoreExportsUsedInFile: true,
   ignore: ["src/components/ui/**"],
-  entry: ["src/routes/**/*.{ts,tsx}", "src/router.tsx"],
-  project: ["src/**/*.{ts,tsx}"],
-  paths: {
-    "src/components/ui/*": ["src/components/ui/*"],
-  },
-};
-
-export default knipConfig;
+  entry: ["src/router.tsx"],
+} satisfies KnipConfig;

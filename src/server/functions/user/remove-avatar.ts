@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
-import { auth } from "@/lib/config/auth.config";
+import { auth } from "@/lib/auth/auth.config";
 import { R2_ENDPOINT, r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
 import { db } from "@/lib/db";
