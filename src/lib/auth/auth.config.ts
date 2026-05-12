@@ -44,7 +44,7 @@ const stripePlugin = stripe({
   createCustomerOnSignUp: true,
   subscription: {
     enabled: true,
-    plans: [{ name: "basic", priceId: env.STRIPE_BASIC_PRICE_ID }],
+    plans: [{ name: "basic", priceId: "price_1TEuNq2LlOYTb68G8n9sH7m" }],
   },
 });
 

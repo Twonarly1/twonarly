@@ -20,7 +20,6 @@ export const env = createEnv({
     R2_PUBLIC_URL: requiredUrl(),
     STRIPE_SECRET_KEY: requiredString(),
     STRIPE_WEBHOOK_SECRET: requiredString(),
-    STRIPE_BASIC_PRICE_ID: requiredString(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
