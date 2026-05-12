@@ -62,5 +62,9 @@
   },
   "overrides": {
     "zod": "^4.4.3"
+  },
+  "patchedDependencies": {
+    "@tanstack/router-generator@1.166.42": "patches/@tanstack%2Frouter-generator@1.166.42.patch",
+    "@tanstack/start-plugin-core@1.169.20": "patches/@tanstack%2Fstart-plugin-core@1.169.20.patch"
   }
 }
