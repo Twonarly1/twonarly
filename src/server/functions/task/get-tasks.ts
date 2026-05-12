@@ -4,7 +4,7 @@ import { and, count, eq, isNotNull, isNull } from "drizzle-orm";
 import { boolean, object, optional } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { tasks as tasksTable } from "@/lib/db/schema";
 
 export const getTasks = createServerFn({ method: "GET" })

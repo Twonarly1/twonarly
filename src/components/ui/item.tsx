@@ -1,9 +1,10 @@
 import { cva } from "class-variance-authority";
-import clsx from "clsx";
-import * as React from "react";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
+
+import { cn } from "@/lib/utils";
 
 import type { VariantProps } from "class-variance-authority";
+import type { ComponentProps, HTMLAttributes, Ref } from "react";
 
 const ItemGroupContext = createContext<"list" | "group">("group");
 
@@ -11,22 +12,22 @@ function ItemGroup({
   variant = "group",
   ref,
   ...props
-}: Omit<React.HTMLAttributes<HTMLElement>, "ref"> & {
+}: Omit<HTMLAttributes<HTMLElement>, "ref"> & {
   variant?: "list" | "group";
-  ref?: React.Ref<HTMLElement>;
+  ref?: Ref<HTMLElement>;
 }) {
   return (
     <ItemGroupContext.Provider value={variant}>
       {variant === "list" ? (
         <ul
-          ref={ref as React.Ref<HTMLUListElement>}
+          ref={ref as Ref<HTMLUListElement>}
           data-slot="item-group"
           className="group/item-group flex flex-col divide-y rounded-xl border bg-surface"
           {...props}
         />
       ) : (
         <div
-          ref={ref as React.Ref<HTMLDivElement>}
+          ref={ref as Ref<HTMLDivElement>}
           data-slot="item-group"
           className="group/item-group flex flex-col divide-y rounded-xl border bg-surface"
           {...props}
@@ -63,16 +64,16 @@ function Item({
   size = "sm",
   ref,
   ...props
-}: Omit<React.HTMLAttributes<HTMLElement>, "ref"> &
+}: Omit<HTMLAttributes<HTMLElement>, "ref"> &
   VariantProps<typeof itemVariants> & {
-    ref?: React.Ref<HTMLElement>;
+    ref?: Ref<HTMLElement>;
   }) {
-  const groupVariant = React.useContext(ItemGroupContext);
-  const classes = clsx(itemVariants({ variant, size }), className);
+  const groupVariant = useContext(ItemGroupContext);
+  const classes = cn(itemVariants({ variant, size }), className);
 
   return groupVariant === "list" ? (
     <li
-      ref={ref as React.Ref<HTMLLIElement>}
+      ref={ref as Ref<HTMLLIElement>}
       data-slot="item"
       data-variant={variant}
       data-size={size}
@@ -81,7 +82,7 @@ function Item({
     />
   ) : (
     <div
-      ref={ref as React.Ref<HTMLDivElement>}
+      ref={ref as Ref<HTMLDivElement>}
       data-slot="item"
       data-variant={variant}
       data-size={size}
@@ -91,7 +92,7 @@ function Item({
   );
 }
 
-function ItemContent({ ...props }: React.ComponentProps<"div">) {
+function ItemContent({ ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="item-content"
@@ -101,7 +102,7 @@ function ItemContent({ ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function ItemTitle({ ...props }: React.ComponentProps<"div">) {
+function ItemTitle({ ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="item-title"
@@ -111,7 +112,7 @@ function ItemTitle({ ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function ItemDescription({ ...props }: React.ComponentProps<"p">) {
+function ItemDescription({ ...props }: ComponentProps<"p">) {
   return (
     <p
       data-slot="item-description"
@@ -121,7 +122,7 @@ function ItemDescription({ ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function ItemActions({ ...props }: React.ComponentProps<"div">) {
+function ItemActions({ ...props }: ComponentProps<"div">) {
   return <div data-slot="item-actions" className="ml-auto flex items-center gap-2" {...props} />;
 }
 

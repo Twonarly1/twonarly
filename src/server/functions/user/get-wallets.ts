@@ -3,7 +3,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/config/auth.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { walletAddress } from "@/lib/db/schema";
 
 export const getWallets = createServerFn({ method: "GET" }).handler(async () => {

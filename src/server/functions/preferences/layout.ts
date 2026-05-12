@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { object, optional, picklist } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { userSettings } from "@/lib/db/schema";
 
 export const fetchLayout = createServerFn({ method: "GET" }).handler(async () => {

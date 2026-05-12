@@ -1,6 +1,6 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+function Table({ className, ...props }: ComponentProps<"table">) {
   return (
     <div data-slot="table-container" className="relative w-full">
       <table data-slot="table" className="h-full w-full table-auto caption-bottom" {...props} />
@@ -8,7 +8,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
   );
 }
 
-function TableHeader({ ...props }: React.ComponentProps<"thead">) {
+function TableHeader({ ...props }: ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
@@ -18,11 +18,11 @@ function TableHeader({ ...props }: React.ComponentProps<"thead">) {
   );
 }
 
-function TableBody({ ...props }: React.ComponentProps<"tbody">) {
+function TableBody({ ...props }: ComponentProps<"tbody">) {
   return <tbody data-slot="table-body" {...props} />;
 }
 
-function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
+function TableFooter({ className, ...props }: ComponentProps<"tfoot">) {
   return (
     <tfoot
       data-slot="table-footer"
@@ -32,7 +32,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   );
 }
 
-function TableRow({ ...props }: React.ComponentProps<"tr">) {
+function TableRow({ ...props }: ComponentProps<"tr">) {
   return (
     <tr
       data-slot="table-row"
@@ -42,7 +42,7 @@ function TableRow({ ...props }: React.ComponentProps<"tr">) {
   );
 }
 
-function TableHead({ ...props }: React.ComponentProps<"th">) {
+function TableHead({ ...props }: ComponentProps<"th">) {
   return (
     <th
       data-slot="table-head"
@@ -52,7 +52,7 @@ function TableHead({ ...props }: React.ComponentProps<"th">) {
   );
 }
 
-function TableCell({ ...props }: React.ComponentProps<"td">) {
+function TableCell({ ...props }: ComponentProps<"td">) {
   return (
     <td
       data-slot="table-cell"
@@ -62,7 +62,7 @@ function TableCell({ ...props }: React.ComponentProps<"td">) {
   );
 }
 
-function TableCaption({ ...props }: React.ComponentProps<"caption">) {
+function TableCaption({ ...props }: ComponentProps<"caption">) {
   return <caption data-slot="table-caption" className="mt-4 text-muted-foreground" {...props} />;
 }
 

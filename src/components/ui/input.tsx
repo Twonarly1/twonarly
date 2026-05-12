@@ -1,13 +1,13 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
-import type * as React from "react";
+import type { ComponentProps } from "react";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+function Input({ className, type, ...props }: ComponentProps<"input">) {
   return (
     <input
       type={type}
       data-slot="input"
-      className={clsx(
+      className={cn(
         "h-7 w-full min-w-0 cursor-auto rounded-lg border border-border bg-transparent px-3 py-1 font-normal text-base text-secondary-foreground outline-none",
         "transition-colors selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0",
         "placeholder:text-faded-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",

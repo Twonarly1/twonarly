@@ -1,10 +1,10 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 
-function Card(props: React.ComponentProps<"div">) {
+function Card(props: ComponentProps<"div">) {
   return <div data-slot="card" className="flex flex-col rounded-xl border bg-surface" {...props} />;
 }
 
-function CardHeader(props: React.ComponentProps<"div">) {
+function CardHeader(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="card-header"
@@ -14,7 +14,7 @@ function CardHeader(props: React.ComponentProps<"div">) {
   );
 }
 
-function CardTitle(props: React.ComponentProps<"div">) {
+function CardTitle(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
@@ -24,7 +24,7 @@ function CardTitle(props: React.ComponentProps<"div">) {
   );
 }
 
-function CardDescription(props: React.ComponentProps<"div">) {
+function CardDescription(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
@@ -34,7 +34,7 @@ function CardDescription(props: React.ComponentProps<"div">) {
   );
 }
 
-function CardAction(props: React.ComponentProps<"div">) {
+function CardAction(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="card-action"
@@ -44,11 +44,11 @@ function CardAction(props: React.ComponentProps<"div">) {
   );
 }
 
-function CardContent(props: React.ComponentProps<"div">) {
+function CardContent(props: ComponentProps<"div">) {
   return <div data-slot="card-content" className="flex flex-col gap-1.5 px-4 pb-4" {...props} />;
 }
 
-function CardFooter(props: React.ComponentProps<"div">) {
+function CardFooter(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="card-footer"

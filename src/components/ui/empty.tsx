@@ -1,6 +1,6 @@
-import type * as React from "react";
+import type { ComponentProps } from "react";
 
-function Empty(props: React.ComponentProps<"div">) {
+function Empty(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="empty"
@@ -10,7 +10,7 @@ function Empty(props: React.ComponentProps<"div">) {
   );
 }
 
-function EmptyHeader(props: React.ComponentProps<"div">) {
+function EmptyHeader(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-header"
@@ -20,7 +20,7 @@ function EmptyHeader(props: React.ComponentProps<"div">) {
   );
 }
 
-function EmptyMedia(props: React.ComponentProps<"div">) {
+function EmptyMedia(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-icon"
@@ -30,11 +30,11 @@ function EmptyMedia(props: React.ComponentProps<"div">) {
   );
 }
 
-function EmptyTitle(props: React.ComponentProps<"div">) {
+function EmptyTitle(props: ComponentProps<"div">) {
   return <div data-slot="empty-title" className="font-medium text-xl tracking-tight" {...props} />;
 }
 
-function EmptyDescription(props: React.ComponentProps<"p">) {
+function EmptyDescription(props: ComponentProps<"p">) {
   return (
     <div
       data-slot="empty-description"
@@ -44,7 +44,7 @@ function EmptyDescription(props: React.ComponentProps<"p">) {
   );
 }
 
-function EmptyContent(props: React.ComponentProps<"div">) {
+function EmptyContent(props: ComponentProps<"div">) {
   return (
     <div
       data-slot="empty-content"

@@ -1,8 +1,9 @@
 import { cva } from "class-variance-authority";
-import clsx from "clsx";
+
+import { cn } from "@/lib/utils";
 
 import type { VariantProps } from "class-variance-authority";
-import type * as React from "react";
+import type { ComponentProps } from "react";
 
 const buttonVariants = cva(
   [
@@ -51,14 +52,14 @@ function Button({
   inverseHover,
   withPress,
   ...props
-}: React.ComponentProps<"button"> &
+}: ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     withPress?: boolean;
     inverseHover?: boolean;
   }) {
   return (
     <button
-      className={clsx(
+      className={cn(
         buttonVariants({ variant, size }),
         withPress && "active:scale-[0.97]",
         inverseHover !== undefined &&

@@ -1,7 +1,9 @@
+import type { ReactNode } from "react";
+
 interface Props {
   title: string;
   description?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 const Section = ({ title, description, children }: Props) => {

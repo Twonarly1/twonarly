@@ -1,4 +1,6 @@
-function Kbd({ ...props }: React.ComponentProps<"kbd">) {
+import type { ComponentProps } from "react";
+
+function Kbd({ ...props }: ComponentProps<"kbd">) {
   return (
     <kbd
       data-slot="kbd"
@@ -8,7 +10,7 @@ function Kbd({ ...props }: React.ComponentProps<"kbd">) {
   );
 }
 
-function KbdGroup({ ...props }: React.ComponentProps<"div">) {
+function KbdGroup({ ...props }: ComponentProps<"div">) {
   return <kbd data-slot="kbd-group" className="inline-flex items-center gap-1" {...props} />;
 }
 

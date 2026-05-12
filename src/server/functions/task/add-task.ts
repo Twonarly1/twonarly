@@ -3,7 +3,7 @@ import { getRequestHeaders } from "@tanstack/react-start/server";
 import { maxLength, minLength, object, pipe, string } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { tasks } from "@/lib/db/schema";
 
 const addTaskInput = object({

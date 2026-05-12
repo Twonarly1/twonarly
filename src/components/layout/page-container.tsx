@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 
-interface Props extends React.ComponentPropsWithRef<"div"> {
+interface Props extends ComponentPropsWithRef<"div"> {
   children: ReactNode;
 }
 

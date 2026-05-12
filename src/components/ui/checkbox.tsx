@@ -1,5 +1,6 @@
-import clsx from "clsx";
 import { useEffect, useRef } from "react";
+
+import { cn } from "@/lib/utils";
 
 import type { ComponentProps } from "react";
 
@@ -26,7 +27,7 @@ function Checkbox({ checked = false, onCheckedChange, className, ...props }: Che
       data-slot="checkbox"
       checked={isChecked}
       onChange={(e) => onCheckedChange?.(e.target.checked)}
-      className={clsx(
+      className={cn(
         "peer mx-auto flex size-3.5 shrink-0 appearance-none items-center justify-center rounded-[3px] border border-border shadow-xs outline-none",
         "transition-colors duration-150 ease-out-strong",
         "checked:border-primary checked:bg-primary",

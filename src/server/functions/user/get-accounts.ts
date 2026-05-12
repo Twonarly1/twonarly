@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { inArray } from "drizzle-orm";
 
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { account } from "@/lib/db/schema";
 import { getDeviceSessions } from "./get-device-sessions";
 

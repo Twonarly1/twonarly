@@ -6,7 +6,7 @@ import { instance } from "valibot";
 import { auth } from "@/lib/config/auth.config";
 import { R2_ENDPOINT, r2 } from "@/lib/config/r2.config";
 import { env } from "@/lib/config/t3.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { user } from "@/lib/db/schema";
 import { rateLimit } from "@/server/rate-limit";
 

@@ -41,6 +41,8 @@ import { removeAvatar } from "@/server/functions/user/remove-avatar";
 import { updateUser } from "@/server/functions/user/update-user";
 import { uploadAvatar } from "@/server/functions/user/upload-avatar";
 
+import type { ChangeEvent } from "react";
+
 export const Route = createLazyFileRoute("/_authenticated/profile/")({
   component: ProfilePage,
 });
@@ -73,7 +75,7 @@ function ProfilePage() {
     }
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 

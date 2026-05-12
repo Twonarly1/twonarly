@@ -16,6 +16,8 @@ import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { addTask } from "@/server/functions/task/add-task";
 
+import type { FormEvent } from "react";
+
 const NewTaskDialog = () => {
   const { newTask } = useSearch({ from: "/_authenticated/tasks/" });
   const addTaskFn = useServerFn(addTask);
@@ -32,7 +34,7 @@ const NewTaskDialog = () => {
 
   const canSubmit = name.trim().length > 0 && name.length <= 256 && !isSubmitting;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!canSubmit) return;
     setIsSubmitting(true);

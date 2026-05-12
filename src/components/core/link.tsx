@@ -1,7 +1,7 @@
 import { createLink } from "@tanstack/react-router";
-import clsx from "clsx";
 
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import type { LinkComponent } from "@tanstack/react-router";
 import type { VariantProps } from "class-variance-authority";
@@ -13,7 +13,7 @@ const BasicLink = ({
   className,
   ...rest
 }: AnchorHTMLAttributes<HTMLAnchorElement> & VariantProps<typeof buttonVariants>) => (
-  <a className={clsx(buttonVariants({ variant, size }), className)} {...rest} />
+  <a className={cn(buttonVariants({ variant, size }), className)} {...rest} />
 );
 
 const CreatedLink = createLink(BasicLink);

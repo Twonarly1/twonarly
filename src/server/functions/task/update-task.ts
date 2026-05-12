@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { boolean, maxLength, minLength, object, optional, pipe, string } from "valibot";
 
 import { auth } from "@/lib/config/auth.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import { tasks } from "@/lib/db/schema";
 
 const updateTaskInput = object({

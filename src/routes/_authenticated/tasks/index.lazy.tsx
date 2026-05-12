@@ -5,7 +5,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import clsx from "clsx";
 import { ChevronDown, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -28,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { useDebounce } from "@/lib/hooks/use-debounce";
 import useDialogStore, { DialogType } from "@/lib/hooks/use-dialog-store";
+import { cn } from "@/lib/utils";
 import { formatDate } from "@/lib/utils/format";
 
 import type {
@@ -191,7 +191,7 @@ function TasksPage() {
               <div className="relative hidden items-center sm:flex">
                 <Search
                   strokeWidth={2.5}
-                  className={clsx(
+                  className={cn(
                     "absolute left-2.5 size-3.5 text-muted-foreground",
                     data.length === 0 && "opacity-50",
                   )}

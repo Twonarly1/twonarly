@@ -11,6 +11,7 @@ import { SliderControl } from "@/components/ui/slider";
 import { capitalizeFirstLetter } from "@/lib/utils/format";
 import { computeColorsFromTheme, hexToLch, lchToHex } from "@/lib/utils/theme";
 
+import type { ChangeEvent } from "react";
 import type { CustomTheme } from "@/server/functions/preferences/theme";
 
 type ZoneId = "sidebar" | "content" | "accent";
@@ -64,7 +65,7 @@ export default function ThemeChanger({ theme, onChange }: Props) {
       .otherwise(() => {});
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const val = e.target.value;
     setInputValue(val);

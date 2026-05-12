@@ -11,7 +11,7 @@ import { linkWalletPlugin } from "@/lib/auth/link-wallet-plugin";
 import { app } from "@/lib/config/app.config";
 import { stripeClient } from "@/lib/config/stripe.config";
 import { env } from "@/lib/config/t3.config";
-import { db } from "@/lib/db/db";
+import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
 const SIWE_DOMAIN = new URL(env.BETTER_AUTH_URL ?? app.url).host;
