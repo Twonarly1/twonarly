@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowRight, CheckSquare, CreditCard, Palette, Shield, Wallet, Zap } from "lucide-react";
 
 import Link from "@/components/core/link";
-import { Button } from "@/components/ui/button";
 import { app } from "@/lib/config/app.config";
 import { getSession } from "@/server/functions/user/get-session";
 
@@ -74,16 +73,6 @@ function LandingPage() {
         <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-4 sm:px-6">
           <span className="font-semibold text-lg">{app.name}</span>
           <nav className="flex items-center gap-1 sm:gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hidden sm:inline-flex"
-              onClick={() =>
-                document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })
-              }
-            >
-              Features
-            </Button>
             {session ? (
               <Link
                 to="/tasks"

@@ -48,6 +48,7 @@ const MobileBottomNav = () => {
                   onClick={() => setOpen(false)}
                   variant="ghost"
                   size="lg"
+                  className="justify-start"
                   activeProps={{
                     className: "text-foreground bg-muted custom:bg-surface border-border",
                   }}
