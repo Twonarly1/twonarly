@@ -24,8 +24,8 @@ A TanStack Start template with multi-provider auth, layout and theme customizati
 - **Styling** — [Tailwind CSS v4](https://tailwindcss.com) + [Radix UI](https://radix-ui.com)
 - **Payments** — [Stripe](https://stripe.com)
 - **Storage** — [Cloudflare R2](https://developers.cloudflare.com/r2) (avatar uploads)
-- **Wallet** — [wagmi](https://wagmi.sh) + [viem](https://viem.sh) + [WalletConnect](https://walletconnect.com)
-- **Validation** — [Zod](https://zod.dev)
+- **Wallet** — [viem](https://viem.sh) + EIP-6963 injected provider discovery (no external wallet SDK)
+- **Validation** — [Valibot](https://valibot.dev)
 - **Linting** — [Biome](https://biomejs.dev)
 
 ## Getting started
@@ -51,11 +51,11 @@ The app runs at `http://localhost:3000`.
 | `bun dev` | Start dev server on port 3000 |
 | `bun build` | Production build |
 | `bun start` | Preview production build |
-| `bun check` | Biome lint + format check |
+| `bunx biome check` | Biome lint + format check |
 | `bun knip` | Find unused exports and dependencies |
-| `bun db:generate` | Generate Drizzle migrations |
-| `bun db:migrate` | Run migrations |
-| `bun db:studio` | Open Drizzle Studio |
+| `bun generate` | Generate Drizzle migrations |
+| `bun migrate` | Run migrations |
+| `bun studio` | Open Drizzle Studio |
 
 ## Environment variables
 
@@ -67,7 +67,6 @@ Server-side variables are validated at startup via `@t3-oss/env-core`. See `src/
 - `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` — GitHub OAuth
 - `R2_ACCOUNT_ID` / `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `R2_BUCKET_NAME` / `R2_PUBLIC_URL` — Cloudflare R2
 - `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` — Stripe
-- `VITE_WALLETCONNECT_PROJECT_ID` — WalletConnect (client-side)
 
 ## License
 
