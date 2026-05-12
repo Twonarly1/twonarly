@@ -61,8 +61,6 @@
     "vite": "^8.0.11"
   },
   "overrides": {
-    "@tanstack/router-generator": {
-      "zod": "^3.25.76"
-    }
+    "zod": "^4.4.3"
   }
 }
