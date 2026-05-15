@@ -22,7 +22,7 @@ const buttonVariants = cva(
         ghost:
           "focus-visible:border-primary border-transparent text-secondary-foreground hover:bg-muted hover:text-foreground custom:hover:bg-content",
         destructive:
-          "border-0 bg-destructive text-destructive-foreground hover:bg-destructive/80 focus-visible:ring focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-surface",
+          "border-0 bg-red-500 text-destructive-foreground hover:bg-red-500/80 focus-visible:ring focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       },
       size: {
         xs: "h-6 gap-1 px-2",

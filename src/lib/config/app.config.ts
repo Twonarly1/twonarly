@@ -1,5 +1,5 @@
 export const app = {
   name: "April",
   description: "...",
-  url: "https://twonarly.vercel.app",
+  url: "https://beauhawkinson-april.vercel.app/",
 };
